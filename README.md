@@ -6,35 +6,33 @@ Breast Intentions seeks to improve its online presence and engagement through st
 
 ### Additional information about the project
 
-TODO: Write a compelling/creative/informative project description / summary
+Breast Intentions needs an inventory management system that will better tend to its needs as a non-profit organization as they help underserved women. They currently use Square which does not provide the necessary functionality they desire. This is why we have been tasked to create an inventory management system for them.
 
 ## Installation
 
 ### Prerequisites
 
-TODO: List what a user needs to have installed before running the installation instructions below (e.g., git, which versions of Ruby/Rails)
+Currently, no prerequisites are needed.
 
 ### Add-ons
 
-TODO: List which add-ons are included in the project, and the purpose each add-on serves in your app.
+Currently, we have no Add-ons.
 
 ### Installation Steps
 
-TODO: Describe the installation process (making sure you mention `bundle install`).
-Instructions need to be such that a user can just copy/paste the commands to get things set up and running. 
-
+Currently, we do not have any installation steps.
 
 ## Functionality
 
-TODO: Write usage instructions. Structuring it as a walkthrough can help structure this section,
-and showcase your features.
-
+1. Log in & Authenticate
+2. Update/add/delete from inventory - Bras sorted by type and size
+3. Update/add/delete from inventory - Events contain information about the client who attended the event
+4. Ensure that inventory is updated as it should
+5. Logout.
 
 ## Known Problems
 
-TODO: Describe any known issues, bugs, odd behaviors or code smells. 
-Provide steps to reproduce the problem and/or name a file or a function where the problem lives.
-
+Currently, no known problems.
 
 ## Contributing
 

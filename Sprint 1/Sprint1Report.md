@@ -1,4 +1,4 @@
-# Sprint x Report (08/19/2024 - 10/06/2024)
+# Sprint 1 Report (08/19/2024 - 10/06/2024)
 
 ## What's New (User Facing)
 Currently, no new features or bug fixes have been implemented in this sprint.

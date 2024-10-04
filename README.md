@@ -44,7 +44,7 @@ Currently, no known problems.
 
 ## Additional Documentation
 
-- [Sprint 1] ()
+- [Sprint 1](https://github.com/JoshnaPR/ACME2-BI/blob/main/Sprint%201/Sprint1Report.md)
 - [Sprint 2] ()
 - [Sprint 3] ()
 

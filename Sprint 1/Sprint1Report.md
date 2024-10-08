@@ -1,5 +1,8 @@
 # Sprint 1 Report (08/19/2024 - 10/06/2024)
 
+## Sprint Video
+[Sprint 1 Demo Video](https://youtu.be/5ikNx6luSkY)
+
 ## What's New (User Facing)
 Currently, no new features or bug fixes have been implemented in this sprint.
 

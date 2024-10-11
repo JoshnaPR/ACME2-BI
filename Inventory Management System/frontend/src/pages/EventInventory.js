@@ -15,9 +15,10 @@ const EventInventory = () => {
         email: '' 
     });
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchByEvent, setSearchByEvent] = useState(true);
-    const [searchByAttendee, setSearchByAttendee] = useState(true);
+    const [searchByEvent, setSearchByEvent] = useState(false);
+    const [searchByAttendee, setSearchByAttendee] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -42,6 +43,17 @@ const EventInventory = () => {
         setEditEventId(eventId);
         setEventFormData({ name: event?.name || '', date: event?.date || '' });
     };
+
+    const handleDeleteEvent = async (eventId) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this event?");
+        if (isConfirmed) {
+            await deleteEvent(eventId);
+            const updatedEvents = await getEvents();
+            setEvents(updatedEvents);
+            setSuccessMessage('Event deleted successfully');
+        }
+    };
+    
 
     const handleEditAttendee = (eventIndex, attendeeIndex, attendee) => {
         setEditAttendeeId({ eventIndex, attendeeIndex });
@@ -99,36 +111,54 @@ const EventInventory = () => {
     };
 
     const handleDeleteAttendee = async (eventIndex, attendeeIndex) => {
-        const updatedEvents = [...events];
-        updatedEvents[eventIndex].attendees.splice(attendeeIndex, 1);
-        await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
-        setEvents(updatedEvents);
-        setSuccessMessage('Attendee deleted successfully');
-    };
+        const isConfirmed = window.confirm("Are you sure you want to delete this attendee?");
+        if (isConfirmed) {
+            const updatedEvents = [...events];
+            updatedEvents[eventIndex].attendees.splice(attendeeIndex, 1);
+            await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
+            setEvents(updatedEvents);
+            setSuccessMessage('Attendee deleted successfully');
+        }
+    };    
 
     const handleCreateEvent = async () => {
+        // Check if both name and date fields are provided
+        if (!eventFormData.name || !eventFormData.date) {
+            setErrorMessage('Event name and date are required.');
+            return;
+        }
+    
+        // If validation passes, create the event
         await createEvent(eventFormData);
         setEventFormData({ name: '', date: '' });
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
         setSuccessMessage('Event created successfully');
+        setErrorMessage('');  // Clear any error messages
     };
-
+    
     // Search events and attendees
     const filteredEvents = events.map(event => {
         const eventMatches = searchByEvent && event.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const filteredAttendees = searchByAttendee 
+        
+        // Filter attendees based on the search term
+        const filteredAttendees = searchByAttendee
             ? event.attendees.filter(attendee =>
                 attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
-            ) 
-            : [];
+            )
+            : event.attendees; // Keep all attendees if not filtering by attendee
+
+        // Determine if the event should be visible
+        const isVisible = eventMatches || (searchByAttendee && filteredAttendees.length > 0);
 
         return {
             ...event,
-            attendees: (searchTerm && (eventMatches || filteredAttendees.length > 0)) ? filteredAttendees : event.attendees,
-            isVisible: eventMatches || filteredAttendees.length > 0
+            attendees: isVisible ? filteredAttendees : event.attendees, // Show filtered attendees if the event is visible
+            isVisible
         };
-    }).filter(event => event.isVisible);
+    }).filter(event => event.isVisible || (!searchTerm && !searchByEvent && !searchByAttendee)); // Show all events if no filters are applied
+
+
 
     return (
         <div>
@@ -141,28 +171,33 @@ const EventInventory = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <div>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={searchByEvent}
-                        onChange={() => setSearchByEvent(!searchByEvent)}
-                    />
-                    Search by Event
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={searchByAttendee}
-                        onChange={() => setSearchByAttendee(!searchByAttendee)}
-                    />
-                    Search by Attendee
-                </label>
-            </div>
+                <div>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={searchByEvent}
+                            onChange={() => {
+                                setSearchByEvent(true);
+                                setSearchByAttendee(false); // Uncheck attendee search
+                            }}
+                        />
+                        Search by Event
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={searchByAttendee}
+                            onChange={() => {
+                                setSearchByAttendee(true);
+                                setSearchByEvent(false); // Uncheck event search
+                            }}
+                        />
+                        Search by Attendee
+                    </label>
+                </div>
 
             {/* New Event Creation Form */}
-            <h2>Create New Event</h2>
-            {successMessage && <h3>{successMessage}</h3>}
+            {successMessage && <h3 style={{ textAlign: 'center'}}>{successMessage}</h3>}
             <input
                 type="text"
                 name="name"
@@ -178,6 +213,7 @@ const EventInventory = () => {
                 placeholder="Event Date"
             />
             <button onClick={handleCreateEvent}>Add Event</button>
+            {errorMessage && <h3>{errorMessage}</h3>}
 
             <ul>
                 {filteredEvents.length > 0 ? (
@@ -205,6 +241,7 @@ const EventInventory = () => {
                                 <>
                                     <span>{event?.name || 'No event name'}</span> - <span>{event?.date || 'No event date'}</span>
                                     <button onClick={() => handleEditEvent(event?._id, event)}>Edit Event</button>
+                                    <button onClick={() => handleDeleteEvent(event?._id)}>Delete Event</button> {/* New Delete button */}
                                 </>
                             )}
 

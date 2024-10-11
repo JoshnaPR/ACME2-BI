@@ -6,7 +6,8 @@ const BraInventory = () => {
     const [newBra, setNewBra] = useState({ type: '', size: '', quantity: '' });
     const [editBra, setEditBra] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchByType, setSearchByType] = useState(true); // Added state for search preference
+    const [searchByType, setSearchByType] = useState(true);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         fetchBras();
@@ -25,33 +26,38 @@ const BraInventory = () => {
         e.preventDefault();
         try {
             await createBra(newBra);
-            fetchBras(); // Refresh the list after creating a new bra
-            setNewBra({ type: '', size: '', quantity: '' }); // Clear form
+            fetchBras(); 
+            setNewBra({ type: '', size: '', quantity: '' }); 
         } catch (error) {
             console.error("Error creating bra:", error);
         }
+        setSuccessMessage('Bra added successfully!');
     };
 
     const handleEdit = async (id) => {
         try {
             await updateBra(id, editBra);
-            fetchBras(); // Refresh the list after updating a bra
-            setEditBra(null); // Clear edit state
+            fetchBras();
+            setEditBra(null);
         } catch (error) {
             console.error("Error updating bra:", error);
         }
+        setSuccessMessage('Bra updated successfully!');
     };
 
     const handleDelete = async (id) => {
-        try {
-            await deleteBra(id);
-            fetchBras(); // Refresh the list after deleting a bra
-        } catch (error) {
-            console.error("Error deleting bra:", error);
+        const confirmDelete = window.confirm("Are you sure you want to delete this bra?");
+        if (confirmDelete) {
+            try {
+                await deleteBra(id);
+                fetchBras();
+            } catch (error) {
+                console.error("Error deleting bra:", error);
+            }
         }
+        setSuccessMessage('Bra deleted successfully!');
     };
 
-    // Updated filtering logic based on search preference
     const filteredBras = bras.filter(bra => {
         if (searchByType) {
             return bra.type.toLowerCase().includes(searchTerm.toLowerCase());
@@ -63,6 +69,7 @@ const BraInventory = () => {
     return (
         <div>
             <h1>Bra Inventory</h1>
+            {successMessage && <h3 style={{ textAlign: 'center'}}>{successMessage}</h3>}
             <input
                 type="text"
                 placeholder="Search Bras"
@@ -73,7 +80,7 @@ const BraInventory = () => {
                 <input
                     type="checkbox"
                     checked={searchByType}
-                    onChange={() => setSearchByType(!searchByType)} // Toggle search preference
+                    onChange={() => setSearchByType(!searchByType)}
                 />
                 Search by Type
             </label>
@@ -81,7 +88,7 @@ const BraInventory = () => {
                 <input
                     type="checkbox"
                     checked={!searchByType}
-                    onChange={() => setSearchByType(!searchByType)} // Toggle search preference
+                    onChange={() => setSearchByType(!searchByType)}
                 />
                 Search by Size
             </label>

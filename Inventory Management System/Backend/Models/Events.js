@@ -1,20 +1,16 @@
 const mongoose = require('mongoose');
 
-const attendeeSchema = mongoose.Schema({
-    name: {type: String, required: true},
-    sizeBefore: {type: String, required: true},
-    sizeAfter: {type: String, required: true},
-    fitterName: {type: String, required: true},
-    email: {type: String, required: true},
-    phoneNumber: {type: String, required: true},
-});
-
-const eventSchema = mongoose.Schema({
-    name: {type: String, required: true},
-    date: {type: Date, required: true},
-    location: {type: String, required: true},
-    description: {type: String, required: true},
-    attendies: {type: Number, required: true},
+const eventSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    date: { type: Date, required: true },
+    attendees: [{
+        name: String,
+        sizeBefore: String,
+        sizeAfter: String,
+        fitterName: String,
+        email: String,
+        phone: String,
+    }],
 });
 
 eventSchema.pre('save', function (next) {
@@ -22,5 +18,5 @@ eventSchema.pre('save', function (next) {
     next();
 });
 
-const Event = mongoose.model('Event', eventSchema);
+const Event = mongoose.model('Events', eventSchema);
 module.exports = Event;

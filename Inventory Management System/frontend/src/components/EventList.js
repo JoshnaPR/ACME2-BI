@@ -1,35 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { createEvent, getEvents, updateEvent, deleteEvent } from '../services/eventService';
 
-const Events = () => {
+const EventManager = () => {
     const [events, setEvents] = useState([]);
+    const [newEvent, setNewEvent] = useState({ name: '', date: '', attendees: [] });
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/events')
-            .then((response) => setEvents(response.data))
-            .catch((error) => console.log(error));
+        const fetchEvents = async () => {
+            const fetchedEvents = await getEvents();
+            setEvents(fetchedEvents);
+        };
+        fetchEvents();
     }, []);
+
+    const handleCreateEvent = async () => {
+        await createEvent(newEvent);
+
+        // Refresh the events list after creating a new event
+        const fetchedEvents = await getEvents();
+        setEvents(fetchedEvents);
+    };
 
     return (
         <div>
-            <h1>Events</h1>
+            <form onSubmit={handleCreateEvent}>
+                <input
+                    type="text"
+                    placeholder="Event Name"
+                    value={newEvent.name}
+                    onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
+                />
+                <input
+                    type="date"
+                    value={newEvent.date}
+                    onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+                />
+                <button type="submit">Create Event</button>
+            </form>
+
             <ul>
-                {events.map((event) =>(
-                    <li key = {event._id}>
-                        <h3>{event.eventName}</h3>
-                        <p>Attendees: {event.numberOfAttendees}</p>
-                        <u1>
-                            {event.attendies.map(att => (
-                                <li key={att.email}>
-                                    {att.name} - {att.sizeBefore} to {att.sizeAfter} (Fitted by: {att.fitterName})
-                                </li>
-                            ))}
-                        </u1>
-                    </li>
+                {events.map((event) => (
+                    <li key={event._id}>{event.name} - {event.date}</li> // make sure that it shows the women who attended the event along with their information
+                    
                 ))}
             </ul>
         </div>
     );
 };
 
-export default EventList;
+export default EventManager;

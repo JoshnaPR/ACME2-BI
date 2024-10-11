@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getEvents, updateEvent, deleteEvent, createEvent } from '../services/eventService';
 
-const EventList = () => {
+const EventInventory = () => {
     const [events, setEvents] = useState([]);
     const [editEventId, setEditEventId] = useState(null);
     const [editAttendeeId, setEditAttendeeId] = useState({ eventIndex: null, attendeeIndex: null });
@@ -14,6 +14,10 @@ const EventList = () => {
         phoneNumber: '', 
         email: '' 
     });
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchByEvent, setSearchByEvent] = useState(true);
+    const [searchByAttendee, setSearchByAttendee] = useState(true);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -57,6 +61,7 @@ const EventList = () => {
         setEventFormData({ name: '', date: '' });
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
+        setSuccessMessage('Event updated successfully');
     };
 
     const handleUpdateAttendee = async () => {
@@ -74,6 +79,7 @@ const EventList = () => {
             email: '' 
         });
         setEvents(updatedEvents);
+        setSuccessMessage('Attendee updated successfully');
     };
 
     const handleAddAttendee = async (eventIndex) => {
@@ -89,6 +95,7 @@ const EventList = () => {
             email: '' 
         });
         setEvents(updatedEvents);
+        setSuccessMessage('Attendee added successfully');
     };
 
     const handleDeleteAttendee = async (eventIndex, attendeeIndex) => {
@@ -96,6 +103,7 @@ const EventList = () => {
         updatedEvents[eventIndex].attendees.splice(attendeeIndex, 1);
         await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
         setEvents(updatedEvents);
+        setSuccessMessage('Attendee deleted successfully');
     };
 
     const handleCreateEvent = async () => {
@@ -103,14 +111,58 @@ const EventList = () => {
         setEventFormData({ name: '', date: '' });
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
+        setSuccessMessage('Event created successfully');
     };
+
+    // Search events and attendees
+    const filteredEvents = events.map(event => {
+        const eventMatches = searchByEvent && event.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const filteredAttendees = searchByAttendee 
+            ? event.attendees.filter(attendee =>
+                attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
+            ) 
+            : [];
+
+        return {
+            ...event,
+            attendees: (searchTerm && (eventMatches || filteredAttendees.length > 0)) ? filteredAttendees : event.attendees,
+            isVisible: eventMatches || filteredAttendees.length > 0
+        };
+    }).filter(event => event.isVisible);
 
     return (
         <div>
-            <h1>Event List</h1>
+            <h1>Event Inventory</h1>
+
+            {/* Search Input and Checkboxes */}
+            <input
+                type="text"
+                placeholder="Search events or attendees"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={searchByEvent}
+                        onChange={() => setSearchByEvent(!searchByEvent)}
+                    />
+                    Search by Event
+                </label>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={searchByAttendee}
+                        onChange={() => setSearchByAttendee(!searchByAttendee)}
+                    />
+                    Search by Attendee
+                </label>
+            </div>
 
             {/* New Event Creation Form */}
             <h2>Create New Event</h2>
+            {successMessage && <h3>{successMessage}</h3>}
             <input
                 type="text"
                 name="name"
@@ -128,8 +180,8 @@ const EventList = () => {
             <button onClick={handleCreateEvent}>Add Event</button>
 
             <ul>
-                {events.length > 0 ? (
-                    events.map((event, eventIndex) => (
+                {filteredEvents.length > 0 ? (
+                    filteredEvents.map((event, eventIndex) => (
                         <li key={event?._id}>
                             {editEventId === event?._id ? (
                                 <>
@@ -157,7 +209,7 @@ const EventList = () => {
                             )}
 
                             <ul>
-                                {event?.attendees && event.attendees.length > 0 ? (
+                                {event?.attendees.length > 0 ? (
                                     event.attendees.map((attendee, attendeeIndex) => (
                                         <li key={attendeeIndex}>
                                             {editAttendeeId.eventIndex === eventIndex && editAttendeeId.attendeeIndex === attendeeIndex ? (
@@ -208,13 +260,14 @@ const EventList = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <span>{attendee?.name || 'No attendee name'}</span> - 
-                                                    <span>{attendee?.sizeBefore || 'No size before'} to {attendee?.sizeAfter || 'No size after'}</span> - 
-                                                    <span>{attendee?.fitterName || 'No fitter name'}</span> - 
-                                                    <span>{attendee?.phoneNumber || 'No phone number'}</span> - 
-                                                    <span>{attendee?.email || 'No email'}</span>
-                                                    <button onClick={() => handleEditAttendee(eventIndex, attendeeIndex, attendee)}>Edit Attendee</button>
-                                                    <button onClick={() => handleDeleteAttendee(eventIndex, attendeeIndex)}>Delete Attendee</button>
+                                                    Name: <span>{attendee?.name || 'No attendee name'}</span> - 
+                                                    Size Before: <span>{attendee?.sizeBefore || 'No size before'}</span> to 
+                                                    Size After: <span>{attendee?.sizeAfter || 'No size after'}</span> -
+                                                    Fitter: <span>{attendee?.fitterName || 'No fitter name'}</span> -
+                                                    Phone #:<span>{attendee?.phoneNumber || 'No phone number'}</span> -
+                                                    Email: <span>{attendee?.email || 'No email'}</span>
+                                                    <button onClick={() => handleEditAttendee(eventIndex, attendeeIndex, attendee)}>Edit</button>
+                                                    <button onClick={() => handleDeleteAttendee(eventIndex, attendeeIndex)}>Delete</button>
                                                 </>
                                             )}
                                         </li>
@@ -227,11 +280,11 @@ const EventList = () => {
                         </li>
                     ))
                 ) : (
-                    <li>No events available</li>
+                    <li>No events</li>
                 )}
             </ul>
         </div>
     );
 };
 
-export default EventList;
+export default EventInventory;

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import BraManager from './components/BraList'; // Ensure the path is correct
-import EventManager from './components/EventList'; // Ensure the path is correct
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; // Change Switch to Routes
+import BraInventory from './pages/BraInventory'; // Ensure the path is correct
+import EventInventory from './pages/EventInventory'; // Ensure the path is correct
+import HomePage from './pages/HomePage'; // Import the home page
 
 function App() {
   const [message, setMessage] = useState('');
@@ -13,16 +15,34 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Breast Intentions Inventory Management System</h1>
-      <p>{message}</p>
-      
-      <h2>Bra Inventory Management</h2>
-      <BraManager /> {/* Include the BraManager component */}
+    <Router>
+      <div>
+        <h1>Breast Intentions Inventory Management System</h1>
+        <p>{message}</p>
+        
+        {/* Navigation Links */}
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/bra-inventory">Bra Inventory</Link>
+            </li>
+            <li>
+              <Link to="/event-inventory">Event Inventory</Link>
+            </li>
+          </ul>
+        </nav>
 
-      <h2>Event/Client Management</h2>
-      <EventManager /> {/* Include the EventManager component */}
-    </div>
+        {/* Define Routes */}
+        <Routes>
+          <Route path="/" element={<HomePage />} /> {/* Home page route */}
+          <Route path="/bra-inventory" element={<BraInventory />} />
+          <Route path="/event-inventory" element={<EventInventory />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

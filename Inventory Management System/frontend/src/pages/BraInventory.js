@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createBra, getBras, updateBra, deleteBra } from '../services/braService';
+import { Link } from 'react-router-dom';
+import '../styles/global.css'; // Custom styles for the homepage
+import logo from '../assets/InnerVentory Button.png'; // Placeholder for your logo
 
 const BraInventory = () => {
     const [bras, setBras] = useState([]);
@@ -89,6 +92,14 @@ const BraInventory = () => {
 
     return (
         <div>
+            <header className="homepage-header">
+                <img src={logo} alt="Breast Intentions Logo" className="logo" />
+                <nav className="navbar">
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/bra-inventory" className="nav-link">Bra Inventory</Link>
+                <Link to="/event-inventory" className="nav-link">Event Inventory</Link>
+                </nav>
+            </header>
             <h1>Bra Inventory</h1>
             {successMessage && <h3 style={{ textAlign: 'center'}}>{successMessage}</h3>}
             <input
@@ -171,6 +182,10 @@ const BraInventory = () => {
                     <button type="submit">Update Bra</button>
                 </form>
             )}
+
+            <footer className="homepage-footer">
+                <p>&copy; 2024 Breast Intentions of Washington. All Rights Reserved.</p>
+            </footer>
         </div>
     );
 };

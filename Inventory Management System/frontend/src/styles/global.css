@@ -1,0 +1,88 @@
+/* HomePage.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fdf1f2; /* Light pink background */
+  }
+  
+  .homepage-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .homepage-header {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo {
+    height: 80px;
+  }
+  
+  .navbar {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .nav-link:hover {
+    color: #d62839;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .features-section h2 {
+    color: #d62839;
+  }
+  
+  ul {
+    list-style-type: square;
+    margin-top: 10px;
+    color: #333;
+  }
+  
+  .cta-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .cta-button {
+    padding: 10px 20px;
+    background-color: #d62839;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #a81d2d;
+  }
+  
+  .homepage-footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+  }
+
+  

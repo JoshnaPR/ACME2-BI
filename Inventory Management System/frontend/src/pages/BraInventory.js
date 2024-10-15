@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createBra, getBras, updateBra, deleteBra } from '../services/braService';
+import { Link } from 'react-router-dom';
+import '../styles/global.css'; // Custom styles for the homepage
+import logo from '../assets/InnerVentory Button.png'; // Placeholder for your logo
 
 const BraInventory = () => {
     const [bras, setBras] = useState([]);
@@ -24,15 +27,36 @@ const BraInventory = () => {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        try {
-            await createBra(newBra);
-            fetchBras(); 
-            setNewBra({ type: '', size: '', quantity: '' }); 
-        } catch (error) {
-            console.error("Error creating bra:", error);
+        const existingBra = bras.find(
+            bra => bra.type.toLowerCase() === newBra.type.toLowerCase() &&
+                   bra.size.toLowerCase() === newBra.size.toLowerCase()
+        );
+    
+        if (existingBra) {
+            // Update the existing bra's quantity
+            const updatedQuantity = parseInt(existingBra.quantity) + parseInt(newBra.quantity);
+            try {
+                await updateBra(existingBra._id, { ...existingBra, quantity: updatedQuantity });
+                fetchBras();
+                setSuccessMessage('Quantity updated successfully!');
+            } catch (error) {
+                console.error("Error updating quantity:", error);
+            }
+        } else {
+            // Create a new bra entry
+            try {
+                await createBra(newBra);
+                fetchBras();
+                setSuccessMessage('Bra added successfully!');
+            } catch (error) {
+                console.error("Error creating bra:", error);
+            }
         }
-        setSuccessMessage('Bra added successfully!');
+    
+        // Reset the input fields
+        setNewBra({ type: '', size: '', quantity: '' });
     };
+    
 
     const handleEdit = async (id) => {
         try {
@@ -68,6 +92,14 @@ const BraInventory = () => {
 
     return (
         <div>
+            <header className="homepage-header">
+                <img src={logo} alt="Breast Intentions Logo" className="logo" />
+                <nav className="navbar">
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/bra-inventory" className="nav-link">Bra Inventory</Link>
+                <Link to="/event-inventory" className="nav-link">Event Inventory</Link>
+                </nav>
+            </header>
             <h1>Bra Inventory</h1>
             {successMessage && <h3 style={{ textAlign: 'center'}}>{successMessage}</h3>}
             <input
@@ -150,6 +182,10 @@ const BraInventory = () => {
                     <button type="submit">Update Bra</button>
                 </form>
             )}
+
+            <footer className="homepage-footer">
+                <p>&copy; 2024 Breast Intentions of Washington. All Rights Reserved.</p>
+            </footer>
         </div>
     );
 };

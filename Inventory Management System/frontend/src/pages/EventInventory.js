@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getEvents, updateEvent, deleteEvent, createEvent } from '../services/eventService';
+import { Link } from 'react-router-dom';
+import '../styles/global.css'; // Custom styles for the homepage
+import logo from '../assets/InnerVentory Button.png'; // Placeholder for your logo
 
 const EventInventory = () => {
     const [events, setEvents] = useState([]);
@@ -162,6 +165,14 @@ const EventInventory = () => {
 
     return (
         <div>
+            <header className="homepage-header">
+                <img src={logo} alt="Breast Intentions Logo" className="logo" />
+                <nav className="navbar">
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/bra-inventory" className="nav-link">Bra Inventory</Link>
+                <Link to="/event-inventory" className="nav-link">Event Inventory</Link>
+                </nav>
+            </header>
             <h1>Event Inventory</h1>
 
             {/* Search Input and Checkboxes */}
@@ -239,9 +250,10 @@ const EventInventory = () => {
                                 </>
                             ) : (
                                 <>
-                                    <span>{event?.name || 'No event name'}</span> - <span>{event?.date || 'No event date'}</span>
+                                    <span>{event?.name || 'No event name'}</span> - 
+                                    <span>{new Date(event?.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
                                     <button onClick={() => handleEditEvent(event?._id, event)}>Edit Event</button>
-                                    <button onClick={() => handleDeleteEvent(event?._id)}>Delete Event</button> {/* New Delete button */}
+                                    <button onClick={() => handleDeleteEvent(event?._id)}>Delete Event</button>
                                 </>
                             )}
 
@@ -320,6 +332,9 @@ const EventInventory = () => {
                     <li>No events</li>
                 )}
             </ul>
+            <footer className="homepage-footer">
+                <p>&copy; 2024 Breast Intentions of Washington. All Rights Reserved.</p>
+            </footer>
         </div>
     );
 };

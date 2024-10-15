@@ -24,15 +24,36 @@ const BraInventory = () => {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        try {
-            await createBra(newBra);
-            fetchBras(); 
-            setNewBra({ type: '', size: '', quantity: '' }); 
-        } catch (error) {
-            console.error("Error creating bra:", error);
+        const existingBra = bras.find(
+            bra => bra.type.toLowerCase() === newBra.type.toLowerCase() &&
+                   bra.size.toLowerCase() === newBra.size.toLowerCase()
+        );
+    
+        if (existingBra) {
+            // Update the existing bra's quantity
+            const updatedQuantity = parseInt(existingBra.quantity) + parseInt(newBra.quantity);
+            try {
+                await updateBra(existingBra._id, { ...existingBra, quantity: updatedQuantity });
+                fetchBras();
+                setSuccessMessage('Quantity updated successfully!');
+            } catch (error) {
+                console.error("Error updating quantity:", error);
+            }
+        } else {
+            // Create a new bra entry
+            try {
+                await createBra(newBra);
+                fetchBras();
+                setSuccessMessage('Bra added successfully!');
+            } catch (error) {
+                console.error("Error creating bra:", error);
+            }
         }
-        setSuccessMessage('Bra added successfully!');
+    
+        // Reset the input fields
+        setNewBra({ type: '', size: '', quantity: '' });
     };
+    
 
     const handleEdit = async (id) => {
         try {

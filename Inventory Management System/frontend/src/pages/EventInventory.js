@@ -239,9 +239,10 @@ const EventInventory = () => {
                                 </>
                             ) : (
                                 <>
-                                    <span>{event?.name || 'No event name'}</span> - <span>{event?.date || 'No event date'}</span>
+                                    <span>{event?.name || 'No event name'}</span> - 
+                                    <span>{new Date(event?.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
                                     <button onClick={() => handleEditEvent(event?._id, event)}>Edit Event</button>
-                                    <button onClick={() => handleDeleteEvent(event?._id)}>Delete Event</button> {/* New Delete button */}
+                                    <button onClick={() => handleDeleteEvent(event?._id)}>Delete Event</button>
                                 </>
                             )}
 

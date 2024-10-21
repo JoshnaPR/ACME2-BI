@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import BraInventory from './pages/BraInventory';
 import EventInventory from './pages/EventInventory';
 import HomePage from './pages/HomePage';
-import './styles/global.css'; // Import the global CSS
+import './styles/BraInventory.css'; // Import the App component's CSS
+import './styles/HomePage.css'; // Import the App component's CSS
 
 function App() {
   const [message, setMessage] = useState('');

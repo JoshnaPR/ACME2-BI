@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createBra, getBras, updateBra, deleteBra } from '../services/braService';
 import { Link } from 'react-router-dom';
-import '../styles/global.css'; // Custom styles for the homepage
-import logo from '../assets/InnerVentory Button.png'; // Placeholder for your logo
+import '../styles/BraInventory.css'; // Custom styles for the homepage
+import logo from '../assets/InnerVentory Button.png';
+import logo2 from '../assets/BreastIntentionsLogo.png';
 
 const BraInventory = () => {
     const [bras, setBras] = useState([]);
@@ -91,100 +92,150 @@ const BraInventory = () => {
     });
 
     return (
-        <div>
-            <header className="homepage-header">
-                <img src={logo} alt="Breast Intentions Logo" className="logo" />
+        <div className="app">
+             <header className="BraInventory-header">
+                <div className="logo-container">
+                    <img src={logo} alt="Breast Intentions Logo" className="logo" />
+                    <img src={logo2} alt="Breast Intentions Logo" className="logo" />
+                </div>
                 <nav className="navbar">
                 <Link to="/" className="nav-link">Home</Link>
                 <Link to="/bra-inventory" className="nav-link">Bra Inventory</Link>
                 <Link to="/event-inventory" className="nav-link">Event Inventory</Link>
                 </nav>
             </header>
-            <h1>Bra Inventory</h1>
-            {successMessage && <h3 style={{ textAlign: 'center'}}>{successMessage}</h3>}
-            <input
-                type="text"
-                placeholder="Search Bras"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <label>
-                <input
-                    type="checkbox"
-                    checked={searchByType}
-                    onChange={() => setSearchByType(!searchByType)}
-                />
-                Search by Type
-            </label>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={!searchByType}
-                    onChange={() => setSearchByType(!searchByType)}
-                />
-                Search by Size
-            </label>
-            <form onSubmit={handleCreate}>
-                <input 
-                    type="text" 
-                    placeholder="Type" 
-                    value={newBra.type} 
-                    onChange={(e) => setNewBra({ ...newBra, type: e.target.value })} 
-                    required 
-                />
-                <input 
-                    type="text" 
-                    placeholder="Size" 
-                    value={newBra.size} 
-                    onChange={(e) => setNewBra({ ...newBra, size: e.target.value })} 
-                    required 
-                />
-                <input 
-                    type="number" 
-                    placeholder="Quantity" 
-                    value={newBra.quantity} 
-                    onChange={(e) => setNewBra({ ...newBra, quantity: e.target.value })} 
-                    required 
-                />
-                <button type="submit">Add Bra</button>
-            </form>
-
-            <ul>
-                {filteredBras.map(bra => (
-                    <li key={bra._id}>
-                        {bra.type} - Size: {bra.size} - Quantity: {bra.quantity}
-                        <button onClick={() => setEditBra(bra)}>Edit</button>
-                        <button onClick={() => handleDelete(bra._id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
-
-            {editBra && (
-                <form onSubmit={(e) => { e.preventDefault(); handleEdit(editBra._id); }}>
-                    <input 
-                        type="text" 
-                        value={editBra.type} 
-                        onChange={(e) => setEditBra({ ...editBra, type: e.target.value })} 
-                        required 
+            <div className="main-content">
+                <h1 className="bra-inventory-title">Welcome to the Bra Inventory</h1>
+                <div className="search-section">
+                    <input
+                        type="text"
+                        className="search-input"
+                        placeholder="Search Bras"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <input 
-                        type="text" 
-                        value={editBra.size} 
-                        onChange={(e) => setEditBra({ ...editBra, size: e.target.value })} 
-                        required 
-                    />
-                    <input 
-                        type="number" 
-                        value={editBra.quantity} 
-                        onChange={(e) => setEditBra({ ...editBra, quantity: e.target.value })} 
-                        required 
-                    />
-                    <button type="submit">Update Bra</button>
+                    <div className="search-options">
+                        <label className="search-option">
+                            <input
+                                type="checkbox"
+                                checked={searchByType}
+                                onChange={() => setSearchByType(true)}
+                            />
+                            Search by Type
+                        </label>
+                        <label className="search-option">
+                            <input
+                                type="checkbox"
+                                checked={!searchByType}
+                                onChange={() => setSearchByType(false)}
+                            />
+                            Search by Size
+                        </label>
+                    </div>
+                </div>
+                <form className="bra-form" onSubmit={handleCreate}>
+                    <h2>Add a New Bra</h2>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <input 
+                                type="text" 
+                                placeholder="Type" 
+                                value={newBra.type} 
+                                onChange={(e) => setNewBra({ ...newBra, type: e.target.value })} 
+                                required 
+                                className="form-input"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <input 
+                                type="text" 
+                                placeholder="Size" 
+                                value={newBra.size} 
+                                onChange={(e) => setNewBra({ ...newBra, size: e.target.value })} 
+                                required 
+                                className="form-input"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <input 
+                                type="number" 
+                                placeholder="Quantity" 
+                                value={newBra.quantity} 
+                                onChange={(e) => setNewBra({ ...newBra, quantity: e.target.value })} 
+                                required 
+                                className="form-input"
+                            />
+                        </div>
+                    </div>
+                    <button type="submit" className="submit-button">Add Bra</button>
                 </form>
-            )}
 
-            <footer className="homepage-footer">
-                <p>&copy; 2024 Breast Intentions of Washington. All Rights Reserved.</p>
+                {successMessage && <h2 style={{ textAlign: 'center'}}>{successMessage}</h2>}
+                
+                <ul className="bra-list">
+                    {filteredBras.map(bra => (
+                        <li key={bra._id} className="bra-item">
+                            <div className="bra-details">
+                                <h3>Type: {bra.type}</h3>
+                                <h3>Size: {bra.size}</h3>
+                                <h3>Quantity: {bra.quantity}</h3>
+                            </div>
+                            <div className="bra-actions">
+                                <button onClick={() => setEditBra(bra)}>Edit</button>
+                                <button onClick={() => handleDelete(bra._id)}>Delete</button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+
+                {editBra && (
+                    <form className="bra-form" onSubmit={(e) => { e.preventDefault(); handleEdit(editBra._id); }}>
+                        <h2>Edit Bra</h2>
+                        <div className="form-row">
+                            <div className="form-group">
+                                <input 
+                                    type="text" 
+                                    placeholder="Type" 
+                                    value={editBra.type} 
+                                    onChange={(e) => setEditBra({ ...editBra, type: e.target.value })} 
+                                    required 
+                                    className="form-input"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input 
+                                    type="text" 
+                                    placeholder="Size" 
+                                    value={editBra.size} 
+                                    onChange={(e) => setEditBra({ ...editBra, size: e.target.value })} 
+                                    required 
+                                    className="form-input"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input 
+                                    type="number" 
+                                    placeholder="Quantity" 
+                                    value={editBra.quantity} 
+                                    onChange={(e) => setEditBra({ ...editBra, quantity: e.target.value })} 
+                                    required 
+                                    className="form-input"
+                                />
+                            </div>
+                        </div>
+                        <button type="submit" className="submit-button">Update Bra</button>
+                    </form>
+                )}
+            </div>
+
+            <footer className="BraInventory-footer">
+                <div className="footer-content">
+                    <p>&copy; 2024 Breast Intentions. All rights reserved.</p>
+                    <div className="social-links">
+                        <a href="https://www.facebook.com/breastintentionswa" target="_blank" rel="noopener noreferrer">Facebook</a>
+                        <a href="https://www.instagram.com/breastintentionsofwa/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    </div>
+                </div>
             </footer>
         </div>
     );

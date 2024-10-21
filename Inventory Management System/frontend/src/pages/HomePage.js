@@ -39,7 +39,13 @@ const HomePage = () => {
       </main>
 
       <footer className="homepage-footer">
-        <p>&copy; 2024 Breast Intentions of Washington. All Rights Reserved.</p>
+        <div className="footer-content">
+          <p>&copy; 2024 Breast Intentions. All rights reserved.</p>
+            <div className="social-links">
+                <a href="https://www.facebook.com/breastintentionswa" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="https://www.instagram.com/breastintentionsofwa/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            </div>
+        </div>
       </footer>
     </div>
   );

@@ -10,6 +10,7 @@ const EventInventory = () => {
     const [editEventId, setEditEventId] = useState(null);
     const [editAttendeeId, setEditAttendeeId] = useState({ eventIndex: null, attendeeIndex: null });
     const [eventFormData, setEventFormData] = useState({ name: '', date: '' });
+    const [newEventFormData, setNewEventFormData] = useState({ name: '', date: '' });
     const [attendeeFormData, setAttendeeFormData] = useState({ 
         name: '', 
         sizeBefore: '', 
@@ -38,6 +39,11 @@ const EventInventory = () => {
         setEventFormData({ ...eventFormData, [name]: value });
     };
 
+    const handleNewEventInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewEventFormData({ ...newEventFormData, [name]: value });
+    };
+
     const handleCreateEvent = async () => {
         // Check if both name and date fields are provided
         if (!eventFormData.name || !eventFormData.date) {
@@ -46,7 +52,7 @@ const EventInventory = () => {
         }
     
         // If validation passes, create the event
-        await createEvent(eventFormData);
+        await createEvent(newEventFormData);
         setEventFormData({ name: '', date: '' });
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
@@ -220,8 +226,8 @@ const EventInventory = () => {
                                 type="text"
                                 placeholder="Event Name"
                                 name="name"
-                                value={eventFormData.name}
-                                onChange={handleEventInputChange}
+                                value={newEventFormData.name}
+                                onChange={handleNewEventInputChange}
                                 required
                                 className="form-input"
                             />
@@ -233,8 +239,8 @@ const EventInventory = () => {
                                 type="date"
                                 placeholder="Event Date"
                                 name="date"
-                                value={eventFormData.date}
-                                onChange={handleEventInputChange}
+                                value={newEventFormData.date}
+                                onChange={handleNewEventInputChange}
                                 required
                                 className="form-input"
                             />

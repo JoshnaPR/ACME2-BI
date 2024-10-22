@@ -246,12 +246,12 @@ const EventInventory = () => {
                 {successMessage && <h3 style={{ textAlign: 'center'}}>{successMessage}</h3>}
                 {errorMessage && <h3>{errorMessage}</h3>}
 
-                <ul class="event-list">
+                <ul className="event-list">
                     {filteredEvents.length > 0 ? (
                         filteredEvents.map((event, eventIndex) => (
-                            <li key={event._id} class="event-item">
-                                <div class="event-title-container">
-                                    <div class="event-title-and-actions">
+                            <li key={event._id} className="event-item">
+                                <div className="event-title-container">
+                                    <div className="event-title-and-actions">
                                         {editEventId === event._id ? (
                                             <>
                                                 <input
@@ -260,24 +260,24 @@ const EventInventory = () => {
                                                     value={eventFormData.name}
                                                     onChange={handleEventInputChange}
                                                     placeholder="Event Name"
-                                                    class="form-input"
+                                                    className="form-input"
                                                 />
                                                 <input
                                                     type="date"
                                                     name="date"
                                                     value={eventFormData.date}
                                                     onChange={handleEventInputChange}
-                                                    class="form-input"
+                                                    className="form-input"
                                                 />
                                             </>
                                         ) : (
                                             <>
-                                                <h3 class="event-title">{event.name || 'No event name'}</h3>
-                                                <p class="event-date">{new Date(event.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</p>
+                                                <h3 className="event-title">{event.name || 'No event name'}</h3>
+                                                <p className="event-date">{new Date(event.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</p>
                                             </>
                                         )}
 
-                                        <div class="event-actions">
+                                        <div className="event-actions">
                                             {editEventId === event._id ? (
                                                 <button onClick={handleUpdateEvent}>Update</button>
                                             ) : (
@@ -290,12 +290,11 @@ const EventInventory = () => {
                                     </div>
                                 </div>
 
-                                <ul class="attendee-list">
+                                <ul className="attendee-list">
                                     {event.attendees.length > 0 ? (
                                         event.attendees.map((attendee, attendeeIndex) => (
-                                            <li key={attendeeIndex} class="attendee-item">
-                                                {editAttendeeId.eventIndex === eventIndex &&
-                                                editAttendeeId.attendeeIndex === attendeeIndex ? (
+                                            <li key={attendeeIndex} className="attendee-item">
+                                                {editAttendeeId.eventIndex === eventIndex && editAttendeeId.attendeeIndex === attendeeIndex ? (
                                                     <>
                                                         <input
                                                             type="text"
@@ -303,7 +302,7 @@ const EventInventory = () => {
                                                             value={attendeeFormData.name}
                                                             onChange={handleAttendeeInputChange}
                                                             placeholder="Attendee Name"
-                                                            class="form-input"
+                                                            className="form-input"
                                                         />
                                                         <input
                                                             type="text"
@@ -311,7 +310,7 @@ const EventInventory = () => {
                                                             value={attendeeFormData.sizeBefore}
                                                             onChange={handleAttendeeInputChange}
                                                             placeholder="Size Before"
-                                                            class="form-input"
+                                                            className="form-input"
                                                         />
                                                         <input
                                                             type="text"
@@ -319,7 +318,7 @@ const EventInventory = () => {
                                                             value={attendeeFormData.sizeAfter}
                                                             onChange={handleAttendeeInputChange}
                                                             placeholder="Size After"
-                                                            class="form-input"
+                                                            className="form-input"
                                                         />
                                                         <input
                                                             type="text"
@@ -327,7 +326,7 @@ const EventInventory = () => {
                                                             value={attendeeFormData.fitterName}
                                                             onChange={handleAttendeeInputChange}
                                                             placeholder="Fitter Name"
-                                                            class="form-input"
+                                                            className="form-input"
                                                         />
                                                         <input
                                                             type="text"
@@ -335,7 +334,7 @@ const EventInventory = () => {
                                                             value={attendeeFormData.phoneNumber}
                                                             onChange={handleAttendeeInputChange}
                                                             placeholder="Phone Number"
-                                                            class="form-input"
+                                                            className="form-input"
                                                         />
                                                         <input
                                                             type="email"
@@ -343,7 +342,7 @@ const EventInventory = () => {
                                                             value={attendeeFormData.email}
                                                             onChange={handleAttendeeInputChange}
                                                             placeholder="Email"
-                                                            class="form-input"
+                                                            className="form-input"
                                                         />
                                                     </>
                                                 ) : (
@@ -357,9 +356,8 @@ const EventInventory = () => {
                                                     </>
                                                 )}
 
-                                                <div class="attendee-actions">
-                                                    {editAttendeeId.eventIndex === eventIndex &&
-                                                    editAttendeeId.attendeeIndex === attendeeIndex ? (
+                                                <div className="attendee-actions">
+                                                    {editAttendeeId.eventIndex === eventIndex && editAttendeeId.attendeeIndex === attendeeIndex ? (
                                                         <button onClick={handleUpdateAttendee}>Update Attendee</button>
                                                     ) : (
                                                         <>
@@ -371,14 +369,18 @@ const EventInventory = () => {
                                             </li>
                                         ))
                                     ) : (
-                                        <li>No attendees</li>
+                                        <h2 style={{ textAlign: 'center' }}>
+                                            No attendees of this name found.
+                                        </h2>
                                     )}
                                     <button onClick={() => handleAddAttendee(eventIndex)}>Add Attendee</button>
                                 </ul>
                             </li>
                         ))
                     ) : (
-                        <li>No events</li>
+                        <h2 style={{ textAlign: 'center' }}>
+                            {searchByEvent ? "No events found." : "No attendees of this name found."}
+                        </h2>
                     )}
                 </ul>
             </div>

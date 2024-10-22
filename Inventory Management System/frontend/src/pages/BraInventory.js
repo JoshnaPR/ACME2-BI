@@ -173,19 +173,25 @@ const BraInventory = () => {
                 {successMessage && <h2 style={{ textAlign: 'center'}}>{successMessage}</h2>}
                 
                 <ul className="bra-list">
-                    {filteredBras.map(bra => (
-                        <li key={bra._id} className="bra-item">
-                            <div className="bra-details">
-                                <h3>Type: {bra.type}</h3>
-                                <h3>Size: {bra.size}</h3>
-                                <h3>Quantity: {bra.quantity}</h3>
-                            </div>
-                            <div className="bra-actions">
-                                <button onClick={() => setEditBra(bra)}>Edit</button>
-                                <button onClick={() => handleDelete(bra._id)}>Delete</button>
-                            </div>
-                        </li>
-                    ))}
+                    {filteredBras.length > 0 ? (
+                        filteredBras.map(bra => (
+                            <li key={bra._id} className="bra-item">
+                                <div className="bra-details">
+                                    <h3>Type: {bra.type}</h3>
+                                    <h3>Size: {bra.size}</h3>
+                                    <h3>Quantity: {bra.quantity}</h3>
+                                </div>
+                                <div className="bra-actions">
+                                    <button onClick={() => setEditBra(bra)}>Edit</button>
+                                    <button onClick={() => handleDelete(bra._id)}>Delete</button>
+                                </div>
+                            </li>
+                        ))
+                    ) : (
+                        <h2 style={{ textAlign: 'center' }}>
+                            {searchByType ? "No bras of this type found." : "No bras of this size found."}
+                        </h2>
+                    )}
                 </ul>
 
                 {editBra && (

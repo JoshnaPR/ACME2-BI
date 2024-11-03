@@ -7,6 +7,8 @@ const eventSchema = new mongoose.Schema({
         name: String,
         sizeBefore: String,
         sizeAfter: String,
+        braSize1: String,
+        braSize2: String,
         fitterName: String,
         email: String,
         phone: String,

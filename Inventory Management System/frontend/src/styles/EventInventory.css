@@ -266,3 +266,7 @@
     text-decoration: underline;
     color: #ffffff;
   }
+
+  .done-checkbox {
+    margin-left: 89%;
+  }

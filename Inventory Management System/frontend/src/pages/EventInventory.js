@@ -15,6 +15,8 @@ const EventInventory = () => {
         name: '', 
         sizeBefore: '', 
         sizeAfter: '', 
+        braSize1: '',
+        braSize2: '',
         fitterName: '', 
         phoneNumber: '', 
         email: '' 
@@ -89,6 +91,8 @@ const EventInventory = () => {
             name: '', 
             sizeBefore: '', 
             sizeAfter: '', 
+            braSize1: '',
+            braSize2: '',
             fitterName: '', 
             phoneNumber: '', 
             email: '' 
@@ -103,6 +107,8 @@ const EventInventory = () => {
             name: attendee?.name || '', 
             sizeBefore: attendee?.sizeBefore || '', 
             sizeAfter: attendee?.sizeAfter || '',
+            braSize1: attendee?.braSize1 || '',
+            braSize2: attendee?.braSize2 || '',
             fitterName: attendee?.fitterName || '',
             phoneNumber: attendee?.phoneNumber || '',
             email: attendee?.email || ''
@@ -128,6 +134,8 @@ const EventInventory = () => {
             name: '', 
             sizeBefore: '', 
             sizeAfter: '', 
+            braSize1: '',
+            braSize2: '',
             fitterName: '', 
             phoneNumber: '', 
             email: '' 
@@ -328,6 +336,22 @@ const EventInventory = () => {
                                                         />
                                                         <input
                                                             type="text"
+                                                            name="braSize1"
+                                                            value={attendeeFormData.braSize1}
+                                                            onChange={handleAttendeeInputChange}
+                                                            placeholder="Bra Size 1"
+                                                            className="form-input"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            name="braSize2"
+                                                            value={attendeeFormData.braSize2}
+                                                            onChange={handleAttendeeInputChange}
+                                                            placeholder="Bra Size 2"
+                                                            className="form-input"
+                                                        />
+                                                        <input
+                                                            type="text"
                                                             name="fitterName"
                                                             value={attendeeFormData.fitterName}
                                                             onChange={handleAttendeeInputChange}
@@ -356,6 +380,8 @@ const EventInventory = () => {
                                                         <p><strong>Name:</strong> {attendee.name || 'No attendee name'}</p>
                                                         <p><strong>Size Before:</strong> {attendee.sizeBefore || 'No size before'}</p>
                                                         <p><strong>Size After:</strong> {attendee.sizeAfter || 'No size after'}</p>
+                                                        <p><strong>Bra Size 1:</strong> {attendee.braSize1 || 'No bra size 1'}</p>
+                                                        <p><strong>Bra Size 2:</strong> {attendee.braSize2 || 'No bra size 2'}</p>
                                                         <p><strong>Fitter:</strong> {attendee.fitterName || 'No fitter name'}</p>
                                                         <p><strong>Phone:</strong> {attendee.phoneNumber || 'No phone number'}</p>
                                                         <p><strong>Email:</strong> {attendee.email || 'No email'}</p>
@@ -371,6 +397,12 @@ const EventInventory = () => {
                                                             <button onClick={() => handleDeleteAttendee(eventIndex, attendeeIndex)}>Delete</button>
                                                         </>
                                                     )}
+                                                </div>
+                                                <div className='done-checkbox'>
+                                                    <label>
+                                                        <input type="checkbox" />
+                                                        Done    
+                                                    </label>    
                                                 </div>
                                             </li>
                                         ))

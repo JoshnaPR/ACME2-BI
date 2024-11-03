@@ -12,6 +12,7 @@ const BraInventory = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchByType, setSearchByType] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         fetchBras();
@@ -91,6 +92,15 @@ const BraInventory = () => {
         }
     });
 
+    const getInventoryTotals = () => {
+        const totalBras = bras.reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+        const normalBras = bras.filter(bra => bra.type === 'Normal').reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+        const nursingBras = bras.filter(bra => bra.type === 'Nursing').reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+        const disabilityBras = bras.filter(bra => bra.type === 'Disability').reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+
+        return { totalBras, normalBras, nursingBras, disabilityBras };
+    };
+
     return (
         <div className="app">
              <header className="BraInventory-header">
@@ -133,18 +143,22 @@ const BraInventory = () => {
                         </label>
                     </div>
                 </div>
+
                 <form className="bra-form" onSubmit={handleCreate}>
                     <h2>Add a New Bra</h2>
                     <div className="form-row">
                         <div className="form-group">
-                            <input 
-                                type="text" 
-                                placeholder="Type" 
-                                value={newBra.type} 
-                                onChange={(e) => setNewBra({ ...newBra, type: e.target.value })} 
-                                required 
+                            <select
+                                value={newBra.type}
+                                onChange={(e) => setNewBra({ ...newBra, type: e.target.value })}
+                                required
                                 className="form-input"
-                            />
+                            >
+                                <option value="" disabled>Select a Type</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Nursing">Nursing</option>
+                                <option value="Disability">Disability</option>
+                            </select>
                         </div>
                         <div className="form-group">
                             <input 
@@ -169,6 +183,23 @@ const BraInventory = () => {
                     </div>
                     <button type="submit" className="submit-button">Add Bra</button>
                 </form>
+
+                <button className='inventory-button' onClick={() => setShowModal(true)}>
+                    View Inventory Levels
+                </button>
+
+                {showModal && (
+                    <div className='modal-overlay' onClick={() => setShowModal(false)}>
+                        <div className='modal-content' onClick={(e) => e.stopPropagation()}>
+                            <h2>Inventory Levels</h2>
+                            <p>Total Bras: {getInventoryTotals().totalBras}</p>
+                            <p>Normal Bras: {getInventoryTotals().normalBras}</p>
+                            <p>Nursing Bras: {getInventoryTotals().nursingBras}</p>
+                            <p>Disability Bras: {getInventoryTotals().disabilityBras}</p>
+                            <button onClick={() => setShowModal(false)}>Close</button>
+                        </div>
+                    </div>
+                )}
 
                 {successMessage && <h2 style={{ textAlign: 'center'}}>{successMessage}</h2>}
                 

@@ -4,7 +4,7 @@ import { createEvent, getEvents } from '../services/eventService';
 const EventManager = () => {
     const [events, setEvents] = useState([]);
     const [newEvent, setNewEvent] = useState({ name: '', date: '', attendees: [] });
-    const [newAttendee, setNewAttendee] = useState({ name: '', sizeBefore: '', sizeAfter: '', fitterName: '', email: '', phone: '' });
+    const [newAttendee, setNewAttendee] = useState({ name: '', sizeBefore: '', sizeAfter: '', braSize1: '', braSize2: '', fitterName: '', email: '', phone: '' });
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -19,7 +19,7 @@ const EventManager = () => {
         if (newAttendee.name && newAttendee.sizeBefore && newAttendee.sizeAfter) {
             setNewEvent({ ...newEvent, attendees: [...newEvent.attendees, newAttendee] });
             // Clear the attendee input fields
-            setNewAttendee({ name: '', sizeBefore: '', sizeAfter: '', fitterName: '', email: '', phone: '' });
+            setNewAttendee({ name: '', sizeBefore: '', sizeAfter: '', braSize1: '', braSize2: '', fitterName: '', email: '', phone: '' });
         } else {
             alert("Please fill in all the fields for the attendee.");
         }
@@ -70,6 +70,18 @@ const EventManager = () => {
                     placeholder="Size After"
                     value={newAttendee.sizeAfter}
                     onChange={(e) => setNewAttendee({ ...newAttendee, sizeAfter: e.target.value })}
+                />
+                <input
+                    type="text"
+                    placeholder="Bra Size 1"
+                    value={newAttendee.braSize1}
+                    onChange={(e) => setNewAttendee({ ...newAttendee, braSize1: e.target.value })}
+                />
+                <input
+                    type="text"
+                    placeholder="Bra Size 2"
+                    value={newAttendee.braSize2}
+                    onChange={(e) => setNewAttendee({ ...newAttendee, braSize2: e.target.value })}
                 />
                 <input
                     type="text"

@@ -89,7 +89,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
-    max-width: 300px;
+    max-width: 400px;
     text-align: center;
   }
   
@@ -222,4 +222,38 @@
   .social-links a:hover {
     text-decoration: underline;
     color: #ffffff;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    background: #ffc4f7;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  .inventory-button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 13px;
+    border-radius: 5px;
+    margin: 20px auto;
+    display: block;
   }

@@ -25,7 +25,10 @@ Here are links to the issues that we completed in this sprint:
  * [Search items from database](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=80006110&issue=JoshnaPR%7CACME2-BI%7C3)
  * [Adding/Removing items in the database](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=80006153&issue=JoshnaPR%7CACME2-BI%7C2)
  * [See updates in the database](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83109666&issue=JoshnaPR%7CACME2-BI%7C12)
- * [Sprint 2]()
+ * [UI for the homepage](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379647&issue=JoshnaPR%7CACME2-BI%7C16) - Just need to implement what the client wanted.
+ * [UI for bra inventory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379722&issue=JoshnaPR%7CACME2-BI%7C17) - Just need to implement what the client wanted.
+ * [UI for event/attendee invetory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379752&issue=JoshnaPR%7CACME2-BI%7C18) - Just need to implement what the client wanted.
+ * [Sprint 2](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=85442729&issue=JoshnaPR%7CACME2-BI%7C36)
 
  ## Incomplete Issues/User Stories
  Here are links to issues we worked on but did not complete in this sprint:
@@ -35,10 +38,7 @@ Here are links to the issues that we completed in this sprint:
  * [Reset Password](https://github.com/JoshnaPR/ACME2-BI/issues/5) - This will be done in the login page.
  * [2 Factor Authorization - Google Authenticator](https://github.com/JoshnaPR/ACME2-BI/issues/4) - This will be implemented within the login page.
  * [Logging In With The Correct Credentials](https://github.com/JoshnaPR/ACME2-BI/issues/1) - We need to test if a test user that we create will be able to log in.
- * [UI for the homepage](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379647&issue=JoshnaPR%7CACME2-BI%7C16) - Just need to implement what the client wanted.
- * [UI for bra inventory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379722&issue=JoshnaPR%7CACME2-BI%7C17) - Just need to implement what the client wanted.
- * [UI for event/attendee invetory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379752&issue=JoshnaPR%7CACME2-BI%7C18) - Just need to implement what the client wanted.
- 
+
 ## Code Files for Review
 
 Here are the current code files for review:

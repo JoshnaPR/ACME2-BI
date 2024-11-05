@@ -48,14 +48,14 @@ const EventInventory = () => {
 
     const handleCreateEvent = async () => {
         // Check if both name and date fields are provided
-        if (!eventFormData.name || !eventFormData.date) {
+        if (!newEventFormData.name || !newEventFormData.date) {
             setErrorMessage('Event name and date are required.');
             return;
         }
     
         // If validation passes, create the event
         await createEvent(newEventFormData);
-        setEventFormData({ name: '', date: '' });
+        setNewEventFormData({ name: '', date: '' });
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
         setSuccessMessage('Event created successfully');
@@ -76,7 +76,15 @@ const EventInventory = () => {
             setSuccessMessage('Event deleted successfully');
         }
     };
-    
+
+    const handleUpdateEvent = async () => {
+        await updateEvent(editEventId, eventFormData);
+        setEditEventId(null);
+        setEventFormData({ name: '', date: '' });
+        const updatedEvents = await getEvents();
+        setEvents(updatedEvents);
+        setSuccessMessage('Event updated successfully');
+    };
 
     const handleAttendeeInputChange = (e) => {
         const { name, value } = e.target;
@@ -113,15 +121,6 @@ const EventInventory = () => {
             phoneNumber: attendee?.phoneNumber || '',
             email: attendee?.email || ''
         });
-    };
-
-    const handleUpdateEvent = async () => {
-        await updateEvent(editEventId, eventFormData);
-        setEditEventId(null);
-        setEventFormData({ name: '', date: '' });
-        const updatedEvents = await getEvents();
-        setEvents(updatedEvents);
-        setSuccessMessage('Event updated successfully');
     };
 
     const handleUpdateAttendee = async () => {
@@ -305,7 +304,7 @@ const EventInventory = () => {
                                 </div>
 
                                 <ul className="attendee-list">
-                                    {event.attendees.length > 0 ? (
+                                    {event.attendees && event.attendees.length > 0 ? (
                                         event.attendees.map((attendee, attendeeIndex) => (
                                             <li key={attendeeIndex} className="attendee-item">
                                                 {editAttendeeId.eventIndex === eventIndex && editAttendeeId.attendeeIndex === attendeeIndex ? (
@@ -407,9 +406,11 @@ const EventInventory = () => {
                                             </li>
                                         ))
                                     ) : (
-                                        <h2 style={{ textAlign: 'center' }}>
-                                            No attendees of this name found.
-                                        </h2>
+                                        searchTerm && searchByAttendee ? (
+                                            <h2 style={{ textAlign: 'center' }}>
+                                                No attendees of this name found.
+                                            </h2>
+                                        ) : null
                                     )}
                                     <button onClick={() => handleAddAttendee(eventIndex)}>Add Attendee</button>
                                 </ul>

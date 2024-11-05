@@ -1,7 +1,7 @@
 # Sprint 2 Report (10/06/2024 - 11/05/2024)
 
 ## Sprint Video
-[Sprint 2 Demo Video]()
+[Sprint 2 Demo Video](https://www.youtube.com/watch?v=MXOypEhCpbY) - The Event Add now works.
 
 ## What's New
 * We have made both the bra and event/attendee inventories with a user friendly UI. 
@@ -25,9 +25,9 @@ Here are links to the issues that we completed in this sprint:
  * [Search items from database](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=80006110&issue=JoshnaPR%7CACME2-BI%7C3)
  * [Adding/Removing items in the database](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=80006153&issue=JoshnaPR%7CACME2-BI%7C2)
  * [See updates in the database](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83109666&issue=JoshnaPR%7CACME2-BI%7C12)
- * [UI for the homepage](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379647&issue=JoshnaPR%7CACME2-BI%7C16) - Just need to implement what the client wanted.
- * [UI for bra inventory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379722&issue=JoshnaPR%7CACME2-BI%7C17) - Just need to implement what the client wanted.
- * [UI for event/attendee invetory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379752&issue=JoshnaPR%7CACME2-BI%7C18) - Just need to implement what the client wanted.
+ * [UI for the homepage](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379647&issue=JoshnaPR%7CACME2-BI%7C16) 
+ * [UI for bra inventory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379722&issue=JoshnaPR%7CACME2-BI%7C17)
+ * [UI for event/attendee invetory page](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=83379752&issue=JoshnaPR%7CACME2-BI%7C18) 
  * [Sprint 2](https://github.com/users/JoshnaPR/projects/2/views/2?pane=issue&itemId=85442729&issue=JoshnaPR%7CACME2-BI%7C36)
 
  ## Incomplete Issues/User Stories

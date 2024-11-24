@@ -1,109 +1,143 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import "../styles/style.css"; // Ensure this matches the correct file path
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'Volunteer', // Default role
-  });
+function Register() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [error, setError] = useState("");
 
-  const [qrCodeUrl, setQrCodeUrl]=useState('');
-  const [message, setMessage]=useState('');
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // Call the backend API to register the user
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
 
-      if (data.qrCodeUrl){
-        setQrCodeUrl(data.qrCodeUrl);
-        setMessage('Registration successful. Please scan the QR code with Google Authenticator to complete the registration.');
-      } else{
-        setMessage('Registration failed. Unable to get QR code. Please try again.');
-      }
-      } catch (error) {
-        console.error('Error during signup!',error);
-        setMessage("Error during registration");
-      }
+    // Send registration data to backend
+    axios
+      .post("http://localhost:5000/register", {
+        firstName,
+        lastName,
+        username,
+        email,
+        password,
+        role,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          console.log("Registration successful!");
+          // Redirect to login page or show success message
+        }
+      })
+      .catch((err) => {
+        setError("Registration failed. Please try again.");
+        console.error(err);
+      });
   };
 
   return (
-    <div className="signup-form">
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Role:
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-          >
-            <option value="Volunteer">Volunteer</option>
-            <option value="Admin">Admin</option>
-          </select>
-        </label>
-        <button type="submit">Sign Up</button>
-      </form>
+    <div className="wrapper">
+      <span className="bg-animate"></span>
+      <span className="bg-animate2"></span>
 
-      {/* This is to display success or error message */}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      <div className="form-box register step1">
+        <h2>Register</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="input-box">
+            <input
+              type="text"
+              required
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <label>First Name</label>
+            <i className="bx bxs-user"></i>
+          </div>
 
-      {/* This is to display QR code for 2FA setup if available */}
-      {qrCodeUrl && (
-        <div>
-          <h3>Scan this QR code with Google Authenticator</h3>
-          <img src={qrCodeUrl} alt="QR Code"/>
-        </div>
-      )}
+          <div className="input-box">
+            <input
+              type="text"
+              required
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <label>Last Name</label>
+            <i className="bx bxs-user"></i>
+          </div>
+
+          <div className="input-box">
+            <input
+              type="text"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <label>Username</label>
+            <i className="bx bxs-user"></i>
+          </div>
+
+          <div className="input-box">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label>Email</label>
+            <i className="bx bxs-envelope"></i>
+          </div>
+
+          <div className="input-box">
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label>Password</label>
+            <i className="bx bxs-lock-alt"></i>
+          </div>
+
+          <div className="input-box">
+            <select
+              required
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="" disabled selected>
+                Select Role
+              </option>
+              <option value="Admin">Admin</option>
+              <option value="Volunteer">Volunteer</option>
+            </select>
+
+            <label>Role</label>
+            <i className="bx bxs-id-card"></i>
+          </div>
+
+          <button type="submit" className="btn">
+            Register
+          </button>
+
+          <div className="logreg-link">
+            <p>
+              Have an account already?{" "}
+              <a href="/login" className="login-link">
+                Login
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <div className="info-text register">
+        <h2>Welcome!</h2>
+        <p>We're excited to see what changes you'll bring to someone's life today!</p>
+      </div>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
-};
+}
 
-export default Signup;
+export default Register;

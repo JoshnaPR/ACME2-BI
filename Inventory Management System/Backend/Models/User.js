@@ -14,7 +14,8 @@ const userSchema = new Schema({
         enum:['Admin','Volunteer'],
         default:'Volunteer'
     },
-    twoFactorSecret:{type:String}
+    twoFactorSecret:{type:String},
+    is2FAEnabled: {type:Boolean, default: false},
 });
 // this ^ paragraph was to create the schema of what sort of information is required from the user
 

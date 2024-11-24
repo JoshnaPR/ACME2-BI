@@ -8,8 +8,14 @@ const userSchema = new Schema({
     username:{type:String, required:[true,'Username is required!'], unique:true},
     email: {type:String, required:[true,'Email is required!'], unique:true},
     password: {type:String, required:[true,'Password is required!']},
-    role: {type:String, required:[true,'Role is required!']},
-    });
+    role: {
+        type:String, 
+        required:[true,'Role is required!'],
+        enum:['Admin','Volunteer'],
+        default:'Volunteer'
+    },
+    twoFactorSecret:{type:String}
+});
 // this ^ paragraph was to create the schema of what sort of information is required from the user
 
 userSchema.pre("save",async function(next){
@@ -28,4 +34,5 @@ userSchema.methods.comparePassword = async function (password){
 // this ^ paragraph was to compare the password entered by the user with the hashed password in the database
 
 const User =mongoose.model("User", userSchema);
-module.exports=User;
+
+module.exports = User;

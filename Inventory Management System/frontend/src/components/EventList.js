@@ -9,7 +9,9 @@ const EventList = () => {
     const [attendeeFormData, setAttendeeFormData] = useState({ 
         name: '', 
         sizeBefore: '', 
-        sizeAfter: '', 
+        sizeAfter: '',
+        braSize1: '',
+        braSize2: '', 
         fitterName: '', 
         phoneNumber: '', 
         email: '' 
@@ -45,6 +47,8 @@ const EventList = () => {
             name: attendee?.name || '', 
             sizeBefore: attendee?.sizeBefore || '', 
             sizeAfter: attendee?.sizeAfter || '',
+            braSize1: attendee?.braSize1 || '',
+            braSize2: attendee?.braSize2 || '',
             fitterName: attendee?.fitterName || '',
             phoneNumber: attendee?.phoneNumber || '',
             email: attendee?.email || ''
@@ -69,6 +73,8 @@ const EventList = () => {
             name: '', 
             sizeBefore: '', 
             sizeAfter: '', 
+            braSize1: '',
+            braSize2: '',
             fitterName: '', 
             phoneNumber: '', 
             email: '' 
@@ -84,6 +90,8 @@ const EventList = () => {
             name: '', 
             sizeBefore: '', 
             sizeAfter: '', 
+            braSize1: '',
+            braSize2: '',
             fitterName: '', 
             phoneNumber: '', 
             email: '' 
@@ -185,6 +193,20 @@ const EventList = () => {
                                                     />
                                                     <input
                                                         type="text"
+                                                        name="braSize1"
+                                                        value={attendeeFormData.braSize1}
+                                                        onChange={handleAttendeeInputChange}
+                                                        placeholder="Bra Size 1"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="braSize2"
+                                                        value={attendeeFormData.braSize2}
+                                                        onChange={handleAttendeeInputChange}
+                                                        placeholder="Bra Size 2"
+                                                    />
+                                                    <input
+                                                        type="text"
                                                         name="fitterName"
                                                         value={attendeeFormData.fitterName}
                                                         onChange={handleAttendeeInputChange}
@@ -210,6 +232,7 @@ const EventList = () => {
                                                 <>
                                                     <span>{attendee?.name || 'No attendee name'}</span> - 
                                                     <span>{attendee?.sizeBefore || 'No size before'} to {attendee?.sizeAfter || 'No size after'}</span> - 
+                                                    <span>{attendee?.braSize1 || 'No bra size 1'} to {attendee?.braSize2 || 'No bra size 2'}</span> -
                                                     <span>{attendee?.fitterName || 'No fitter name'}</span> - 
                                                     <span>{attendee?.phoneNumber || 'No phone number'}</span> - 
                                                     <span>{attendee?.email || 'No email'}</span>

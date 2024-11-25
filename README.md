@@ -20,15 +20,24 @@ Currently, we have no Add-ons.
 
 ### Installation Steps
 
-Currently, we do not have any installation steps.
+Currently, you can create a remote clone of our repo and within two powershell terminals and having the MondoDB connect on Angel's local device you can do this:
+* Terminal 1
+  1. Change directory to backend
+  2. Use "npm start" command"
+* Terminal 2
+  1. Change directory to frontend
+  2. Use "npm start" command"
+* MongoDB
+  1. Connect on Angel's local device
 
 ## Functionality
 
-1. Log in & Authenticate
-2. Update/add/delete from inventory - Bras sorted by type and size
-3. Update/add/delete from inventory - Events contain information about the client who attended the event
-4. Ensure that inventory is updated as it should
-5. Logout.
+1. Sign up and make an account
+2. Log in & Authenticate
+3. Update/add/delete from inventory - Bras sorted by type and size
+4. Update/add/delete from inventory - Events contain information about the client who attended the event
+5. Ensure that inventory is updated as it should
+6. Logout
 
 ## Known Problems
 

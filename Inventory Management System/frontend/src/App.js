@@ -7,7 +7,8 @@ import HomePage from './pages/HomePage';
 import Login from './pages/Login'; // Add Login page import
 import Signup from './pages/Signup'; // Add Signup page import
 import VerifyOTP from './components/VerifyOTP'; // Import VerifyOTP component
-import './styles/global.css'; // Import the global CSS
+import './styles/BraInventory.css'; // Import the App component's CSS
+import './styles/HomePage.css'; // Import the App component's CSS
 
 function App() {
   const [message, setMessage] = useState('');

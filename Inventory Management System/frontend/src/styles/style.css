@@ -37,27 +37,31 @@ body {
 }
 
 .wrapper .form-box.login{
-    left: 0;
+    left: 20px;
     top:-120px;
-    padding: -10px  60px 0 50px;
+    padding: -10px  50px 0 70px;
     /* display: none; */
 }
 
 .wrapper .form-box.login .animation{
     transform:translateX(0);
+    opacity:1;
+    filter:blur(0);
     transition: .7s ease;
 }
 
 .wrapper.active .form-box.login .animation{
-    transform:translateX(-120%)
-
+    transform:translateX(-120%);
+    opacity:0;
+    filter:blur(10px);
+    transition-delay: calc(.1s *var(--i));
 }
 
 .wrapper .form-box.register{
     right:0;
     top:-100px;
     padding: 0px 20px 0px 50px;
-    display: none;
+    /* display: none; */
 }
 
 .form-box h2{
@@ -200,7 +204,7 @@ body {
     padding: 30px 30px 60px 20px;
     position: absolute;
     top:-15%; 
-    display: none;
+    /* display: none; */
 }
 
 .info-text h2 {

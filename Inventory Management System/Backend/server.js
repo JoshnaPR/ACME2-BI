@@ -24,11 +24,13 @@ const Bra = require('./Models/Bra'); // Ensure this model exists
 const eventRoutes = require('./Routes/eventRoutes'); // Create this file
 const braRoutes = require('./Routes/braRoutes'); // Create this file
 const verifyOtpRoutes = require('./Routes/verifyOtpRoutes');
+const userRoutes=require("./Routes/userRoutes")
 
 // Use Routes
 app.use('/api/events', eventRoutes);
 app.use('/api/bras', braRoutes);
 app.use('/api', verifyOtpRoutes);
+app.use("/api/users", userRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {

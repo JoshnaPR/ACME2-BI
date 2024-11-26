@@ -1,4 +1,6 @@
 // roleMiddleware.js - this is to check if the authenticated user has the required role
+// so here we use the role from 'req.user' (set by authMiddleware), compare the required role with 
+// the user's role and return the result as a boolean
 
 // Middleware to check if the user has the required role
 const checkRole = (role) => {

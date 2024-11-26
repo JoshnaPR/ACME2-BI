@@ -1,3 +1,11 @@
+/* This handles the authentication and the 2FA. 
+'/register' - creates a new user, generates a 2FA secret and QR code
+'/login' - validates user credentials and, if enabled, verifies OTP for 2FA
+'/enable-2fa' - this verifies the OTP to enable 2FA for a user
+There are also role-based endpoints: 
+'/admin-endpoint' & '/volunteer-endpoint' that are protected by roleMiddleware to allow only Admins or volunteers*/ 
+
+
 const express = require("express");
 const speakeasy = require("speakeasy");
 const QRCode = require("qrcode");

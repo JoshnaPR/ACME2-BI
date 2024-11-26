@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/style.css"; // Ensure this matches the correct file path
 
@@ -11,38 +12,45 @@ function Login() {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const navigate = useNavigate(); // Use navigate for programmatic navigation
+
+  // Handle the login form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
 
     try {
+      // Send login credentials (email and password) to the backend
       const response = await axios.post("http://localhost:5000/login", {
         email,
         password,
       });
 
+      // If 2FA is required, show OTP input form
       if (response.data.twoFactorRequired) {
         setIsOtpSent(true); // Show OTP input form
         setSuccessMessage("OTP sent to your registered email.");
       } else if (response.data.token) {
-        // Check if the role is provided in the response
-        setRole(response.data.role); 
-        localStorage.setItem("token", response.data.token);
+        // If login is successful, store the token in localStorage
+        setRole(response.data.role); // Set user role
+        localStorage.setItem("token", response.data.token); // Store token in localStorage
         setSuccessMessage("Login successful!");
-        window.location.href = role === "Admin" ? "/admin-dashboard" : "/dashboard"; // Redirect based on role
+        navigate("/home"); // Redirect to Home Page
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password.");
     }
   };
 
+  // Handle OTP form submission after login
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
 
     try {
+      // Verify the OTP entered by the user
       const response = await axios.post("http://localhost:5000/verify-otp", {
         email,
         otp,
@@ -50,9 +58,9 @@ function Login() {
 
       if (response.data.success && response.data.token) {
         setRole(response.data.role); // Update role after successful OTP verification
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.token); // Store token in localStorage
         setSuccessMessage("2FA verification successful!");
-        window.location.href = role === "Admin" ? "/admin-dashboard" : "/dashboard"; // Redirect based on role
+        navigate("/home"); // Redirect to Home Page
       } else {
         setError("Invalid OTP.");
       }

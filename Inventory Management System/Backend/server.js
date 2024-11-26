@@ -6,7 +6,8 @@ const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
 
 // Load environment variables
-dotenv.config();
+require('dotenv').config();
+console.log('MongoDB URI: ', process.env.MONGODB_URI);
 
 // Create an Express app
 const app = express();

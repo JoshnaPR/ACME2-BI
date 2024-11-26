@@ -1,3 +1,8 @@
+/*This handles basic user management. 
+'/register' = registers new users without 2FA setup
+'/login' - authenticates users and issues a JWT
+'/protected' - a test route to show how authentication works using authMiddleware */
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

@@ -3,16 +3,24 @@ import axios from "axios";
 import "../styles/style.css"; // Ensure this matches the correct file path
 
 function Register() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    role: "",
+  });
+
   const [googleAuthSetup, setGoogleAuthSetup] = useState(false);
   const [qrCode, setQrCode] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,26 +28,19 @@ function Register() {
     setSuccessMessage("");
 
     try {
-      // Step 1: Send registration data to backend
-      const response = await axios.post("http://localhost:5000/api/users/register", {
-        firstName,
-        lastName,
-        username,
-        email,
-        password,
-        role,
-      });
+      // Step 1: Register the user
+      const response = await axios.post("http://localhost:5000/api/users/register", formData);
 
       if (response.data.success) {
         setSuccessMessage("Registration successful! Setting up Google Authenticator...");
-        
+
         // Step 2: Setup Google Authenticator
         const googleAuthResponse = await axios.post("http://localhost:5000/api/users/setup-google-auth", {
-          email,
+          email: formData.email,
         });
 
         if (googleAuthResponse.data.qrCode) {
-          setQrCode(googleAuthResponse.data.qrCode); // Set QR code for display
+          setQrCode(googleAuthResponse.data.qrCode); // Display QR Code
           setGoogleAuthSetup(true);
         } else {
           setError("Failed to set up Google Authenticator.");
@@ -63,9 +64,10 @@ function Register() {
             <div className="input-box">
               <input
                 type="text"
+                name="firstName"
                 required
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={formData.firstName}
+                onChange={handleChange}
               />
               <label>First Name</label>
               <i className="bx bxs-user"></i>
@@ -74,9 +76,10 @@ function Register() {
             <div className="input-box">
               <input
                 type="text"
+                name="lastName"
                 required
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                value={formData.lastName}
+                onChange={handleChange}
               />
               <label>Last Name</label>
               <i className="bx bxs-user"></i>
@@ -85,9 +88,10 @@ function Register() {
             <div className="input-box">
               <input
                 type="text"
+                name="username"
                 required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={formData.username}
+                onChange={handleChange}
               />
               <label>Username</label>
               <i className="bx bxs-user"></i>
@@ -96,9 +100,10 @@ function Register() {
             <div className="input-box">
               <input
                 type="email"
+                name="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
               />
               <label>Email</label>
               <i className="bx bxs-envelope"></i>
@@ -107,9 +112,10 @@ function Register() {
             <div className="input-box">
               <input
                 type="password"
+                name="password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
               />
               <label>Password</label>
               <i className="bx bxs-lock-alt"></i>
@@ -117,9 +123,10 @@ function Register() {
 
             <div className="input-box">
               <select
+                name="role"
                 required
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
+                value={formData.role}
+                onChange={handleChange}
               >
                 <option value="" disabled>
                   Select Role

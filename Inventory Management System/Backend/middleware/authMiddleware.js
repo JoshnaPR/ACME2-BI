@@ -1,4 +1,7 @@
 //  this is to ensure that the user is authenticated
+// So the token is extracted from the request header, it is decoded using the secret key. 
+// If valid, the 'req.user' object is populated with user details and passed to the next middleware or route
+
 const jwt = require("jsonwebtoken");
 
 // Middleware to verify JWT token

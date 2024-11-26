@@ -58,7 +58,7 @@ function Register() {
     <div className="wrapper">
       <span className="bg-animate2"></span>
       <div className="form-box register">
-        <h2>Register</h2>
+        <h2>Sign Up</h2>
         {!googleAuthSetup ? (
           <form onSubmit={handleSubmit}>
             <div className="input-box">
@@ -121,7 +121,7 @@ function Register() {
               <i className="bx bxs-lock-alt"></i>
             </div>
 
-            <div className="input-box">
+            <div className="input-box ">
               <select
                 name="role"
                 required

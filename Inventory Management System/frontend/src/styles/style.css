@@ -12,7 +12,8 @@ body {
     justify-content: center;
     align-items:center;
     min-height:100vh;
-    background:  rgb(250, 184, 195);
+    /* background:  rgb(250, 184, 195); */
+    background:  black;
 }
 
 .wrapper{
@@ -21,7 +22,7 @@ body {
     height: 600px;
     background: transparent;
     border: 2px solid white;
-    box-shadow: 0 0 25px rgb(239, 114, 135) ;
+    box-shadow: 0 0 23px rgb(239, 114, 135) ;
     overflow: hidden;
 
 }
@@ -60,8 +61,8 @@ body {
 
 .wrapper .form-box.register{
     right:0;
-    top:-100px;
-    padding: 0px 20px 0px 50px;
+    top:-120px;
+    padding: 0px 20px 0px 40px;
     pointer-events: none;
     /* display: none; */
 }
@@ -88,7 +89,7 @@ body {
 
 .form-box h2{
     font-size:32px;
-    color:white;
+    color:black;
     text-align: center;
 }
 
@@ -105,7 +106,7 @@ body {
     background: transparent;
     border:none;
     outline:none;
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid black;
     padding-right: 23px;
     font-size: 16px;
     color:black;
@@ -118,21 +119,35 @@ body {
     border-bottom-color: palevioletred;
 }
 
+/* Register page details */
 .input-box label{
     position: absolute;
-    top:50%;
+    top:60%;
     left:0;
+    right:0;
     transform: translateY(-50%);
     font-size: 16px;
-    color:#fff;
+    color:black;
     pointer-events:none;
     transition: .5s;
 }
 
+/* .input-box .role-input-label{
+    position: absolute;
+    top:50%;
+    left:0;
+    right:70px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color:black;
+    pointer-events:none;
+    transition: .5s;
+} */
+
 .input-box input:focus~label,
 .input-box input:valid~label{
     top:-5px;
-    color:palevioletred;
+    color:rgb(239, 114, 135);
 }
 
 
@@ -142,14 +157,13 @@ body {
     right:0;
     transform: translateY(-50%);
     font-size: 18px;
-    color: #fff;
+    color: black;
     transition:.5s;
 }
 
 .input-box input:focus~i,
 .input-box input:valid~i{
     color: rgb(250, 184, 195);
-
 }
 
 .btn{
@@ -157,12 +171,12 @@ body {
     width:100%;
     height:45px;
     background:transparent;
-    border: 2px solid #fff;
+    border: 2px solid black;
     outline:none;
     border-radius: 40px;
     cursor: pointer;
     font-size: 16px;
-    color: #fff;
+    color: black; 
     font-weight: 600;
     z-index: 1;
     overflow:hidden;
@@ -174,8 +188,8 @@ body {
     top:-100;
     left:0;
     width: 100%;
-    height:300%;
-    background: linear-gradient(rgb(245, 180, 191),rgb(239, 114, 135),rgb(245, 180, 191),rgb(239, 114, 135));
+    height:200%;
+    background: rgb(245, 180, 191);
     z-index: -1;
     transition: .5s;
 }
@@ -186,7 +200,7 @@ body {
 
 .form-box .logreg-link{
     font-size: 14.5px;
-    color:#fff;
+    color:black;
     text-align: center;
     margin: 20px 0 10px;
 }
@@ -213,11 +227,11 @@ body {
 
 }
 
+/* "Welcome, We're excited.." Text on Register page */
 .wrapper .info-text.login{
     right:0;
     text-align: right;
-    padding: 0 40px 60px 150px;
-    /* display: none; */
+    padding: 10px 40px 60px 150px;
 }
 
 .wrapper .info-text.login .animation {
@@ -235,10 +249,11 @@ body {
     /* transition-delay: calc(.1s * var(--i)); */
 }
 
+/* "Welcome, We're excited.." Text on Register page */
 .wrapper .info-text.register{
     left:0;
     text-align:left;
-    padding: 30px 30px 60px 20px;
+    padding: 10px 30px 60px 10px;
     position: absolute;
     top:-15%; 
     pointer-events: none;
@@ -264,18 +279,21 @@ body {
     /* transition-delay: calc(.1s * var(--i)); */
 }
 
+/* Welcome/Welcome Back heading on Register and Login Page */
 .info-text h2 {
     font-size: 36px;
-    color:white;
+    color:black;
     line-height: 1.3;
     text-transform: uppercase;
 }
 
+/*" We're excited to see... " text on Login and Register page */
 .info-text p{
     font-size: 16px;
-    color: #fff;
+    color: black;
 }
 
+/* Dark pink band on Login page */
 .wrapper .bg-animate{
     position: absolute;
     top: -4px;
@@ -284,7 +302,7 @@ body {
     height: 700px;
     background: linear-gradient(45deg,rgb(239, 114, 135),rgb(245, 180, 191));
     border-bottom: 3px solid white;
-    transform: rotate(10deg) skewY(40deg);
+    transform: rotate(10deg) skewY(42deg);
     transform-origin: bottom right;
     transition: 1.5s ease;
     transition-delay: 1.6s;
@@ -295,15 +313,16 @@ body {
     transition-delay: .5s;
 }
 
+/* Dark pink band on Register page */
 .wrapper .bg-animate2{
     position: absolute;
     top: 100%;
     left: 150px;
-    width: 850px;
-    height: 700px;
-    background: rgb(245, 180, 191);
+    width: 950px;
+    height: 770px;
+    background: linear-gradient(45deg,rgb(239, 114, 135),rgb(245, 180, 191));
     border-top: 3px solid white;
-    transform: rotate(0) skewY(0);
+    transform: rotate(-12deg) skewY(-38deg);
     transform-origin: bottom left;
     transition: 1.5s ease;
     transition-delay: .5s;

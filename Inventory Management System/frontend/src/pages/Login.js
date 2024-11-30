@@ -6,8 +6,6 @@ import "../styles/style.css"; // Ensure this matches the correct file path
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isOtpSent, setIsOtpSent] = useState(false);
-  const [role, setRole] = useState(""); // Store the user's role after login
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -36,7 +34,7 @@ function Login() {
       );
       if (response.data) {
         // If login is successful, store the token in localStorage
-        setRole(response.data.role); // Set user role
+        localStorage.setItem("role", response.data.role);
         if (response.data.token) {
           localStorage.setItem("token", response.data.token); // Store token in localStorage
         }

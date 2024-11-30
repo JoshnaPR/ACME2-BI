@@ -28,16 +28,24 @@ function Register() {
     setSuccessMessage("");
 
     try {
-      // Step 1: Register the user
-      const response = await axios.post("http://localhost:5000/api/users/register", formData);
+      // Step 1: Register new user
+      const response = await axios.post(
+        "http://localhost:5000/api/users/register",
+        formData
+      );
 
       if (response.data.success) {
-        setSuccessMessage("Registration successful! Setting up Google Authenticator...");
+        setSuccessMessage(
+          "Registration successful! Setting up Google Authenticator..."
+        );
 
         // Step 2: Setup Google Authenticator
-        const googleAuthResponse = await axios.post("http://localhost:5000/api/users/setup-google-auth", {
-          email: formData.email,
-        });
+        const googleAuthResponse = await axios.post(
+          "http://localhost:5000/api/users/setup-google-auth",
+          {
+            email: formData.email,
+          }
+        );
 
         if (googleAuthResponse.data.qrCode) {
           setQrCode(googleAuthResponse.data.qrCode); // Display QR Code
@@ -46,7 +54,9 @@ function Register() {
           setError("Failed to set up Google Authenticator.");
         }
       } else {
-        setError(response.data.message || "Registration failed. Please try again.");
+        setError(
+          response.data.message || "Registration failed. Please try again."
+        );
       }
     } catch (err) {
       setError("An error occurred during registration. Please try again.");
@@ -175,7 +185,10 @@ function Register() {
 
       <div className="info-text register">
         <h2>Welcome!</h2>
-        <p>We're excited to see what changes you'll bring to someone's life today!</p>
+        <p>
+          We're excited to see what changes you'll bring to someone's life
+          today!
+        </p>
       </div>
     </div>
   );

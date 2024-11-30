@@ -1,183 +1,327 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-body 
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: rgb(248, 156, 172);
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* background:  rgb(250, 184, 195); */
+  background: black;
 }
 
-section
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    background: url('BreastIntentionsPic.jpg') no-repeat;
-    background-size: cover;
-    background-position: center;
-    animation: animateBg 5s liner infinite;
+.wrapper {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 23px rgb(239, 114, 135);
+  overflow: hidden;
 }
 
-@keyframes animateBg 
-{
-    100%
-    {
-        filter: hue-rotate(360deg);
-    }
+.wrapper .form-box {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 150%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.login-box
-{
-    position: relative;
-    width: 400px;
-    height: 450px;
-    background: transparent;
-    border:2px solid rgba(255, 255, 255, .5);
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(20px);
+.wrapper .form-box.login {
+  left: 20px;
+  top: -120px;
+  padding: -10px 50px 0 70px;
+  /* display: none; */
 }
 
-h2
-{   
-    font-size: 2em;
-    color: black;
-    text-align: center;
+.wrapper .form-box.login .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition: 0.7s ease;
+  transition-delay: calc(0.1s * var(--j));
 }
 
-.input-box
-{
-    position: relative;
-    width: 310px;
-    margin: 30px 0;
-    border-bottom: 2px solid 
+.wrapper.active .form-box.login .animation {
+  transform: translateX(-120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition-delay: calc(0.1s * var(--i));
 }
 
-.input-box label
-{
+.wrapper .form-box.register {
+  right: 0;
+  top: -120px;
+  padding: 0px 20px 0px 40px;
+  /* display: none; */
+}
+
+.wrapper.active .form-box.register {
+  pointer-events: auto;
+}
+
+.wrapper .form-box.register .animation {
+  transform: translateX(120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition: 0.7s ease;
+  transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .form-box.register .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition-delay: calc(0.1s * var(--i));
+}
+
+.form-box h2 {
+  font-size: 32px;
+  color: black;
+  text-align: center;
+}
+
+.form-box .input-box {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  margin: 25px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  padding-right: 23px;
+  font-size: 16px;
+  color: black;
+  font-weight: 400;
+  transition: 0.5s;
+}
+
+.input-box input:focus,
+.input-box input:valid {
+  border-bottom-color: palevioletred;
+}
+
+/* Register page details */
+.input-box label {
+  position: absolute;
+  top: 60%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: black;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+/* .input-box .role-input-label{
     position: absolute;
-    top: 50%;
-    left: 5px;
+    top:50%;
+    left:0;
+    right:70px;
     transform: translateY(-50%);
-    font-size: 1em;
-    color: black;
-    pointer-events: none;
+    font-size: 16px;
+    color:black;
+    pointer-events:none;
     transition: .5s;
+} */
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -5px;
+  color: rgb(239, 114, 135);
 }
 
-.input-box input:focus~label,
-.input-box input:valid~label
-{
-    top: -5px;
-
+.input-box i {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: black;
+  transition: 0.5s;
 }
 
-.input-box input
-{
-    width: 100%;
-    height: 50px;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 1em;
-    color: black;
-    padding: 0 40px 0 5px;
+.input-box input:focus ~ i,
+.input-box input:valid ~ i {
+  color: rgb(250, 184, 195);
 }
 
-.input-box .icon
-{
-    position: absolute;
-    right: 8px;
-    color: rgb(188, 110, 123);
-    font-size: 1.2em;
-    line-height: 57px;
+.btn {
+  position: relative;
+  width: 100%;
+  height: 45px;
+  background: transparent;
+  border: 2px solid black;
+  outline: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 16px;
+  color: black;
+  font-weight: 600;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.remember-forgot
-{
-    margin: -15px 0 15px;
-    font-size: .9em;
-    color: black;
-    display: flex;
-    justify-content: space-between;   
+.btn::before {
+  content: "";
+  position: absolute;
+  top: -100;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: rgb(245, 180, 191);
+  z-index: -1;
+  transition: 0.5s;
 }
 
-.remember-forgot label input
-{
-    margin-right: 3px;
+.btn:hover::before {
+  top: 0;
 }
 
-.remember-forgot a
-{
-    color: black;
-    text-decoration: none;
+.form-box .logreg-link {
+  font-size: 14.5px;
+  color: black;
+  text-align: center;
+  margin: 20px 0 10px;
 }
 
-.remember-forgot a:hover
-{
-    text-decoration: underline;
+.logreg-link p a {
+  color: palevioletred;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-button
-{
-    width: 100%;
-    height: 40px;
-    background: rgb(255, 182, 194);
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    cursor: pointer;
-    font-size: 1em;
-    color: black;
-    font-weight: 500;
+.logreg-link p a:hover {
+  text-decoration: underline;
 }
 
-.register-link
-{
-    font-size: .9em;
-    color: black;
-    text-align: center;
-    margin: 25px 0 10px;
+.wrapper .info-text {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.register-link p a
-{
-    color: black;
-    text-decoration: none;
-    font-weight: 600;
+/* "Welcome, We're excited.." Text on Register page */
+.wrapper .info-text.login {
+  right: 0;
+  text-align: right;
+  padding: 10px 40px 60px 150px;
 }
 
-.register-link p a:hover
-{
-    text-decoration: underline;
+.wrapper .info-text.login .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition: 0.7s ease;
+  /* transition-delay: calc(.1s * var(--j)); */
 }
 
-@media (max-width: 360px)
-{
-    .login-box
-    {
-        width: 100%;
-        height: 100vh;
-        border: none;
-        border-radius: 0;
-    }
+.wrapper.active .info-text.login .animation {
+  transform: translateX(120%);
+  opacity: 0;
+  filter: blur(10px);
+  /* transition-delay: calc(.1s * var(--i)); */
+}
 
-    .input-box
-    {
-        width: 290px;
+/* "Welcome, We're excited.." Text on Register page */
+.wrapper .info-text.register {
+  left: 0;
+  text-align: left;
+  padding: 10px 30px 60px 10px;
+  position: absolute;
+  top: -15%;
+  pointer-events: none;
+  /* display: none; */
+}
 
-    }
+.wrapper.active .info-text.register {
+  pointer-events: auto;
+}
+
+.wrapper .info-text.register .animation {
+  transform: translateX(-120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition: 0.7s ease;
+  /* transition-delay: calc(.1s * var(--j)); */
+}
+
+.wrapper.active .info-text.register .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  /* transition-delay: calc(.1s * var(--i)); */
+}
+
+/* Welcome/Welcome Back heading on Register and Login Page */
+.info-text h2 {
+  font-size: 36px;
+  color: black;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/*" We're excited to see... " text on Login and Register page */
+.info-text p {
+  font-size: 16px;
+  color: black;
+}
+
+/* Dark pink band on Login page */
+.wrapper .bg-animate {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 850px;
+  height: 700px;
+  background: linear-gradient(45deg, rgb(239, 114, 135), rgb(245, 180, 191));
+  border-bottom: 3px solid white;
+  transform: rotate(10deg) skewY(42deg);
+  transform-origin: bottom right;
+  transition: 1.5s ease;
+  transition-delay: 1.6s;
+}
+
+.wrapper.active .bg-animate {
+  transform: rotate(0) skewY(0);
+  transition-delay: 0.5s;
+}
+
+/* Dark pink band on Register page */
+.wrapper .bg-animate2 {
+  position: absolute;
+  top: 100%;
+  left: 150px;
+  width: 950px;
+  height: 770px;
+  background: linear-gradient(45deg, rgb(239, 114, 135), rgb(245, 180, 191));
+  border-top: 3px solid white;
+  transform: rotate(-12deg) skewY(-38deg);
+  transform-origin: bottom left;
+  transition: 1.5s ease;
+  transition-delay: 0.5s;
+}
+*/ .wrapper.active .bg-animate2 {
+  transform: rotate(-11deg) skewY(-41deg);
+  transition-delay: 1.2s;
 }

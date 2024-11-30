@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: rgb(250, 184, 195);
+}
+
+.landing-page-container {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+}
+
+.landing-page-container h1 {
+    font-size: 2.5rem;
+    color: rgb(239, 114, 135);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.landing-page-container p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 1rem;
+    color: white;
+    background: linear-gradient(rgb(239, 114, 135), rgb(245, 180, 191));
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.cta-button:hover {
+    background: linear-gradient(rgb(245, 180, 191), rgb(239, 114, 135));
+    transform: scale(1.05);
+}
+
+.cta-button:active {
+    transform: scale(0.95);
+}
+
+/* .landing-page-container footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.landing-page-container footer a {
+    color: rgb(239, 114, 135);
+    text-decoration: none;
+}
+
+.landing-page-container footer a:hover {
+    text-decoration: underline;
+} */

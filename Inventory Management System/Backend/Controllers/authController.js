@@ -7,12 +7,12 @@ exports.registerUser = async (req, res) => {
   const { firstName, lastName, username, email, password, role } = req.body;
 
   try {
-    // Check if username is already registered
-    const isDuplicate = await User.findOne({ username });
+    // Check if email is already registered
+    const isDuplicate = await User.findOne({ email });
     if (isDuplicate) {
       return res
         .status(400)
-        .json({ success: false, message: "Username is already registered!" });
+        .json({ success: false, message: "Email is already registered!" });
     }
 
     // Create and save the user
@@ -40,10 +40,10 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Find the user by their username
-    const user = await User.findOne({ username });
+    // Find the user by their email
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).send({ message: "Authentication Failed!" });
     }

@@ -91,7 +91,7 @@ const EventInventory = () => {
         setAttendeeFormData({ ...attendeeFormData, [name]: value });
     };
 
-        const handleAddAttendee = async (eventIndex) => {
+    const handleAddAttendee = async (eventIndex) => {
         const updatedEvents = [...events];
         updatedEvents[eventIndex].attendees.push(attendeeFormData);
         await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
@@ -376,14 +376,14 @@ const EventInventory = () => {
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <p><strong>Name:</strong> {attendee.name || 'No attendee name'}</p>
-                                                        <p><strong>Size Before:</strong> {attendee.sizeBefore || 'No size before'}</p>
-                                                        <p><strong>Size After:</strong> {attendee.sizeAfter || 'No size after'}</p>
-                                                        <p><strong>Bra Size 1:</strong> {attendee.braSize1 || 'No bra size 1'}</p>
-                                                        <p><strong>Bra Size 2:</strong> {attendee.braSize2 || 'No bra size 2'}</p>
-                                                        <p><strong>Fitter:</strong> {attendee.fitterName || 'No fitter name'}</p>
-                                                        <p><strong>Phone:</strong> {attendee.phoneNumber || 'No phone number'}</p>
-                                                        <p><strong>Email:</strong> {attendee.email || 'No email'}</p>
+                                                        <p><strong>Name:</strong> {attendee?.name ?? 'No attendee name'}</p>
+                                                        <p><strong>Size Before:</strong> {attendee?.sizeBefore ?? 'No size before'}</p>
+                                                        <p><strong>Size After:</strong> {attendee?.sizeAfter ?? 'No size after'}</p>
+                                                        <p><strong>Bra Size 1:</strong> {attendee?.braSize1 ?? 'No bra size 1'}</p>
+                                                        <p><strong>Bra Size 2:</strong> {attendee?.braSize2 ?? 'No bra size 2'}</p>
+                                                        <p><strong>Fitter:</strong> {attendee?.fitterName ?? 'No fitter name'}</p>
+                                                        <p><strong>Phone:</strong> {attendee?.phoneNumber ?? ''}</p>
+                                                        <p><strong>Email:</strong> {attendee?.email ?? 'No email'}</p>
                                                     </>
                                                 )}
 

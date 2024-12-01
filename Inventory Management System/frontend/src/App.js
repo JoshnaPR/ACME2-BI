@@ -1,29 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import BraInventory from './pages/BraInventory';
-import EventInventory from './pages/EventInventory';
-import HomePage from './pages/HomePage';
-import './styles/BraInventory.css'; // Import the App component's CSS
-import './styles/HomePage.css'; // Import the App component's CSS
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import LandingPage from "./pages/LandingPage"; // Create a LandingPage component
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import VerifyOTP from "./components/VerifyOTP";
+import HomePage from "./pages/HomePage";
+import BraInventory from "./pages/BraInventory";
+import EventInventory from "./pages/EventInventory";
+import "./styles/global.css"; // Import global styles
 
 function App() {
-  const [message, setMessage] = useState('');
+  // Check if the user is authenticated and OTP is verified
+  const isAuthenticated = localStorage.getItem("token");
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:5000')
-      .then((response) => setMessage(response.data))
-      .catch((error) => console.log(error));
-  }, []);
+  const isOtpVerified = localStorage.getItem("otpVerified") === "true";
 
   return (
     <Router>
       <div>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/bra-inventory" element={<BraInventory />} />
-          <Route path="/event-inventory" element={<EventInventory />} />
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/verify-otp" element={<VerifyOTP />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/home"
+            element={isAuthenticated ? <HomePage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/bra-inventory"
+            element={isAuthenticated ? <BraInventory /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/event-inventory"
+            element={isAuthenticated ? <EventInventory /> : <Navigate to="/" />}
+          />
+
+          {/* Redirect unknown routes */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
     </Router>

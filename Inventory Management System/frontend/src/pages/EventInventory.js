@@ -208,7 +208,7 @@ const EventInventory = () => {
           <img src={logo2} alt="Breast Intentions Logo" className="logo" />
         </div>
         <nav className="navbar">
-          <Link to="/" className="nav-link">
+          <Link to="/home" className="nav-link">
             Home
           </Link>
           <Link to="/bra-inventory" className="nav-link">
@@ -438,35 +438,35 @@ const EventInventory = () => {
                           <>
                             <p>
                               <strong>Name:</strong>{" "}
-                              {attendee.name || "No attendee name"}
+                              {attendee?.name ?? "No attendee name"}
                             </p>
                             <p>
                               <strong>Size Before:</strong>{" "}
-                              {attendee.sizeBefore || "No size before"}
+                              {attendee?.sizeBefore ?? "No size before"}
                             </p>
                             <p>
                               <strong>Size After:</strong>{" "}
-                              {attendee.sizeAfter || "No size after"}
+                              {attendee?.sizeAfter ?? "No size after"}
                             </p>
                             <p>
                               <strong>Bra Size 1:</strong>{" "}
-                              {attendee.braSize1 || "No bra size 1"}
+                              {attendee?.braSize1 ?? "No bra size 1"}
                             </p>
                             <p>
                               <strong>Bra Size 2:</strong>{" "}
-                              {attendee.braSize2 || "No bra size 2"}
+                              {attendee?.braSize2 ?? "No bra size 2"}
                             </p>
                             <p>
                               <strong>Fitter:</strong>{" "}
-                              {attendee.fitterName || "No fitter name"}
+                              {attendee?.fitterName ?? "No fitter name"}
                             </p>
                             <p>
                               <strong>Phone:</strong>{" "}
-                              {attendee.phoneNumber || "No phone number"}
+                              {attendee?.phoneNumber ?? ""}
                             </p>
                             <p>
                               <strong>Email:</strong>{" "}
-                              {attendee.email || "No email"}
+                              {attendee?.email ?? "No email"}
                             </p>
                           </>
                         )}

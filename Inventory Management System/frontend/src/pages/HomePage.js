@@ -14,7 +14,7 @@ const HomePage = () => {
           <img src={logo2} alt="Breast Intentions Logo" className="logo" />
         </div>
         <nav className="navbar">
-          <Link to="/" className="nav-link">Home</Link>
+          <Link to="/home" className="nav-link">Home</Link>
           <Link to="/bra-inventory" className="nav-link">Bra Inventory</Link>
           <Link to="/event-inventory" className="nav-link">Event Inventory</Link>
         </nav>

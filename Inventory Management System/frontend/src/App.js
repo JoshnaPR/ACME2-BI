@@ -12,7 +12,11 @@ import VerifyOTP from "./components/VerifyOTP";
 import HomePage from "./pages/HomePage";
 import BraInventory from "./pages/BraInventory";
 import EventInventory from "./pages/EventInventory";
-import "./styles/global.css"; // Import global styles
+import "./styles/BraInventory.css";
+import "./styles/EventInventory.css";
+import "./styles/HomePage.css";
+import "./styles/LandingPage.css";
+import "./styles/style.css";
 
 function App() {
   // Check if the user is authenticated and OTP is verified

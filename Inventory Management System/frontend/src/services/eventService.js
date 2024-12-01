@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api/events';
-const INVENTORY_URL = 'http://localhost:5000/api/inventory'; // Update this to your actual inventory API endpoint
+const INVENTORY_URL = 'http://localhost:5000/api/inventory';
 
 // Function to create an event
 export const createEvent = async (eventData) => {

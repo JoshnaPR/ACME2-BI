@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  createBra,
-  getBras,
-  updateBra,
-  deleteBra,
-} from "../services/braService";
+import { createBra, getBras, updateBra, deleteBra} from "../services/braService";
 import { Link } from "react-router-dom";
 import "../styles/BraInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
@@ -249,7 +244,7 @@ const BraInventory = () => {
                 </div>
                 <div className="bra-actions">
                   <button onClick={() => setEditBra(bra)}>Edit</button>
-                  {role == "Admin" ? (
+                  {role === "Admin" ? (
                     <button onClick={() => handleDelete(bra._id)}>
                       Delete
                     </button>

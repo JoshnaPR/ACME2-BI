@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  getEvents,
-  updateEvent,
-  deleteEvent,
-  createEvent,
-} from "../services/eventService";
+import { getEvents, updateEvent, deleteEvent, createEvent} from "../services/eventService";
 import { Link } from "react-router-dom";
 import "../styles/EventInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png"; // Placeholder for your logo
@@ -354,7 +349,7 @@ const EventInventory = () => {
                           >
                             Edit
                           </button>
-                          {role == "Admin" ? (
+                          {role === "Admin" ? (
                             <button
                               onClick={() => handleDeleteEvent(event._id)}
                             >
@@ -495,7 +490,7 @@ const EventInventory = () => {
                               >
                                 Edit
                               </button>
-                              {role == "Admin" ? (
+                              {role === "Admin" ? (
                                 <button
                                   onClick={() =>
                                     handleDeleteAttendee(

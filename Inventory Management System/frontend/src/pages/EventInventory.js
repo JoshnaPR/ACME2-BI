@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import "../styles/EventInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png"; // Placeholder for your logo
 import logo2 from "../assets/BreastIntentionsLogo.png"; // Placeholder for your logo
+import { IoIosLogOut } from "react-icons/io";
 
 const EventInventory = () => {
   const role = localStorage.getItem("role");
@@ -221,6 +222,9 @@ const EventInventory = () => {
           </Link>
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
+          </Link>
+          <Link to="/logout" title="Logout">
+            <IoIosLogOut size={25} />
           </Link>
         </nav>
       </header>

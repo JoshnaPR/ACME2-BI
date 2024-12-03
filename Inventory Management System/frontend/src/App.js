@@ -13,6 +13,7 @@ import HomePage from "./pages/HomePage";
 import BraInventory from "./pages/BraInventory";
 import EventInventory from "./pages/EventInventory";
 import "./styles/global.css"; // Import global styles
+import Logout from "./pages/Logout";
 
 function App() {
   // Check if the user is authenticated and OTP is verified
@@ -43,6 +44,8 @@ function App() {
             path="/event-inventory"
             element={isAuthenticated ? <EventInventory /> : <Navigate to="/" />}
           />
+
+          <Route path="/logout" element={<Logout />} />
 
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />

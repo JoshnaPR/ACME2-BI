@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import "../styles/BraInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
+import { IoIosLogOut } from "react-icons/io";
 
 const BraInventory = () => {
   const role = localStorage.getItem("role");
@@ -138,6 +139,9 @@ const BraInventory = () => {
           </Link>
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
+          </Link>
+          <Link to="/logout" title="Logout">
+            <IoIosLogOut size={25} />
           </Link>
         </nav>
       </header>

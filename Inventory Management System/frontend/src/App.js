@@ -17,6 +17,8 @@ import "./styles/EventInventory.css";
 import "./styles/HomePage.css";
 import "./styles/LandingPage.css";
 import "./styles/style.css";
+import "./styles/global.css"; // Import global styles
+import Logout from "./pages/Logout";
 
 function App() {
   // Check if the user is authenticated and OTP is verified
@@ -47,6 +49,8 @@ function App() {
             path="/event-inventory"
             element={isAuthenticated ? <EventInventory /> : <Navigate to="/" />}
           />
+
+          <Route path="/logout" element={<Logout />} />
 
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />

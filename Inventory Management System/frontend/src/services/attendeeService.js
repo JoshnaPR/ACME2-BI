@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://your-api-url.com/api/events'; // Update this to actual API endpoint
+const API_URL = 'http://localhost:5000/api/events';
 
 // Create a new attendee for a specific event
 export const createAttendee = async (eventId, attendeeData) => {

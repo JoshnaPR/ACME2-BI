@@ -1,12 +1,24 @@
 // HomePage.js
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/HomePage.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
+import "./TwoFA.css"
 
-const HomePage = () => {
+const TwoFA = () => {
+  useEffect(() => {
+    // Ensure your custom script initializes after component is mounted
+    const script = document.createElement("script");
+    script.src = "/scripts.js";
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
   return (
     <div className="homepage-container">
       <header className="homepage-header">
@@ -21,7 +33,7 @@ const HomePage = () => {
           <Link to="/bra-inventory" className="nav-link">
             Bra Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link">
+          <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
           <Link to="/two-fa" className="nav-link">
@@ -33,34 +45,25 @@ const HomePage = () => {
         </nav>
       </header>
 
-      <main className="content">
-        <h1>Welcome to the Breast Intentions Inventory Management System</h1>
+      <div className="border-bottom border-dark pt-4 mb-4"></div>
 
-        <div className="features-section">
-          <h2>Features:</h2>
-          <ul>
-            <li>
-              <span>📦</span> Add, edit, and delete bras in the inventory.
-            </li>
-            <li>
-              <span>🗓️</span> Manage event details and attendee information.
-            </li>
-            <li>
-              <span>🔍</span> Search for specific bras, events, or attendees
-              easily.
-            </li>
-          </ul>
+      <div id="2FABox" className="d-flex flex-row justify-content-center align-items-center gap-3">
+        <button id="enable2FAButton" className="btn btn-success">
+          UPDATE/ENABLE 2FA
+        </button>
+        <div id="twoFAFormHolder" className="d-flex flex-row align-items-center gap-3">
+          <img id="qrImage" height="150" width="150" alt="QR Image" />
+          <form id="twoFAUpdateForm" className="d-flex flex-column gap-2">
+            <input
+              type="text"
+              name="code"
+              placeholder="2 FA Code"
+              className="form-control"
+            />
+            <button className="btn btn-primary" type="submit">SET</button>
+          </form>
         </div>
-
-        <div className="cta-buttons">
-          <Link to="/bra-inventory" className="cta-button">
-            Go to Bra Inventory
-          </Link>
-          <Link to="/event-inventory" className="cta-button">
-            Go to Event Inventory
-          </Link>
-        </div>
-      </main>
+      </div>
 
       <footer className="homepage-footer">
         <div className="footer-content">
@@ -87,4 +90,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default TwoFA;

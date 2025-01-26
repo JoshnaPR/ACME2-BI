@@ -14,6 +14,7 @@ import BraInventory from "./pages/BraInventory";
 import EventInventory from "./pages/EventInventory";
 import "./styles/global.css"; // Import global styles
 import Logout from "./pages/Logout";
+import TwoFA from "./pages/TwoFA";
 
 function App() {
   // Check if the user is authenticated and OTP is verified
@@ -45,10 +46,15 @@ function App() {
             element={isAuthenticated ? <EventInventory /> : <Navigate to="/" />}
           />
 
+          <Route
+            path="/two-fa"
+            element={isAuthenticated ? <TwoFA /> : <Navigate to="/" />}
+          />
+
           <Route path="/logout" element={<Logout />} />
 
           {/* Redirect unknown routes */}
-          <Route path="*" element={<Navigate to="/" />} />
+          {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>
       </div>
     </Router>

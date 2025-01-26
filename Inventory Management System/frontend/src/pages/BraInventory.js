@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  createBra,
-  getBras,
-  updateBra,
-  deleteBra,
-} from "../services/braService";
+import { createBra, getBras, updateBra, deleteBra} from "../services/braService";
 import { Link } from "react-router-dom";
 import "../styles/BraInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
@@ -131,7 +126,7 @@ const BraInventory = () => {
           <img src={logo2} alt="Breast Intentions Logo" className="logo" />
         </div>
         <nav className="navbar">
-          <Link to="/" className="nav-link">
+          <Link to="/home" className="nav-link">
             Home
           </Link>
           <Link to="/bra-inventory" className="nav-link">
@@ -176,23 +171,18 @@ const BraInventory = () => {
         </div>
 
         <form className="bra-form" onSubmit={handleCreate}>
-          <h2>Add a New Bra</h2>
-          <div className="form-row">
-            <div className="form-group">
-              <select
-                value={newBra.type}
-                onChange={(e) => setNewBra({ ...newBra, type: e.target.value })}
-                required
-                className="form-input"
-              >
-                <option value="" disabled>
-                  Select a Type
-                </option>
-                <option value="Normal">Normal</option>
-                <option value="Nursing">Nursing</option>
-                <option value="Disability">Disability</option>
-              </select>
-            </div>
+        <h2>Add a New Bra</h2>
+            <div className="form-row">
+                <div className="form-group">
+                  <input
+                      type="text"
+                      placeholder="Type"
+                      value={newBra.type}
+                      onChange={(e) => setNewBra({ ...newBra, type: e.target.value })}
+                      required
+                      className="form-input"
+                  />
+             </div>
             <div className="form-group">
               <input
                 type="text"
@@ -253,7 +243,7 @@ const BraInventory = () => {
                 </div>
                 <div className="bra-actions">
                   <button onClick={() => setEditBra(bra)}>Edit</button>
-                  {role == "Admin" ? (
+                  {role === "Admin" ? (
                     <button onClick={() => handleDelete(bra._id)}>
                       Delete
                     </button>

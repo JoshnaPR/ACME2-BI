@@ -4,6 +4,8 @@ import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 import Cookies from "js-cookie"; // Import js-cookie for accessing cookies
 import "../styles/style.css"; // Ensure this matches the correct file path
+// Enable credentials with Axios globally
+axios.defaults.withCredentials = true;
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -16,10 +18,13 @@ function Login() {
   const navigate = useNavigate(); // Use navigate for programmatic navigation
 
   useEffect(() => {
-    const token = Cookies.get("token"); // Access the token from cookies
+    console.log("inside useEffect");
+    const token = Cookies.get("newToken"); // Access the token from cookies
+    console.log("token", token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token); // Decode the token
+        console.log("decodedToken", decodedToken)
 
         // Check if the decoded token has a boolean flag for 2FA
         if (decodedToken.twoFactorAuth) {
@@ -66,7 +71,7 @@ function Login() {
       setError(err.response?.data?.message || "Invalid email or password.");
     }
   };
-
+  console.log("show2FACodeInput", show2FACodeInput);
   return (
     <div className="wrapper">
       <span className="bg-animate"></span>

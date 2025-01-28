@@ -26,7 +26,8 @@ body.logged #homePage {
 }
 
 .ready #twoFAFormHolder {
-    display: flex !important;
+    display: block !important;
+    text-align: center;
 }
 
 #loginForm .code{
@@ -37,3 +38,17 @@ body.logged #homePage {
     display: block;
 }
 
+.btn.small {
+    display: block;
+    width: 40%;
+    height: 35px;
+    font-size: 14px;
+    border-radius: 20px;
+    margin-left: 30%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+img#qrImage {
+    margin-top: 2%;
+}

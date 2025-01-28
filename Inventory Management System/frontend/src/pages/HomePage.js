@@ -21,11 +21,11 @@ const HomePage = () => {
           <Link to="/bra-inventory" className="nav-link">
             Bra Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link">
+          <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link">
-            Enable 2 FA Authentication
+          <Link to="/two-fa" className="nav-link" id="enable2FAButton">
+            2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />

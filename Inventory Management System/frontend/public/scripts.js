@@ -23,12 +23,12 @@ $(document).ready(function () {
     };
 
     // Initialize the app
-    checkSession();
+    // checkSession();
 
     $("#logoutButton").click(async () => {
         try {
             await fetch(`/logout`);
-            await checkSession();
+            //await checkSession();
         } catch (error) {
             console.error("Error logging out:", error);
         }
@@ -52,7 +52,7 @@ $(document).ready(function () {
 
             if (success) {
                 $("#loginForm").trigger("reset");
-                await checkSession();
+                //await checkSession();
             } else {
                 alert(error || "Login failed. Please try again.");
             }

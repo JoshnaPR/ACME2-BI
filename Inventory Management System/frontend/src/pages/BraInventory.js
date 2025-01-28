@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createBra, getBras, updateBra, deleteBra} from "../services/braService";
+import { createBra, getBras, updateBra, deleteBra } from "../services/braService";
 import { Link } from "react-router-dom";
 import "../styles/BraInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
@@ -135,6 +135,9 @@ const BraInventory = () => {
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
+          <Link to="/two-fa" className="nav-link" id="enable2FAButton">
+            2 FA Authentication
+          </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />
           </Link>
@@ -171,18 +174,18 @@ const BraInventory = () => {
         </div>
 
         <form className="bra-form" onSubmit={handleCreate}>
-        <h2>Add a New Bra</h2>
-            <div className="form-row">
-                <div className="form-group">
-                  <input
-                      type="text"
-                      placeholder="Type"
-                      value={newBra.type}
-                      onChange={(e) => setNewBra({ ...newBra, type: e.target.value })}
-                      required
-                      className="form-input"
-                  />
-             </div>
+          <h2>Add a New Bra</h2>
+          <div className="form-row">
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Type"
+                value={newBra.type}
+                onChange={(e) => setNewBra({ ...newBra, type: e.target.value })}
+                required
+                className="form-input"
+              />
+            </div>
             <div className="form-group">
               <input
                 type="text"

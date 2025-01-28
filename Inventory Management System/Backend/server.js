@@ -93,9 +93,8 @@ app.get("/qrImage", async (req, res) => {
 // set the 2 FA
 app.get("/set2FA", async (req, res) => {
   try {
-    // Extract the userId from the cookies
-    const token = req.cookies.token; // Assuming the token is stored in cookies
-    console.log("Token:", token);
+    // Extract the token from cookies
+    const token = req.cookies.token;
 
     if (!token) {
       console.error("Token not found.");
@@ -106,14 +105,12 @@ app.get("/set2FA", async (req, res) => {
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("Decoded:", decoded);
     } catch (error) {
       console.error("Token verification failed:", error.message);
       return res.status(400).json({ message: "Invalid or expired token" });
     }
 
     const userId = decoded.userId; // Extract `userId` from token payload
-    console.log("Decoded userId:", userId);
 
     if (!userId) {
       console.error("userId not found in token payload.");
@@ -148,7 +145,26 @@ app.get("/set2FA", async (req, res) => {
     // Enable 2FA for the user and save the updated data
     user.twoFactorAuth.enabled = true;
     user.twoFactorAuth.secret = tempSecret;
+    console.log("Updated user:", user);
     await user.save();
+    console.log("After saving data in db");
+
+    const newToken = jwt.sign(
+      {
+        userId: user._id,
+        username: user.username,
+        role: user.role,
+        twoFactorAuth: user.twoFactorAuth.enabled, // Updated value
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "9h" } // Same expiration time as login
+    );
+
+    console.log("newToken", newToken);
+
+    // Reset the cookie with the new token
+    res.cookie("newToken", newToken);
+    console.log(req.cookies);
     // Send success response
     return res.json({
       success: true,

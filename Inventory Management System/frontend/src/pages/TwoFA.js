@@ -36,8 +36,8 @@ const TwoFA = () => {
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link">
-            Enable 2 FA Authentication
+          <Link to="/two-fa" className="nav-link" id="enable2FAButton">
+            2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />
@@ -48,9 +48,9 @@ const TwoFA = () => {
       <div className="border-bottom border-dark pt-4 mb-4"></div>
 
       <div id="2FABox" className="d-flex flex-row justify-content-center align-items-center gap-3">
-        <button id="enable2FAButton" className="btn btn-success">
+        {/* <button id="enable2FAButton" className="btn small btn-success">
           UPDATE/ENABLE 2FA
-        </button>
+        </button> */}
         <div id="twoFAFormHolder" className="d-flex flex-row align-items-center gap-3">
           <img id="qrImage" height="150" width="150" alt="QR Image" />
           <form id="twoFAUpdateForm" className="d-flex flex-column gap-2">
@@ -60,7 +60,7 @@ const TwoFA = () => {
               placeholder="2 FA Code"
               className="form-control"
             />
-            <button className="btn btn-primary" type="submit">SET</button>
+            <button className="btn small btn-primary" type="submit" id="set">SET</button>
           </form>
         </div>
       </div>

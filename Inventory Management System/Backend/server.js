@@ -75,7 +75,7 @@ app.get("/qrImage", async (req, res) => {
 
     // Generate 2FA secret and QR code
     const secret = authenticator.generateSecret();
-    const uri = authenticator.keyuri(user.username, "2FA Tutorial", secret);
+    const uri = authenticator.keyuri(user.username, "BI", secret);
     const image = await qrcode.toDataURL(uri);
 
     // Update user's tempSecret

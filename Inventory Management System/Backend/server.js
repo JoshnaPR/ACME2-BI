@@ -15,18 +15,20 @@ app.use(cors());
 app.use(express.json());
 
 // Import Models
-const Event = require("./Models/Events"); // Ensure this model exists
-const Bra = require("./Models/Bra"); // Ensure this model exists
+const Event = require("./Models/Events");
+const Bra = require("./Models/Bra");
 
 // Import Routes
-const eventRoutes = require("./Routes/eventRoutes"); // Create this file
-const braRoutes = require("./Routes/braRoutes"); // Create this file
+const eventRoutes = require("./Routes/eventRoutes");
+const braRoutes = require("./Routes/braRoutes");
 const userRoutes = require("./Routes/userRoutes");
+const logRoutes = require("./Routes/logRoute");
 
 // Use Routes
 app.use("/api/events", eventRoutes);
 app.use("/api/bras", braRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/logs", logRoutes);
 
 // MongoDB Connection
 mongoose

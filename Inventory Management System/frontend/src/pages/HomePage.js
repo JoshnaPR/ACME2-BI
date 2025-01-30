@@ -1,12 +1,31 @@
 // HomePage.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/HomePage.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
+import { fetchLogs } from "../services/logService";
 
 const HomePage = () => {
+
+  const [logs, setLogs] = useState(null);
+  const [showLogsModal, setShowLogsModal] = useState(false);
+
+  useEffect(() => {
+    if (showLogsModal) {
+      const getLogs = async () => {
+        try {
+          const logData = await fetchLogs();
+          setLogs(logData);
+        } catch (error) {
+          console.error("Failed to fetch logs:", error);
+        }
+      };
+      getLogs();
+    }
+  }, [showLogsModal]);  
+
   return (
     <div className="homepage-container">
       <header className="homepage-header">
@@ -57,6 +76,30 @@ const HomePage = () => {
             Go to Event Inventory
           </Link>
         </div>
+
+         <button onClick={() => setShowLogsModal(true)} className="cta-button">
+          Show Logs
+        </button>
+
+        {showLogsModal && (
+          <div className="modal-overlay" onClick={() => setShowLogsModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h2>Logs</h2>
+              {logs ? (
+                <ul>
+                  {logs.logs?.map((log, index) => (
+                    <li key={index}>
+                      <strong>{new Date(log.timestamp).toLocaleString()}:</strong> {log.action}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Loading logs...</p>
+              )}
+              <button onClick={() => setShowLogsModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className="homepage-footer">

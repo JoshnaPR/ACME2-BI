@@ -5,6 +5,7 @@ import "../styles/EventInventory.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png"; // Placeholder for your logo
 import logo2 from "../assets/BreastIntentionsLogo.png"; // Placeholder for your logo
 import { IoIosLogOut } from "react-icons/io";
+import { logAction } from "../services/logService";
 
 const EventInventory = () => {
   const role = localStorage.getItem("role");
@@ -68,6 +69,8 @@ const EventInventory = () => {
     setEvents(updatedEvents);
     setSuccessMessage("Event created successfully");
     setErrorMessage("");
+
+    logAction(localStorage.getItem("userId"), 'Created a new event: ${newEventFormData.name} taking place on ${newEventFormData.date}');
   };
 
   const handleEditEvent = (eventId, event) => {
@@ -87,6 +90,8 @@ const EventInventory = () => {
       const updatedEvents = await getEvents();
       setEvents(updatedEvents);
       setSuccessMessage("Event deleted successfully");
+
+      logAction(localStorage.getItem("userId"), 'Deleted event: ${event.name} taking place on ${event.date}');
     }
   };
 
@@ -97,6 +102,8 @@ const EventInventory = () => {
     const updatedEvents = await getEvents();
     setEvents(updatedEvents);
     setSuccessMessage("Event updated successfully");
+
+    logAction(localStorage.getItem("userId"), 'Updated event: ${eventFormData.name} taking place on ${eventFormData.date}');
   };
 
   const handleAttendeeInputChange = (e) => {

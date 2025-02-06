@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { createBra, getBras, updateBra, deleteBra } from "../services/braService";
 import { Link } from "react-router-dom";
-import "../styles/BraInventory.css"; // Custom styles for the homepage
+import "../styles/BraInventory.css";
 import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
+import { logAction } from "../services/logService";
 
 const BraInventory = () => {
   const role = localStorage.getItem("role");
@@ -38,7 +39,6 @@ const BraInventory = () => {
     );
 
     if (existingBra) {
-      // Update the existing bra's quantity
       const updatedQuantity =
         parseInt(existingBra.quantity) + parseInt(newBra.quantity);
       try {
@@ -52,11 +52,14 @@ const BraInventory = () => {
         console.error("Error updating quantity:", error);
       }
     } else {
-      // Create a new bra entry
       try {
         await createBra(newBra);
         fetchBras();
         setSuccessMessage("Bra added successfully!");
+        
+        console.log("Logging action:", `Added ${newBra.quantity} of a bra: ${newBra.type} ${newBra.size} to the inventory`);
+        logAction(localStorage.getItem("userId"), `Added ${newBra.quantity} of a bra: ${newBra.type} ${newBra.size} to the inventory`);
+
       } catch (error) {
         console.error("Error creating bra:", error);
       }
@@ -75,6 +78,7 @@ const BraInventory = () => {
       console.error("Error updating bra:", error);
     }
     setSuccessMessage("Bra updated successfully!");
+    logAction(localStorage.getItem("userId"), `Updated a bra: ${editBra.type} ${editBra.size} in the inventory`);
   };
 
   const handleDelete = async (id) => {
@@ -90,6 +94,7 @@ const BraInventory = () => {
       }
     }
     setSuccessMessage("Bra deleted successfully!");
+    logAction(localStorage.getItem("userId"), `Deleted a bra: ${editBra.type} ${editBra.size} from the inventory`);
   };
 
   const filteredBras = bras.filter((bra) => {
@@ -114,8 +119,11 @@ const BraInventory = () => {
     const disabilityBras = bras
       .filter((bra) => bra.type === "Disability")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+    const flexfitBras = bras
+      .filter((bra) => bra.type === "FlexFit")
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
 
-    return { totalBras, normalBras, nursingBras, disabilityBras };
+    return { totalBras, normalBras, nursingBras, disabilityBras, flexfitBras };
   };
 
   return (
@@ -226,6 +234,7 @@ const BraInventory = () => {
               <p>Normal Bras: {getInventoryTotals().normalBras}</p>
               <p>Nursing Bras: {getInventoryTotals().nursingBras}</p>
               <p>Disability Bras: {getInventoryTotals().disabilityBras}</p>
+              <p>FlexFit Bras: {getInventoryTotals().flexfitBras}</p>
               <button onClick={() => setShowModal(false)}>Close</button>
             </div>
           </div>

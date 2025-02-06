@@ -6,7 +6,8 @@ const Logout = () => {
 
   useEffect(() => {
     // Clear all data from localStorage
-    localStorage.clear();
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
 
     // Redirect to the login page
     navigate("/login");

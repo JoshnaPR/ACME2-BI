@@ -1,21 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
+import Cookies from "js-cookie"; // Import js-cookie for accessing cookies
 import "../styles/style.css"; // Ensure this matches the correct file path
+// Enable credentials with Axios globally
+axios.defaults.withCredentials = true;
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [show2FACodeInput, setShow2FACodeInput] = useState(false);
 
   const navigate = useNavigate(); // Use navigate for programmatic navigation
 
   useEffect(() => {
+    console.log("inside useEffect");
+    const token = Cookies.get("newToken"); // Access the token from cookies
+    console.log("token", token);
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token); // Decode the token
+        console.log("decodedToken", decodedToken)
+
+        // Check if the decoded token has a boolean flag for 2FA
+        if (decodedToken.twoFactorAuth) {
+          setShow2FACodeInput(true); // Show 2FA input if enabled
+        }
+      } catch (err) {
+        console.error("Failed to decode token:", err);
+      }
+    }
+
     if (successMessage) {
       navigate("/home"); // Redirect to Home Page after login success
     }
   }, [successMessage, navigate]);
+
+
 
   // Handle the login form submission
   const handleSubmit = async (e) => {
@@ -30,8 +55,10 @@ function Login() {
         {
           email,
           password,
+          code
         }
       );
+      console.log("response", response, response.data)
       if (response.data) {
         // If login is successful, store the token in localStorage
         localStorage.setItem("role", response.data.role);
@@ -44,7 +71,7 @@ function Login() {
       setError(err.response?.data?.message || "Invalid email or password.");
     }
   };
-
+  console.log("show2FACodeInput", show2FACodeInput);
   return (
     <div className="wrapper">
       <span className="bg-animate"></span>
@@ -73,7 +100,18 @@ function Login() {
             <i className="bx bxs-lock-alt"></i>
           </div>
 
-          <button type="submit" className="btn">
+          {show2FACodeInput ? <div className="input-box">
+            <input
+              type="number"
+              required
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
+            <label>2FA Code</label>
+            <i className="bx bxs-user"></i>
+          </div> : ""}
+
+          <button type="submit" className="btn" id="loginForm">
             {"Login"}
           </button>
         </form>

@@ -17,23 +17,27 @@ const userSchema = new Schema({
     enum: ["Admin", "Volunteer"],
     default: "Volunteer",
   },
+  twoFactorAuth: {
+    enabled: { type: Boolean, default: false },
+    secret: { type: String, default: null },
+    tempSecret: { type: String, default: null },
+  },
 });
-// this ^ paragraph was to create the schema of what sort of information is required from the user
 
+// Hash password before saving
 userSchema.pre("save", async function (next) {
   const user = this;
-  if (!user.isModified) return next();
-  let salt = await bcrypt.genSalt(10);
-  let hash = await bcrypt.hash(user.password, salt);
+  if (!user.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(user.password, salt);
   user.password = hash;
   next();
 });
-// this ^ paragraph was to create the password and hash it.
 
+// Compare password method
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-// this ^ paragraph was to compare the password entered by the user with the hashed password in the database
 
 const User = mongoose.model("User", userSchema);
 

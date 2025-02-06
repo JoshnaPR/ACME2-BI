@@ -1,7 +1,9 @@
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
+const { authenticator } = require('otplib');
 require("dotenv").config();
 const secretKey = process.env.JWT_SECRET;
+console.log
 
 exports.registerUser = async (req, res) => {
   const { firstName, lastName, username, email, password, role } = req.body;
@@ -40,7 +42,7 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, code } = req.body;
 
     // Find the user by their email
     const user = await User.findOne({ email });
@@ -54,29 +56,52 @@ exports.loginUser = async (req, res) => {
       return res.status(400).send({ message: "Incorrect Password!" });
     }
 
+    // Handle 2FA verification
+    if (user.twoFactorAuth.enabled) {
+      console.log("inside  2FA verification")
+      if (!code) {
+        return res.status(400).send({
+          message: "2FA code required!",
+          codeRequested: true,
+        });
+      }
+
+      console.log("code:", code);
+      console.log("secret:", user.twoFactorAuth.secret);
+      const verified = authenticator.check(code, user.twoFactorAuth.secret);
+      console.log("verified", verified);
+
+      if (!verified) {
+        return res.status(400).send({ message: "Invalid 2FA code!" });
+      }
+    }
+
     // Generate JWT token including user role
-    let token = jwt.sign(
+    const token = jwt.sign(
       {
-        userId: user?._id,
-        username: user?.username,
-        role: user?.role,
+        userId: user._id,
+        username: user.username,
+        role: user.role,
+        twoFactorAuth: user.twoFactorAuth.enabled,
       },
       secretKey,
-      { expiresIn: "1h" }
+      { expiresIn: "9h" }
     );
 
     // Send user data along with token
-    let finalData = {
-      userId: user?._id,
-      username: user?.username,
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      role: user?.role,
+    const finalData = {
+      userId: user._id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      twoFactorAuth: user.twoFactorAuth.enabled,
       token,
     };
 
     res.send(finalData);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(500).send({ message: "An error occurred during login!", error: err });
   }
 };
+

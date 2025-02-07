@@ -57,8 +57,7 @@ const BraInventory = () => {
         fetchBras();
         setSuccessMessage("Bra added successfully!");
         
-        console.log("Logging action:", `Added ${newBra.quantity} of a bra: ${newBra.type} ${newBra.size} to the inventory`);
-        logAction(localStorage.getItem("userId"), `Added ${newBra.quantity} of a bra: ${newBra.type} ${newBra.size} to the inventory`);
+        await logAction(localStorage.getItem("userId"), `Added ${newBra.quantity} of a bra: ${newBra.type} ${newBra.size} to the Inventory`);
 
       } catch (error) {
         console.error("Error creating bra:", error);
@@ -70,18 +69,35 @@ const BraInventory = () => {
   };
 
   const handleEdit = async (id) => {
+    const existingBra = bras.find((bra) => bra._id === id);
+
+    if (!existingBra) {
+      console.error("Bra not found for editing.");
+      return;
+    }
+
     try {
       await updateBra(id, editBra);
       fetchBras();
       setEditBra(null);
+
     } catch (error) {
       console.error("Error updating bra:", error);
     }
     setSuccessMessage("Bra updated successfully!");
-    logAction(localStorage.getItem("userId"), `Updated a bra: ${editBra.type} ${editBra.size} in the inventory`);
+    await logAction(localStorage.getItem("userId"), `Updated ${existingBra.type} ${existingBra.size} - Qty: ${existingBra.quantity} to ${editBra.type} ${editBra.size} - Qty: ${editBra.quantity} in the Inventory`
+  );
   };
 
   const handleDelete = async (id) => {
+
+    const braToDelete = bras.find((bra) => bra._id === id);
+
+    if (!braToDelete) {
+      console.error("Bra not found for deletion.");
+      return;
+    }
+
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this bra?"
     );
@@ -89,12 +105,18 @@ const BraInventory = () => {
       try {
         await deleteBra(id);
         fetchBras();
+
+        console.log("Logging action:", `Deleted: ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the Inventory`);
+
       } catch (error) {
         console.error("Error deleting bra:", error);
       }
     }
     setSuccessMessage("Bra deleted successfully!");
-    logAction(localStorage.getItem("userId"), `Deleted a bra: ${editBra.type} ${editBra.size} from the inventory`);
+
+    console.log("Logging action:", `Deleted: ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the inventory`);
+    console.log("User ID from localStorage:", localStorage.getItem("userId"));
+    await logAction(localStorage.getItem("userId"), `Deleted ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the inventory`);
   };
 
   const filteredBras = bras.filter((bra) => {

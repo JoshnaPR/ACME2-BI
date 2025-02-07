@@ -35,6 +35,11 @@ function Login() {
       if (response.data) {
         // If login is successful, store the token in localStorage
         localStorage.setItem("role", response.data.role);
+        
+        //AR Added
+        localStorage.setItem("userId", response.data.userId);
+        //End of Code Added
+
         if (response.data.token) {
           localStorage.setItem("token", response.data.token); // Store token in localStorage
         }

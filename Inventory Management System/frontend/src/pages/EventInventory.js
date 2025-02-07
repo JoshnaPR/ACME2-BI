@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { getEvents, updateEvent, deleteEvent, createEvent} from "../services/eventService";
 import { Link } from "react-router-dom";
-import "../styles/EventInventory.css"; // Custom styles for the homepage
-import logo from "../assets/InnerVentory Button.png"; // Placeholder for your logo
-import logo2 from "../assets/BreastIntentionsLogo.png"; // Placeholder for your logo
+import "../styles/EventInventory.css";
+import logo from "../assets/InnerVentory Button.png";
+import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
 import { logAction } from "../services/logService";
 
@@ -56,13 +56,11 @@ const EventInventory = () => {
   };
 
   const handleCreateEvent = async () => {
-    // Check if both name and date fields are provided
     if (!newEventFormData.name || !newEventFormData.date) {
       setErrorMessage("Event name and date are required.");
       return;
     }
 
-    // If validation passes, create the event
     await createEvent(newEventFormData);
     setNewEventFormData({ name: "", date: "" });
     const updatedEvents = await getEvents();
@@ -70,7 +68,8 @@ const EventInventory = () => {
     setSuccessMessage("Event created successfully");
     setErrorMessage("");
 
-    logAction(localStorage.getItem("userId"), 'Created a new event: ${newEventFormData.name} taking place on ${newEventFormData.date}');
+    const formattedDate = new Date(newEventFormData.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+    logAction(localStorage.getItem("userId"), `Created a new event: ${newEventFormData.name} taking place on ${formattedDate}`);
   };
 
   const handleEditEvent = (eventId, event) => {
@@ -81,29 +80,43 @@ const EventInventory = () => {
     });
   };
 
+  const handleUpdateEvent = async () => {
+    const originalEvent = events.find((event) => event._id === editEventId);
+    await updateEvent(editEventId, eventFormData);
+
+    setEditEventId(null);
+    setEventFormData({ name: "", date: "" });
+    
+    const updatedEvents = await getEvents();
+    setEvents(updatedEvents);
+    setSuccessMessage("Event updated successfully");
+
+    const updatedEvent = updatedEvents.find((event) => event._id === editEventId);
+    if (originalEvent && updatedEvent) {
+      const formattedOriginalDate = new Date(originalEvent.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+      const formattedUpdatedDate = new Date(updatedEvent.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+      logAction(localStorage.getItem("userId"), `Updated event: ${originalEvent.name} taking place on ${formattedOriginalDate} to ${updatedEvent.name} taking place on ${formattedUpdatedDate}`);
+    }
+  };
+
   const handleDeleteEvent = async (eventId) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this event?"
     );
     if (isConfirmed) {
-      await deleteEvent(eventId);
-      const updatedEvents = await getEvents();
-      setEvents(updatedEvents);
-      setSuccessMessage("Event deleted successfully");
 
-      logAction(localStorage.getItem("userId"), 'Deleted event: ${event.name} taking place on ${event.date}');
+      const eventToDelete = events.find((event) => event._id === eventId);
+
+      if(eventToDelete){
+        await deleteEvent(eventId);
+        const updatedEvents = await getEvents();
+        setEvents(updatedEvents);
+        setSuccessMessage("Event deleted successfully");
+
+        const formattedDate = new Date(eventToDelete.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+        logAction(localStorage.getItem("userId"), `Deleted event: ${eventToDelete.name} taking place on ${formattedDate}`);
+      }
     }
-  };
-
-  const handleUpdateEvent = async () => {
-    await updateEvent(editEventId, eventFormData);
-    setEditEventId(null);
-    setEventFormData({ name: "", date: "" });
-    const updatedEvents = await getEvents();
-    setEvents(updatedEvents);
-    setSuccessMessage("Event updated successfully");
-
-    logAction(localStorage.getItem("userId"), 'Updated event: ${eventFormData.name} taking place on ${eventFormData.date}');
   };
 
   const handleAttendeeInputChange = (e) => {
@@ -127,6 +140,11 @@ const EventInventory = () => {
     });
     setEvents(updatedEvents);
     setSuccessMessage("Attendee added successfully");
+
+    const event = updatedEvents[eventIndex];
+    const formattedDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+
+    logAction(localStorage.getItem("userId"), `Added an attendee to event: ${event.name} on ${formattedDate}`);
   };
 
   const handleEditAttendee = (eventIndex, attendeeIndex, attendee) => {
@@ -145,9 +163,13 @@ const EventInventory = () => {
 
   const handleUpdateAttendee = async () => {
     const { eventIndex, attendeeIndex } = editAttendeeId;
+    const currentAttendee = events[eventIndex].attendees[attendeeIndex];
+    
     const updatedEvents = [...events];
     updatedEvents[eventIndex].attendees[attendeeIndex] = attendeeFormData;
+    
     await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
+    
     setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
     setAttendeeFormData({
       name: "",
@@ -161,14 +183,28 @@ const EventInventory = () => {
     });
     setEvents(updatedEvents);
     setSuccessMessage("Attendee updated successfully");
+
+    const event = updatedEvents[eventIndex];
+    const oldAttendee = currentAttendee;
+    const newAttendee = attendeeFormData;
+
+    const eventDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+    
+    logAction(localStorage.getItem("userId"), `Updated attendee: ${oldAttendee.name || "Unnamed"} 
+      (Size Before: ${oldAttendee.sizeBefore || "N/A"}, Size After: ${oldAttendee.sizeAfter || "N/A"}) to New details - 
+      (Name: ${newAttendee.name || "N/A"}, Size Before: ${newAttendee.sizeBefore || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"}) 
+      in Event: ${event.name} on ${eventDate}`);
   };
 
   const handleDeleteAttendee = async (eventIndex, attendeeIndex) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this attendee?"
     );
+
     if (isConfirmed) {
       const updatedEvents = [...events];
+      const deletedAttendee = updatedEvents[eventIndex].attendees[attendeeIndex];
+
       updatedEvents[eventIndex].attendees.splice(attendeeIndex, 1);
       await updateEvent(
         updatedEvents[eventIndex]._id,
@@ -176,6 +212,10 @@ const EventInventory = () => {
       );
       setEvents(updatedEvents);
       setSuccessMessage("Attendee deleted successfully");
+
+      const formattedDate = new Date(updatedEvents[eventIndex].date).toLocaleDateString("en-US", { timeZone: "UTC" });
+
+      logAction(localStorage.getItem("userId"), `Deleted Attendee: ${deletedAttendee.name || "Unnamed"} from event: ${updatedEvents[eventIndex].name} on ${formattedDate}`);
     }
   };
 
@@ -186,14 +226,12 @@ const EventInventory = () => {
         searchByEvent &&
         event.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Filter attendees based on the search term
       const filteredAttendees = searchByAttendee
         ? event.attendees.filter((attendee) =>
             attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
           )
         : event.attendees;
 
-      // Determine if the event should be visible
       const isVisible =
         eventMatches || (searchByAttendee && filteredAttendees.length > 0);
 

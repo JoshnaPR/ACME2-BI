@@ -9,15 +9,17 @@ import { fetchLogs } from "../services/logService";
 
 const HomePage = () => {
 
-  const [logs, setLogs] = useState(null);
+  const [logs, setLogs] = useState([]);
   const [showLogsModal, setShowLogsModal] = useState(false);
 
   useEffect(() => {
+    console.log("Logs modal state changed: ", showLogsModal);
     if (showLogsModal) {
       const getLogs = async () => {
         try {
           const logData = await fetchLogs();
-          setLogs(logData);
+          console.log("Fetched logs:", logData);
+          setLogs(logData || []);
         } catch (error) {
           console.error("Failed to fetch logs:", error);
         }
@@ -34,7 +36,7 @@ const HomePage = () => {
           <img src={logo2} alt="Breast Intentions Logo" className="logo" />
         </div>
         <nav className="navbar">
-          <Link to="/" className="nav-link">
+          <Link to="/home" className="nav-link">
             Home
           </Link>
           <Link to="/bra-inventory" className="nav-link">
@@ -77,26 +79,30 @@ const HomePage = () => {
           </Link>
         </div>
 
-         <button onClick={() => setShowLogsModal(true)} className="cta-button">
+        <button onClick={() => setShowLogsModal(true)} className="cta-button">
           Show Logs
         </button>
 
         {showLogsModal && (
           <div className="modal-overlay" onClick={() => setShowLogsModal(false)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <h2>Logs</h2>
-              {logs ? (
-                <ul>
-                  {logs.logs?.map((log, index) => (
-                    <li key={index}>
-                      <strong>{new Date(log.timestamp).toLocaleString()}:</strong> {log.action}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Loading logs...</p>
-              )}
-              <button onClick={() => setShowLogsModal(false)}>Close</button>
+              <h2>Breast Intentions Logs</h2>
+              <div className="log-container">
+                {logs.length > 0 ? (
+                  <ul>
+                    {logs.map((log, index) => (
+                      <li key={index}>
+                        <strong>{new Date(log.timestamp).toLocaleString()}</strong>
+                        <span> User - {log.username} </span><br />
+                        <span>{log.action}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No Logs Found</p>
+                )}
+              </div>
+              <button className="close-button" onClick={() => setShowLogsModal(false)}>Close</button>
             </div>
           </div>
         )}

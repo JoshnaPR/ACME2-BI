@@ -84,6 +84,29 @@ router.post('/login', async (req, res) => {
                 return res.status(400).json({ message: 'Invalid OTP' });
             }
         }
+        
+        //AR Added
+        const token = jwt.sign(
+            {
+                userId: user._id,
+                username: user.username,
+                role: user.role,
+            },
+            secretKey,
+            { expiresIn: "1h" }
+        );
+
+        // Send user data along with token
+        const finalData = {
+            userId: user._id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            token,
+        };
+        res.status(200).json(finalData);
+        //End of Code Added
 
         // If login is successful
         res.status(200).json({ message: 'Login successful' });

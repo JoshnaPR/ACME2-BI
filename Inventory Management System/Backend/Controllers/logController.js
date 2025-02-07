@@ -35,7 +35,7 @@ exports.getLogs = async (req, res) => {
   
 exports.createLog = async (req, res) => {
     const { userId, action } = req.body;
-  
+      
     if (!userId || !action) {
       return res.status(400).json({ message: "User ID and action are required" });
     }

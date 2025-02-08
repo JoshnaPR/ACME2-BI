@@ -6,6 +6,27 @@ import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
 import { logAction } from "../services/logService";
+import { getBras } from "../services/braService";
+
+const API_URL = 'http://localhost:5000/api/bras';
+
+export const updateBra = async (braId, updateData) => {
+  try {
+    const response = await fetch(`${API_URL}/${braId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update bra");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating bra:", error);
+  }
+}; 
 
 const EventInventory = () => {
   const role = localStorage.getItem("role");
@@ -36,13 +57,24 @@ const EventInventory = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [bras, setBras] = useState([]);
+
   useEffect(() => {
-    const fetchEvents = async () => {
-      const eventData = await getEvents();
-      setEvents(eventData || []);
+    const fetchData = async () => {
+      try {
+        const eventData = await getEvents();
+        setEvents(eventData || []);
+
+        const brasData = await getBras();
+        setBras(brasData || []);
+
+        console.log("Fetched events and bras data successfully");
+      } catch (error) {
+        console.error("Error fetching events and bras data:", error);
+      }
     };
 
-    fetchEvents();
+    fetchData();
   }, []);
 
   const handleEventInputChange = (e) => {
@@ -164,11 +196,30 @@ const EventInventory = () => {
   const handleUpdateAttendee = async () => {
     const { eventIndex, attendeeIndex } = editAttendeeId;
     const currentAttendee = events[eventIndex].attendees[attendeeIndex];
-    
     const updatedEvents = [...events];
+
     updatedEvents[eventIndex].attendees[attendeeIndex] = attendeeFormData;
-    
     await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
+
+    const oldBra1 = bras.find((bra) => `${bra.type} ${bra.size}` === currentAttendee.braSize1);
+    const oldBra2 = bras.find((bra) => `${bra.type} ${bra.size}` === currentAttendee.braSize2);
+
+    const selectedBra1 = bras.find((bra) => `${bra.type} ${bra.size}` === attendeeFormData.braSize1);
+    const selectedBra2 = bras.find((bra) => `${bra.type} ${bra.size}` === attendeeFormData.braSize2);
+
+    if (oldBra1) {
+      await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
+    }
+    if (oldBra2) {
+      await updateBra(oldBra2._id, { quantity: oldBra2.quantity + 1 });
+    }
+
+    if (selectedBra1) {
+      await updateBra(selectedBra1._id, { quantity: selectedBra1.quantity - 1 });
+    }
+    if (selectedBra2) {
+      await updateBra(selectedBra2._id, { quantity: selectedBra2.quantity - 1 });
+    }
     
     setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
     setAttendeeFormData({
@@ -442,7 +493,7 @@ const EventInventory = () => {
                               placeholder="Size After"
                               className="form-input"
                             />
-                            <input
+                            {/* <input
                               type="text"
                               name="braSize1"
                               value={attendeeFormData.braSize1}
@@ -457,7 +508,33 @@ const EventInventory = () => {
                               onChange={handleAttendeeInputChange}
                               placeholder="Bra Size 2"
                               className="form-input"
-                            />
+                            /> */}
+                            <select
+                              name="braSize1"
+                              value={attendeeFormData.braSize1}
+                              onChange={handleAttendeeInputChange}
+                              className="form-input"
+                            >
+                              <option value="">Select Bra Size 1</option>
+                              {bras.map((bra) => (
+                                <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                  {bra.type} {bra.size} (Qty: {bra.quantity})
+                                </option>
+                              ))}
+                            </select>
+                            <select
+                              name="braSize2"
+                              value={attendeeFormData.braSize2}
+                              onChange={handleAttendeeInputChange}
+                              className="form-input"
+                            >
+                              <option value="">Select Bra Size 2</option>
+                              {bras.map((bra) => (
+                                <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                  {bra.type} {bra.size} (Qty: {bra.quantity})
+                                </option>
+                              ))}
+                            </select>
                             <input
                               type="text"
                               name="fitterName"

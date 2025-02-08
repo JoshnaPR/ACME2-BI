@@ -106,17 +106,13 @@ const BraInventory = () => {
         await deleteBra(id);
         fetchBras();
 
-        console.log("Logging action:", `Deleted: ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the Inventory`);
-
+        setSuccessMessage("Bra deleted successfully!");
+        await logAction(localStorage.getItem("userId"), `Deleted ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the inventory`);
+        
       } catch (error) {
         console.error("Error deleting bra:", error);
       }
     }
-    setSuccessMessage("Bra deleted successfully!");
-
-    console.log("Logging action:", `Deleted: ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the inventory`);
-    console.log("User ID from localStorage:", localStorage.getItem("userId"));
-    await logAction(localStorage.getItem("userId"), `Deleted ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the inventory`);
   };
 
   const filteredBras = bras.filter((bra) => {

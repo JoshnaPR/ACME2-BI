@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const { authenticator } = require('otplib');
 require("dotenv").config();
 const secretKey = process.env.JWT_SECRET;
-console.log
 
 exports.registerUser = async (req, res) => {
   const { firstName, lastName, username, email, password, role } = req.body;

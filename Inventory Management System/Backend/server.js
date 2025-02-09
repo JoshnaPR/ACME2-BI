@@ -26,9 +26,6 @@ app.use(cookieParser());
 // Import Models
 const User = require("./Models/User"); // Ensure this model exists
 
-const Event = require("./Models/Events"); // Ensure this model exists
-const Bra = require("./Models/Bra"); // Ensure this model exists
-
 // Import Routes
 const eventRoutes = require("./Routes/eventRoutes");
 const braRoutes = require("./Routes/braRoutes");

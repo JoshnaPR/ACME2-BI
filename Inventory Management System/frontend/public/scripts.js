@@ -1,34 +1,8 @@
 /* global $, jQuery */
 $(document).ready(function () {
-    const checkSession = async () => {
-        try {
-            const response = await fetch("http://localhost:5000/check");
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            console.log(await response.json());
-            // console.log(success, id);
-            // $("#loginForm").removeClass("codeRequested");
-            // $("#2FABox").removeClass("ready");
-            // if (success) {
-            //     $("body").addClass("logged");
-            //     $("#userId").text(id);
-            // } else {
-            //     $("body").removeClass("logged");
-            //     $("#userId").text("");
-            // }
-        } catch (error) {
-            console.error("Error checking session:", error);
-        }
-    };
-
-    // Initialize the app
-    // checkSession();
-
     $("#logoutButton").click(async () => {
         try {
             await fetch(`/logout`);
-            //await checkSession();
         } catch (error) {
             console.error("Error logging out:", error);
         }
@@ -52,7 +26,6 @@ $(document).ready(function () {
 
             if (success) {
                 $("#loginForm").trigger("reset");
-                //await checkSession();
             } else {
                 alert(error || "Login failed. Please try again.");
             }

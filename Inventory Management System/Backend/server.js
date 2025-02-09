@@ -145,10 +145,7 @@ app.get("/set2FA", async (req, res) => {
     // Enable 2FA for the user and save the updated data
     user.twoFactorAuth.enabled = true;
     user.twoFactorAuth.secret = tempSecret;
-    console.log("Updated user:", user);
     await user.save();
-    console.log("After saving data in db");
-
     const newToken = jwt.sign(
       {
         userId: user._id,
@@ -160,11 +157,9 @@ app.get("/set2FA", async (req, res) => {
       { expiresIn: "9h" } // Same expiration time as login
     );
 
-    console.log("newToken", newToken);
-
     // Reset the cookie with the new token
     res.cookie("newToken", newToken);
-    console.log(req.cookies);
+
     // Send success response
     return res.json({
       success: true,

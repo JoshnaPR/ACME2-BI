@@ -57,7 +57,6 @@ exports.loginUser = async (req, res) => {
 
     // Handle 2FA verification
     if (user.twoFactorAuth.enabled) {
-      console.log("inside  2FA verification")
       if (!code) {
         return res.status(400).send({
           message: "2FA code required!",
@@ -65,10 +64,7 @@ exports.loginUser = async (req, res) => {
         });
       }
 
-      console.log("code:", code);
-      console.log("secret:", user.twoFactorAuth.secret);
       const verified = authenticator.check(code, user.twoFactorAuth.secret);
-      console.log("verified", verified);
 
       if (!verified) {
         return res.status(400).send({ message: "Invalid 2FA code!" });

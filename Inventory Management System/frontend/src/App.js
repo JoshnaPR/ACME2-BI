@@ -8,7 +8,6 @@ import {
 import LandingPage from "./pages/LandingPage"; // Create a LandingPage component
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import VerifyOTP from "./components/VerifyOTP";
 import HomePage from "./pages/HomePage";
 import BraInventory from "./pages/BraInventory";
 import EventInventory from "./pages/EventInventory";
@@ -25,8 +24,6 @@ function App() {
   // Check if the user is authenticated and OTP is verified
   const isAuthenticated = localStorage.getItem("token");
 
-  const isOtpVerified = localStorage.getItem("otpVerified") === "true";
-
   return (
     <Router>
       <div>
@@ -35,7 +32,6 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/verify-otp" element={<VerifyOTP />} />
 
           {/* Protected Routes */}
           <Route

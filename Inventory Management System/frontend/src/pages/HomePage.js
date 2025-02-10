@@ -95,9 +95,9 @@ const HomePage = () => {
                   <ul>
                     {logs.map((log, index) => (
                       <li key={index}>
-                        <strong>{new Date(log.timestamp).toLocaleString()}</strong>
-                        <span> User - {log.username} </span><br />
-                        <span>{log.action}</span>
+                        <strong>{new Date(log.timestamp).toLocaleString()}</strong> <br />
+                        <span> User: {log.username} </span><br />
+                        <span>{log.action}</span> <br />
                       </li>
                     ))}
                   </ul>

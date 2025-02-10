@@ -10,4 +10,8 @@ router.post("/register", AuthController.registerUser);
 // Route: Login user
 router.post("/login", AuthController.loginUser);
 
+router.post("/forgotPassword", AuthController.forgotPassword);
+
+router.post("/reset-password/:token", AuthController.resetPassword);
+
 module.exports = router;

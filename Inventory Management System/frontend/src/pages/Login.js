@@ -18,13 +18,10 @@ function Login() {
   const navigate = useNavigate(); // Use navigate for programmatic navigation
 
   useEffect(() => {
-    console.log("inside useEffect");
     const token = Cookies.get("newToken"); // Access the token from cookies
-    console.log("token", token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token); // Decode the token
-        console.log("decodedToken", decodedToken)
 
         // Check if the decoded token has a boolean flag for 2FA
         if (decodedToken.twoFactorAuth) {
@@ -58,11 +55,10 @@ function Login() {
           code
         }
       );
-      console.log("response", response, response.data)
       if (response.data) {
         // If login is successful, store the token in localStorage
         localStorage.setItem("role", response.data.role);
-        
+
         //AR Added
         localStorage.setItem("userId", response.data.userId);
         //End of Code Added
@@ -76,7 +72,6 @@ function Login() {
       setError(err.response?.data?.message || "Invalid email or password.");
     }
   };
-  console.log("show2FACodeInput", show2FACodeInput);
   return (
     <div className="wrapper">
       <span className="bg-animate"></span>
@@ -126,6 +121,10 @@ function Login() {
             Don't have an account?{" "}
             <a href="/signup" className="register-link">
               Sign Up
+            </a>
+            <br />
+            <a href="/forgotpassword" className="register-link">
+              Forgot Password
             </a>
           </p>
         </div>

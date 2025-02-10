@@ -66,7 +66,6 @@ $(document).ready(function () {
             }
             );
             const { success } = await response.json();
-            console.log("success", success)
             if (success) {
                 alert("SUCCESS: 2FA enabled/updated.");
             } else {

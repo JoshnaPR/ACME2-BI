@@ -19,6 +19,8 @@ import "./styles/style.css";
 import "./styles/global.css"; // Import global styles
 import Logout from "./pages/Logout";
 import TwoFA from "./pages/TwoFA";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   // Check if the user is authenticated and OTP is verified
@@ -31,6 +33,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/signup" element={<Signup />} />
 
           {/* Protected Routes */}

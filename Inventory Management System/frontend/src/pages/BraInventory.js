@@ -76,6 +76,12 @@ const BraInventory = () => {
       return;
     }
 
+    if (existingBra.type === editBra.type && existingBra.size === editBra.size && existingBra.quantity === editBra.quantity) {
+      console.log("No changes made to the bra.");
+      setEditBra(null);
+      return;
+    }
+
     try {
       await updateBra(id, editBra);
       fetchBras();
@@ -85,8 +91,8 @@ const BraInventory = () => {
       console.error("Error updating bra:", error);
     }
     setSuccessMessage("Bra updated successfully!");
-    await logAction(localStorage.getItem("userId"), `Updated ${existingBra.type} ${existingBra.size} - Qty: ${existingBra.quantity} to ${editBra.type} ${editBra.size} - Qty: ${editBra.quantity} in the Inventory`
-  );
+    await logAction(localStorage.getItem("userId"), `Updated ${existingBra.type} ${existingBra.size} 
+    - Qty: ${existingBra.quantity} to ${editBra.type} ${editBra.size} - Qty: ${editBra.quantity} in the Inventory`);
   };
 
   const handleDelete = async (id) => {

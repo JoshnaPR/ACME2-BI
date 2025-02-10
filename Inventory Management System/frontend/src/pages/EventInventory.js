@@ -114,20 +114,40 @@ const EventInventory = () => {
 
   const handleUpdateEvent = async () => {
     const originalEvent = events.find((event) => event._id === editEventId);
-    await updateEvent(editEventId, eventFormData);
-
-    setEditEventId(null);
-    setEventFormData({ name: "", date: "" });
     
-    const updatedEvents = await getEvents();
-    setEvents(updatedEvents);
-    setSuccessMessage("Event updated successfully");
+    if (!originalEvent) {
+      console.error("Event not found for editing");
+      return;
+    }
 
-    const updatedEvent = updatedEvents.find((event) => event._id === editEventId);
-    if (originalEvent && updatedEvent) {
-      const formattedOriginalDate = new Date(originalEvent.date).toLocaleDateString("en-US", { timeZone: "UTC" });
-      const formattedUpdatedDate = new Date(updatedEvent.date).toLocaleDateString("en-US", { timeZone: "UTC" });
-      logAction(localStorage.getItem("userId"), `Updated event: ${originalEvent.name} taking place on ${formattedOriginalDate} to ${updatedEvent.name} taking place on ${formattedUpdatedDate}`);
+    const originalEventDate = new Date(originalEvent.date).toISOString().split("T")[0];
+
+    if (originalEvent.name === eventFormData.name && originalEventDate === eventFormData.date) {
+      console.log("No changes made to event");
+      setEditEventId(null);
+      setEventFormData({ name: "", date: "" });
+      return;
+    }
+    try {
+      await updateEvent(editEventId, eventFormData);
+
+      setEditEventId(null);
+      setEventFormData({ name: "", date: "" });
+      
+      const updatedEvents = await getEvents();
+      setEvents(updatedEvents);
+      setSuccessMessage("Event updated successfully");
+
+      const updatedEvent = updatedEvents.find((event) => event._id === editEventId);
+      if (originalEvent && updatedEvent) {
+        const formattedOriginalDate = new Date(originalEvent.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+        const formattedUpdatedDate = new Date(updatedEvent.date).toLocaleDateString("en-US", { timeZone: "UTC" });
+        logAction(localStorage.getItem("userId"), `Updated event: ${originalEvent.name} taking place on ${formattedOriginalDate} to 
+        ${updatedEvent.name} taking place on ${formattedUpdatedDate}`);
+      }
+    } catch (error) {
+      console.error("Error updating event:", error);
+      setErrorMessage("Failed to update event");
     }
   };
 
@@ -177,7 +197,7 @@ const EventInventory = () => {
     const formattedDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
 
     logAction(localStorage.getItem("userId"), `Added an attendee to event: ${event.name} on ${formattedDate}`);
-  };
+  };  
 
   const handleEditAttendee = (eventIndex, attendeeIndex, attendee) => {
     setEditAttendeeId({ eventIndex, attendeeIndex });
@@ -196,16 +216,51 @@ const EventInventory = () => {
   const handleUpdateAttendee = async () => {
     const { eventIndex, attendeeIndex } = editAttendeeId;
     const currentAttendee = events[eventIndex].attendees[attendeeIndex];
-    const updatedEvents = [...events];
+    
+    if (!currentAttendee) {
+      console.error("Attendee not found for editing");
+      return;
+    }
 
+    const normalize = (value) => (value ? value.toString().trim() : "");
+
+    const checkChange =
+    normalize(currentAttendee.name) === normalize(attendeeFormData.name) &&
+    normalize(currentAttendee.sizeBefore) === normalize(attendeeFormData.sizeBefore) &&
+    normalize(currentAttendee.sizeAfter) === normalize(attendeeFormData.sizeAfter) &&
+    normalize(currentAttendee.braSize1) === normalize(attendeeFormData.braSize1) &&
+    normalize(currentAttendee.braSize2) === normalize(attendeeFormData.braSize2) &&
+    normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
+    normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
+    normalize(currentAttendee.email) === normalize(attendeeFormData.email);
+
+    console.log("checkChange: ", checkChange);
+    
+    if (checkChange) {
+      console.log("No changes made to attendee");
+      setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
+      setAttendeeFormData({
+        name: "",
+        sizeBefore: "",
+        sizeAfter: "",
+        braSize1: "",
+        braSize2: "",
+        fitterName: "",
+        phoneNumber: "",
+        email: "",
+      });
+      return;
+    }
+
+    const updatedEvents = [...events];
     updatedEvents[eventIndex].attendees[attendeeIndex] = attendeeFormData;
     await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
 
-    const oldBra1 = bras.find((bra) => `${bra.type} ${bra.size}` === currentAttendee.braSize1);
-    const oldBra2 = bras.find((bra) => `${bra.type} ${bra.size}` === currentAttendee.braSize2);
+    const oldBra1 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(currentAttendee.braSize1));
+    const oldBra2 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(currentAttendee.braSize2));
 
-    const selectedBra1 = bras.find((bra) => `${bra.type} ${bra.size}` === attendeeFormData.braSize1);
-    const selectedBra2 = bras.find((bra) => `${bra.type} ${bra.size}` === attendeeFormData.braSize2);
+    const selectedBra1 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize1));
+    const selectedBra2 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize2));
 
     if (oldBra1) {
       await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
@@ -241,9 +296,13 @@ const EventInventory = () => {
 
     const eventDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
     
-    logAction(localStorage.getItem("userId"), `Updated attendee: ${oldAttendee.name || "Unnamed"} 
-      (Size Before: ${oldAttendee.sizeBefore || "N/A"}, Size After: ${oldAttendee.sizeAfter || "N/A"}) to New details - 
-      (Name: ${newAttendee.name || "N/A"}, Size Before: ${newAttendee.sizeBefore || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"}) 
+    logAction(localStorage.getItem("userId"), 
+      `Updated attendee: ${oldAttendee.name || "Unnamed"} 
+      (Size Before: ${oldAttendee.sizeBefore || "N/A"}, Size After: ${oldAttendee.sizeAfter || "N/A"},
+      Bra 1: ${oldAttendee.braSize1 || "N/A"}, Bra 2: ${oldAttendee.braSize2 || "N/A"})
+      to New details - 
+      (Name: ${newAttendee.name || "N/A"}, Size Before: ${newAttendee.sizeBefore || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"},
+      Bra 1: ${newAttendee.braSize1 || "N/A"}, Bra 2: ${newAttendee.braSize2 || "N/A"}) 
       in Event: ${event.name} on ${eventDate}`);
   };
 
@@ -493,22 +552,6 @@ const EventInventory = () => {
                               placeholder="Size After"
                               className="form-input"
                             />
-                            {/* <input
-                              type="text"
-                              name="braSize1"
-                              value={attendeeFormData.braSize1}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Bra Size 1"
-                              className="form-input"
-                            />
-                            <input
-                              type="text"
-                              name="braSize2"
-                              value={attendeeFormData.braSize2}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Bra Size 2"
-                              className="form-input"
-                            /> */}
                             <select
                               name="braSize1"
                               value={attendeeFormData.braSize1}
@@ -588,7 +631,7 @@ const EventInventory = () => {
                             </p>
                             <p>
                               <strong>Phone:</strong>{" "}
-                              {attendee?.phoneNumber ?? ""}
+                              {attendee?.phoneNumber ?? "No phone number"}
                             </p>
                             <p>
                               <strong>Email:</strong>{" "}

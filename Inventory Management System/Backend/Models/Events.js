@@ -10,8 +10,8 @@ const eventSchema = new mongoose.Schema({
         braSize1: String,
         braSize2: String,
         fitterName: String,
+        phoneNumber: String,
         email: String,
-        phone: String,
     }],
 });
 

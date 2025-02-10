@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api/events';
-const INVENTORY_URL = 'http://localhost:5000/api/inventory';
 
 // Function to create an event
 export const createEvent = async (eventData) => {
@@ -45,50 +44,6 @@ export const deleteEvent = async (id) => {
         await axios.delete(`${API_URL}/${id}`);
     } catch (error) {
         console.error('Error deleting event:', error);
-        throw error;
-    }
-};
-
-// Inventory functions
-// Function to get inventory items
-export const getInventoryItems = async (eventId) => {
-    try {
-        const response = await axios.get(`${INVENTORY_URL}?eventId=${eventId}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching inventory items:', error);
-        return [];
-    }
-};
-
-// Function to create an inventory item
-export const createInventoryItem = async (itemData) => {
-    try {
-        const response = await axios.post(INVENTORY_URL, itemData);
-        return response.data;
-    } catch (error) {
-        console.error('Error creating inventory item:', error);
-        throw error;
-    }
-};
-
-// Function to update an inventory item by its ID
-export const updateInventoryItem = async (id, itemData) => {
-    try {
-        const response = await axios.put(`${INVENTORY_URL}/${id}`, itemData);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating inventory item:', error);
-        throw error;
-    }
-};
-
-// Function to delete an inventory item by its ID
-export const deleteInventoryItem = async (id) => {
-    try {
-        await axios.delete(`${INVENTORY_URL}/${id}`);
-    } catch (error) {
-        console.error('Error deleting inventory item:', error);
         throw error;
     }
 };

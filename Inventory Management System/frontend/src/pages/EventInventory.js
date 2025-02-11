@@ -26,7 +26,9 @@ export const updateBra = async (braId, updateData) => {
   } catch (error) {
     console.error("Error updating bra:", error);
   }
-}; 
+};
+
+
 
 const EventInventory = () => {
   const role = localStorage.getItem("role");
@@ -58,6 +60,11 @@ const EventInventory = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [bras, setBras] = useState([]);
+  const[braSearch, setBraSearch] = useState("");
+
+  const filteredBras = bras.filter((bra) => {
+    `${bra.type} ${bra.size}`.toLowerCase().includes(braSearch.toLowerCase());
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -298,11 +305,9 @@ const EventInventory = () => {
     
     logAction(localStorage.getItem("userId"), 
       `Updated attendee: ${oldAttendee.name || "Unnamed"} 
-      (Size Before: ${oldAttendee.sizeBefore || "N/A"}, Size After: ${oldAttendee.sizeAfter || "N/A"},
-      Bra 1: ${oldAttendee.braSize1 || "N/A"}, Bra 2: ${oldAttendee.braSize2 || "N/A"})
+      (Size After: ${oldAttendee.sizeAfter || "N/A"})
       to New details - 
-      (Name: ${newAttendee.name || "N/A"}, Size Before: ${newAttendee.sizeBefore || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"},
-      Bra 1: ${newAttendee.braSize1 || "N/A"}, Bra 2: ${newAttendee.braSize2 || "N/A"}) 
+      (Name: ${newAttendee.name || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"}) 
       in Event: ${event.name} on ${eventDate}`);
   };
 

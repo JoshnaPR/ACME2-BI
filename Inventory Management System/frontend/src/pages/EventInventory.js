@@ -60,11 +60,6 @@ const EventInventory = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [bras, setBras] = useState([]);
-  const[braSearch, setBraSearch] = useState("");
-
-  const filteredBras = bras.filter((bra) => {
-    `${bra.type} ${bra.size}`.toLowerCase().includes(braSearch.toLowerCase());
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -549,40 +544,64 @@ const EventInventory = () => {
                               placeholder="Size Before"
                               className="form-input"
                             />
-                            <input
-                              type="text"
-                              name="sizeAfter"
-                              value={attendeeFormData.sizeAfter}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Size After"
-                              className="form-input"
-                            />
-                            <select
-                              name="braSize1"
-                              value={attendeeFormData.braSize1}
-                              onChange={handleAttendeeInputChange}
-                              className="form-input"
-                            >
-                              <option value="">Select Bra Size 1</option>
+                            <div className="input-container">
+                              <input
+                                type="text"
+                                name="braSize1"
+                                value={attendeeFormData.braSize1}
+                                onChange={handleAttendeeInputChange}
+                                list="braSize1-options"
+                                placeholder="Select Bra Size 1"
+                                className="form-input"
+                              />
+                              {attendeeFormData.braSize1 && (
+                                <button
+                                  type="button"
+                                  className="clear-btn"
+                                  onClick={() =>
+                                    handleAttendeeInputChange({ target: { name: "braSize1", value: "" } })
+                                  }
+                                >
+                                  ❌
+                                </button>
+                              )}
+                            </div>
+                            <datalist id="braSize1-options">
                               {bras.map((bra) => (
                                 <option key={bra._id} value={`${bra.type} ${bra.size}`}>
                                   {bra.type} {bra.size} (Qty: {bra.quantity})
                                 </option>
                               ))}
-                            </select>
-                            <select
-                              name="braSize2"
-                              value={attendeeFormData.braSize2}
-                              onChange={handleAttendeeInputChange}
-                              className="form-input"
-                            >
-                              <option value="">Select Bra Size 2</option>
+                            </datalist>
+                            <div className="input-container">
+                              <input
+                                type="text"
+                                name="braSize2"
+                                value={attendeeFormData.braSize2}
+                                onChange={handleAttendeeInputChange}
+                                list="braSize2-options"
+                                placeholder="Select Bra Size 2"
+                                className="form-input"
+                              />
+                              {attendeeFormData.braSize2 && (
+                                <button
+                                  type="button"
+                                  className="clear-btn"
+                                  onClick={() =>
+                                    handleAttendeeInputChange({ target: { name: "braSize2", value: "" } })
+                                  }
+                                >
+                                  Clear
+                                </button>
+                              )}
+                            </div>
+                            <datalist id="braSize2-options">
                               {bras.map((bra) => (
                                 <option key={bra._id} value={`${bra.type} ${bra.size}`}>
                                   {bra.type} {bra.size} (Qty: {bra.quantity})
                                 </option>
                               ))}
-                            </select>
+</datalist>
                             <input
                               type="text"
                               name="fitterName"

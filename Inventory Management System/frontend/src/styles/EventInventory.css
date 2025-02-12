@@ -296,3 +296,8 @@
     font-size: 0.9rem;
     margin-left: 5px;
   }  
+
+  .scrollable-datalist {
+  max-height: 200px;
+  overflow-y: auto;
+} 

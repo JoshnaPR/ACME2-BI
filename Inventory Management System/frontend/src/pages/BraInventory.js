@@ -48,6 +48,7 @@ const BraInventory = () => {
         });
         fetchBras();
         setSuccessMessage("Quantity updated successfully!");
+        await logAction(localStorage.getItem("userId"), `Added more of ${existingBra.type} ${existingBra.size} so quantity went from ${existingBra.quantity} to ${updatedQuantity} in the Inventory`);
       } catch (error) {
         console.error("Error updating quantity:", error);
       }

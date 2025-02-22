@@ -48,6 +48,7 @@ const BraInventory = () => {
         });
         fetchBras();
         setSuccessMessage("Quantity updated successfully!");
+        await logAction(localStorage.getItem("userId"), `Added more of ${existingBra.type} ${existingBra.size} so quantity went from ${existingBra.quantity} to ${updatedQuantity} in the Inventory`);
       } catch (error) {
         console.error("Error updating quantity:", error);
       }
@@ -146,8 +147,11 @@ const BraInventory = () => {
     const flexfitBras = bras
       .filter((bra) => bra.type === "FlexFit")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+    const kidsBras = bras
+      .filter((bra) => bra.type === "Kids")
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
 
-    return { totalBras, normalBras, nursingBras, disabilityBras, flexfitBras };
+    return { totalBras, normalBras, nursingBras, disabilityBras, flexfitBras, kidsBras };
   };
 
   return (
@@ -253,12 +257,13 @@ const BraInventory = () => {
         {showModal && (
           <div className="modal-overlay" onClick={() => setShowModal(false)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <h2>Inventory Levels</h2>
-              <p>Total Bras: {getInventoryTotals().totalBras}</p>
+              <h1>Inventory Levels</h1>
+              <h2><strong>Total Bras: {getInventoryTotals().totalBras}</strong></h2>
               <p>Normal Bras: {getInventoryTotals().normalBras}</p>
               <p>Nursing Bras: {getInventoryTotals().nursingBras}</p>
               <p>Disability Bras: {getInventoryTotals().disabilityBras}</p>
               <p>FlexFit Bras: {getInventoryTotals().flexfitBras}</p>
+              <p>Kids Bras: {getInventoryTotals().kidsBras}</p>
               <button onClick={() => setShowModal(false)}>Close</button>
             </div>
           </div>

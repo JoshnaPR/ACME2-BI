@@ -298,11 +298,9 @@ const EventInventory = () => {
 
     logAction(localStorage.getItem("userId"),
       `Updated attendee: ${oldAttendee.name || "Unnamed"} 
-      (Size Before: ${oldAttendee.sizeBefore || "N/A"}, Size After: ${oldAttendee.sizeAfter || "N/A"},
-      Bra 1: ${oldAttendee.braSize1 || "N/A"}, Bra 2: ${oldAttendee.braSize2 || "N/A"})
+      (Size After: ${oldAttendee.sizeAfter || "N/A"})
       to New details - 
-      (Name: ${newAttendee.name || "N/A"}, Size Before: ${newAttendee.sizeBefore || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"},
-      Bra 1: ${newAttendee.braSize1 || "N/A"}, Bra 2: ${newAttendee.braSize2 || "N/A"}) 
+      (Name: ${newAttendee.name || "N/A"}, Size After: ${newAttendee.sizeAfter || "N/A"}) 
       in Event: ${event.name} on ${eventDate}`);
   };
 
@@ -547,40 +545,78 @@ const EventInventory = () => {
                               placeholder="Size Before"
                               className="form-input"
                             />
+                           <div className="input-container">
                             <input
                               type="text"
-                              name="sizeAfter"
-                              value={attendeeFormData.sizeAfter}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Size After"
-                              className="form-input"
-                            />
-                            <select
                               name="braSize1"
                               value={attendeeFormData.braSize1}
                               onChange={handleAttendeeInputChange}
+                              placeholder="Select Bra Size 1"
                               className="form-input"
-                            >
-                              <option value="">Select Bra Size 1</option>
-                              {bras.map((bra) => (
-                                <option key={bra._id} value={`${bra.type} ${bra.size}`}>
-                                  {bra.type} {bra.size} (Qty: {bra.quantity})
-                                </option>
-                              ))}
-                            </select>
-                            <select
+                              list="braSize1-list"
+                            />
+                            {attendeeFormData.braSize1 && (
+                              <button
+                                type="button"
+                                className="clear-btn"
+                                onClick={() =>
+                                  handleAttendeeInputChange({ target: { name: "braSize1", value: "" } })
+                                }
+                              >
+                                ❌
+                              </button>
+                            )}
+                            <datalist id="braSize1-list" className="scrollable-datalist">
+                              {bras
+                                .filter((bra) =>
+                                  `${bra.type} ${bra.size}`
+                                    .toLowerCase()
+                                    .includes(attendeeFormData.braSize1.toLowerCase())
+                                )
+                                .slice(0, 100)
+                                .map((bra) => (
+                                  <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                    {bra.type} {bra.size} (Qty: {bra.quantity})
+                                  </option>
+                                ))}
+                            </datalist>
+                          </div>
+                          <div className="input-container">
+                            <input
+                              type="text"
                               name="braSize2"
                               value={attendeeFormData.braSize2}
                               onChange={handleAttendeeInputChange}
+                              placeholder="Select Bra Size 2"
                               className="form-input"
-                            >
-                              <option value="">Select Bra Size 2</option>
-                              {bras.map((bra) => (
-                                <option key={bra._id} value={`${bra.type} ${bra.size}`}>
-                                  {bra.type} {bra.size} (Qty: {bra.quantity})
-                                </option>
-                              ))}
-                            </select>
+                              list="braSize2-list"
+                            />
+                            {attendeeFormData.braSize2 && (
+                              <button
+                                type="button"
+                                className="clear-btn"
+                                onClick={() =>
+                                  handleAttendeeInputChange({ target: { name: "braSize2", value: "" } })
+                                }
+                              >
+                                Clear
+                              </button>
+                            )}
+                            <datalist id="braSize2-list" className="scrollable-datalist">
+                              {bras
+                                .filter((bra) =>
+                                  `${bra.type} ${bra.size}`
+                                    .toLowerCase()
+                                    .includes(attendeeFormData.braSize2.toLowerCase())
+                                )
+                                .slice(0, 100)
+                                .map((bra) => (
+                                  <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                    {bra.type} {bra.size} (Qty: {bra.quantity})
+                                  </option>
+                                ))}
+                            </datalist>
+                          </div>
                             <input
                               type="text"
                               name="fitterName"

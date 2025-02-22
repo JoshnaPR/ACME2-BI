@@ -21,10 +21,6 @@ body.logged #homePage {
 }
 
 #twoFAFormHolder {
-  display: none !important;
-}
-
-.ready #twoFAFormHolder {
   margin-top: 80%;
   display: block !important;
   text-align: center;

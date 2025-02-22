@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getEvents, updateEvent, deleteEvent, createEvent} from "../services/eventService";
+import { getEvents, updateEvent, deleteEvent, createEvent } from "../services/eventService";
 import { Link } from "react-router-dom";
 import "../styles/EventInventory.css";
 import logo from "../assets/InnerVentory Button.png";
@@ -26,7 +26,7 @@ export const updateBra = async (braId, updateData) => {
   } catch (error) {
     console.error("Error updating bra:", error);
   }
-}; 
+};
 
 const EventInventory = () => {
   const role = localStorage.getItem("role");
@@ -114,7 +114,7 @@ const EventInventory = () => {
 
   const handleUpdateEvent = async () => {
     const originalEvent = events.find((event) => event._id === editEventId);
-    
+
     if (!originalEvent) {
       console.error("Event not found for editing");
       return;
@@ -133,7 +133,7 @@ const EventInventory = () => {
 
       setEditEventId(null);
       setEventFormData({ name: "", date: "" });
-      
+
       const updatedEvents = await getEvents();
       setEvents(updatedEvents);
       setSuccessMessage("Event updated successfully");
@@ -159,7 +159,7 @@ const EventInventory = () => {
 
       const eventToDelete = events.find((event) => event._id === eventId);
 
-      if(eventToDelete){
+      if (eventToDelete) {
         await deleteEvent(eventId);
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
@@ -197,7 +197,7 @@ const EventInventory = () => {
     const formattedDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
 
     logAction(localStorage.getItem("userId"), `Added an attendee to event: ${event.name} on ${formattedDate}`);
-  };  
+  };
 
   const handleEditAttendee = (eventIndex, attendeeIndex, attendee) => {
     setEditAttendeeId({ eventIndex, attendeeIndex });
@@ -216,7 +216,7 @@ const EventInventory = () => {
   const handleUpdateAttendee = async () => {
     const { eventIndex, attendeeIndex } = editAttendeeId;
     const currentAttendee = events[eventIndex].attendees[attendeeIndex];
-    
+
     if (!currentAttendee) {
       console.error("Attendee not found for editing");
       return;
@@ -225,17 +225,17 @@ const EventInventory = () => {
     const normalize = (value) => (value ? value.toString().trim() : "");
 
     const checkChange =
-    normalize(currentAttendee.name) === normalize(attendeeFormData.name) &&
-    normalize(currentAttendee.sizeBefore) === normalize(attendeeFormData.sizeBefore) &&
-    normalize(currentAttendee.sizeAfter) === normalize(attendeeFormData.sizeAfter) &&
-    normalize(currentAttendee.braSize1) === normalize(attendeeFormData.braSize1) &&
-    normalize(currentAttendee.braSize2) === normalize(attendeeFormData.braSize2) &&
-    normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
-    normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
-    normalize(currentAttendee.email) === normalize(attendeeFormData.email);
+      normalize(currentAttendee.name) === normalize(attendeeFormData.name) &&
+      normalize(currentAttendee.sizeBefore) === normalize(attendeeFormData.sizeBefore) &&
+      normalize(currentAttendee.sizeAfter) === normalize(attendeeFormData.sizeAfter) &&
+      normalize(currentAttendee.braSize1) === normalize(attendeeFormData.braSize1) &&
+      normalize(currentAttendee.braSize2) === normalize(attendeeFormData.braSize2) &&
+      normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
+      normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
+      normalize(currentAttendee.email) === normalize(attendeeFormData.email);
 
     console.log("checkChange: ", checkChange);
-    
+
     if (checkChange) {
       console.log("No changes made to attendee");
       setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
@@ -275,7 +275,7 @@ const EventInventory = () => {
     if (selectedBra2) {
       await updateBra(selectedBra2._id, { quantity: selectedBra2.quantity - 1 });
     }
-    
+
     setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
     setAttendeeFormData({
       name: "",
@@ -295,8 +295,8 @@ const EventInventory = () => {
     const newAttendee = attendeeFormData;
 
     const eventDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
-    
-    logAction(localStorage.getItem("userId"), 
+
+    logAction(localStorage.getItem("userId"),
       `Updated attendee: ${oldAttendee.name || "Unnamed"} 
       (Size Before: ${oldAttendee.sizeBefore || "N/A"}, Size After: ${oldAttendee.sizeAfter || "N/A"},
       Bra 1: ${oldAttendee.braSize1 || "N/A"}, Bra 2: ${oldAttendee.braSize2 || "N/A"})
@@ -338,8 +338,8 @@ const EventInventory = () => {
 
       const filteredAttendees = searchByAttendee
         ? event.attendees.filter((attendee) =>
-            attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
-          )
+          attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
         : event.attendees;
 
       const isVisible =
@@ -372,6 +372,9 @@ const EventInventory = () => {
           </Link>
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
+          </Link>
+          <Link to="/two-fa" className="nav-link">
+            2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />
@@ -526,7 +529,7 @@ const EventInventory = () => {
                     event.attendees.map((attendee, attendeeIndex) => (
                       <li key={attendeeIndex} className="attendee-item">
                         {editAttendeeId.eventIndex === eventIndex &&
-                        editAttendeeId.attendeeIndex === attendeeIndex ? (
+                          editAttendeeId.attendeeIndex === attendeeIndex ? (
                           <>
                             <input
                               type="text"
@@ -642,7 +645,7 @@ const EventInventory = () => {
 
                         <div className="attendee-actions">
                           {editAttendeeId.eventIndex === eventIndex &&
-                          editAttendeeId.attendeeIndex === attendeeIndex ? (
+                            editAttendeeId.attendeeIndex === attendeeIndex ? (
                             <button onClick={handleUpdateAttendee}>
                               Update Attendee
                             </button>

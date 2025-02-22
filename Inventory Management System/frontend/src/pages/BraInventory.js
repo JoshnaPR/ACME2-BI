@@ -57,7 +57,7 @@ const BraInventory = () => {
         await createBra(newBra);
         fetchBras();
         setSuccessMessage("Bra added successfully!");
-        
+
         await logAction(localStorage.getItem("userId"), `Added ${newBra.quantity} of a bra: ${newBra.type} ${newBra.size} to the Inventory`);
 
       } catch (error) {
@@ -115,7 +115,7 @@ const BraInventory = () => {
 
         setSuccessMessage("Bra deleted successfully!");
         await logAction(localStorage.getItem("userId"), `Deleted ${braToDelete.type} ${braToDelete.size} - Qty: ${braToDelete.quantity} from the inventory`);
-        
+
       } catch (error) {
         console.error("Error deleting bra:", error);
       }
@@ -171,7 +171,7 @@ const BraInventory = () => {
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link" id="enable2FAButton">
+          <Link to="/two-fa" className="nav-link">
             2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">

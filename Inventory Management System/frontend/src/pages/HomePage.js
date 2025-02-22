@@ -26,7 +26,7 @@ const HomePage = () => {
       };
       getLogs();
     }
-  }, [showLogsModal]);  
+  }, [showLogsModal]);
 
   return (
     <div className="homepage-container">
@@ -45,7 +45,7 @@ const HomePage = () => {
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link" id="enable2FAButton">
+          <Link to="/two-fa" className="nav-link">
             2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">

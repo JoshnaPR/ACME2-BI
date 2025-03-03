@@ -4,7 +4,7 @@ import "../styles/HomePage.css"; // Custom styles for the homepage
 import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
-import "./TwoFA.css"
+import "../styles/TwoFA.css"
 
 const TwoFA = () => {
   const [qrImage, setQrImage] = useState("");
@@ -91,7 +91,7 @@ const TwoFA = () => {
       <div id="2FABox" className="d-flex flex-row justify-content-center align-items-center gap-3">
         {is2FAReady && (
           <div id="twoFAFormHolder" className="d-flex flex-row align-items-center gap-3 ">
-            <img id="qrImage" height="150" width="150" src={qrImage} alt="QR Image" />
+            <img id="qrImage" height="150" width="150" src={qrImage} alt="QR" />
             <form className="d-flex flex-column gap-2" onSubmit={handleSubmit}>
               <input
                 type="text"

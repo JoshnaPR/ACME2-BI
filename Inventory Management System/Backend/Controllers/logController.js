@@ -18,7 +18,6 @@ async function logAction(userId, action) {
     });
 
     await logEntry.save();
-    console.log("Log entry saved: ,", logEntry);
   } catch (error) {
     console.error("Error logging action:", error);
   }

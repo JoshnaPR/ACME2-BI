@@ -6,6 +6,8 @@ import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
 import { fetchLogs } from "../services/logService";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const HomePage = () => {
 
@@ -27,6 +29,40 @@ const HomePage = () => {
       getLogs();
     }
   }, [showLogsModal]);
+
+  const handleDownloadReport = async () => {
+    try {
+      const logData = await fetchLogs();
+      const filteredLogs = logData.filter((log) =>
+        log.action.includes("given out")
+      );
+  
+      if (filteredLogs.length === 0) {
+        alert("No records of bras given out found.");
+        return;
+      }
+  
+      const doc = new jsPDF();
+      doc.text("Breast Intentions - Bra Distribution Report", 20, 10);
+  
+      const tableData = filteredLogs.map((log, index) => [
+        index + 1,
+        new Date(log.timestamp).toLocaleDateString(),
+        log.username,
+        log.action,
+      ]);
+  
+      doc.autoTable({
+        head: [["#", "Date", "User", "Action"]],
+        body: tableData,
+      });
+  
+      doc.save("Bra_Distribution_Report.pdf");
+    } catch (error) {
+      console.error("Error generating report:", error);
+    }
+  };
+  
 
   return (
     <div className="homepage-container">
@@ -84,6 +120,9 @@ const HomePage = () => {
 
         <button onClick={() => setShowLogsModal(true)} className="cta-button">
           Show Logs
+        </button>
+        <button onClick={handleDownloadReport} className="cta-button">
+        Download Report
         </button>
 
         {showLogsModal && (

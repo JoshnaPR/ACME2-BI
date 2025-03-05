@@ -273,7 +273,7 @@ const BraInventory = () => {
           <h2 style={{ textAlign: "center" }}>{successMessage}</h2>
         )}
 
-{editBra && (
+        {editBra && (
           <form
             className="bra-form"
             onSubmit={(e) => {

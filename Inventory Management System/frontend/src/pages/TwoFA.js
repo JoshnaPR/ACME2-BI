@@ -68,7 +68,7 @@ const TwoFA = () => {
           <img src={logo2} alt="Breast Intentions Logo" className="logo" />
         </div>
         <nav className="navbar">
-          <Link to="/" className="nav-link">
+          <Link to="/home" className="nav-link">
             Home
           </Link>
           <Link to="/bra-inventory" className="nav-link">

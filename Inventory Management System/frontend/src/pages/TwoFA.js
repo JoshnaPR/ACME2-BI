@@ -18,7 +18,7 @@ const TwoFA = () => {
     try {
       const token = localStorage.getItem("token");
       document.cookie = `token=${token}`;
-      const response = await fetch("http://localhost:5000/qrImage", {
+      const response = await fetch("http://breastintentionsdb.com/qrImage", {
         method: "GET",
         credentials: "include",
       });
@@ -41,7 +41,7 @@ const TwoFA = () => {
     const code = e.target.code.value;
 
     try {
-      const response = await fetch(`http://localhost:5000/set2FA?code=${code}`, {
+      const response = await fetch(`http://breastintentionsdb.com/set2FA?code=${code}`, {
         method: "GET",
         credentials: "include",
       });

@@ -31,7 +31,7 @@ function ResetPassword() {
         const token = window.location.pathname.split("/").pop();
 
         axios
-            .post(`http://localhost:5000/api/users/reset-password/${token}`, { newPassword })
+            .post(`http://breastintentionsdb.com/api/users/reset-password/${token}`, { newPassword })
             .then((response) => {
                 setSuccessMessage(response.data.message);
                 setNewPassword("");

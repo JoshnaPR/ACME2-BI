@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/events';
+const API_URL = 'http://breastintentionsdb.com/api/events';
 
 // Function to create an event
 export const createEvent = async (eventData) => {

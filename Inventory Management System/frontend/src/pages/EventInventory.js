@@ -8,7 +8,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { logAction } from "../services/logService";
 import { getBras } from "../services/braService";
 
-const API_URL = 'http://breastintentionsdb.com/api/bras';
+const API_URL = 'https://breastintentionsdb.com/api/bras';
 
 export const updateBra = async (braId, updateData) => {
   try {

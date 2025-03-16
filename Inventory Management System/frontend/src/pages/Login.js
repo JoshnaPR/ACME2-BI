@@ -48,7 +48,7 @@ function Login() {
     try {
       // Send login credentials (email and password) to the backend
       const response = await axios.post(
-        "http://breastintentionsdb.com/api/users/login",
+        "https://breastintentionsdb.com/api/users/login",
         {
           email,
           password,

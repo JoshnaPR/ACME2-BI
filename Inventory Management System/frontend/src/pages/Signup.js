@@ -28,7 +28,7 @@ function Register() {
     try {
       // Step 1: Register new user
       const response = await axios.post(
-        "http://breastintentionsdb.com/api/users/register",
+        "https://breastintentionsdb.com/api/users/register",
         formData
       );
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://breastintentionsdb.com/api/logs";
+const API_URL = "https://breastintentionsdb.com/api/logs";
 
 export const logAction = async (userId, action) => {
     try {     

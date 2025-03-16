@@ -32,7 +32,7 @@ function ForgotPassword() {
 
         try {
             await axios.post(
-                "http://breastintentionsdb.com/api/users/forgotPassword",
+                "https://breastintentionsdb.com/api/users/forgotPassword",
                 {
                     email,
                 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://breastintentionsdb.com/api/bras'; // Adjust based on your backend route
+const API_URL = 'https://breastintentionsdb.com/api/bras'; // Adjust based on your backend route
 
 export const createBra = async (braData) => {
     try {

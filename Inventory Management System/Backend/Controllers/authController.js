@@ -138,7 +138,7 @@ exports.forgotPassword = async (req, res) => {
           <p>You requested a password reset for <b>Breast Intentions</b>.</p>
           <p>Click the button below to reset your password:</p>
           <div style="text-align: center; margin: 20px 0;">
-            <a href="http://localhost:3000/reset-password/${token}" 
+            <a href="https://breastintentionsdb.com/reset-password/${token}" 
               style="background-color: #007BFF; color: white; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 5px; display: inline-block;">
               Reset Your Password
             </a>

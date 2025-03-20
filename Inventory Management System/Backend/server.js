@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-  origin: ["http://breastintentionsdb.com", "http://www.breastintentionsdb.com"], // Replace with your frontend domain
+  origin: ["https://breastintentionsdb.com", "https://www.breastintentionsdb.com"], // Replace with your frontend domain
   credentials: true,
 };
 app.use(cors(corsOptions));

@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/style.css";
 axios.defaults.withCredentials = true;
 
 function ResetPassword() {
+    const { token } = useParams();
+    const navigate = useNavigate();
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+
+    useEffect(() => {
+        if (!token) {
+            setError("Invalid password reset link.");
+        }
+    }, [token]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,9 +45,7 @@ function ResetPassword() {
                 setSuccessMessage(response.data.message);
                 setNewPassword("");
                 setConfirmPassword("");
-                setTimeout(() => {
-                    window.location.href = "/login";
-                }, 3000);
+                setTimeout(() => navigate("/login"), 3000);
             })
             .catch(() => {
                 setError("Your link has expired");

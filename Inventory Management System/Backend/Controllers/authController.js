@@ -1,9 +1,14 @@
 const User = require("../Models/User");
-const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const { authenticator } = require('otplib');
 require("dotenv").config();
 const secretKey = process.env.JWT_SECRET;
+const SibApiV3Sdk = require("sib-api-v3-sdk");
+// Initialize Brevo API
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications["api-key"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 exports.registerUser = async (req, res) => {
   const { firstName, lastName, username, email, password, role } = req.body;
@@ -113,25 +118,14 @@ exports.forgotPassword = async (req, res) => {
     }
 
     // Generate a unique JWT token for the user that contains the user's id
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "10m", });
+    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: "10m" });
 
-
-    // Send the token to the user's email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD_APP_EMAIL,
-      },
-    });
-
-
-    // Email configuration
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: req.body.email,
-      subject: "Breast Intentions - Reset Your Password",
-      html: `
+    // Brevo (Sendinblue) email setup
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail.to = [{ email: user.email, name: `${user.firstName} ${user.lastName}` }];
+    sendSmtpEmail.sender = { email: "joshna2507@gmail.com", name: "Christine Weaver" };
+    sendSmtpEmail.subject = "Reset Your Password";
+    sendSmtpEmail.htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
           <h2 style="color: #333; text-align: center;">Reset Your Password</h2>
           <p>Hi <b>${user.firstName} ${user.lastName}</b>,</p>
@@ -148,17 +142,15 @@ exports.forgotPassword = async (req, res) => {
           <hr style="border: none; border-top: 1px solid #ddd;">
           <p style="text-align: center; font-size: 12px; color: #777;">&copy; 2025 Breast Intentions. All rights reserved.</p>
         </div>
-      `,
-    };
+    `;
 
-    // Send the email
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        return res.status(500).send({ message: err.message });
-      }
-      res.status(200).send({ message: "Email sent" });
-    });
+    // Send the email using Brevo API
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+
+    res.status(200).send({ message: "Password reset email sent successfully" });
+
   } catch (err) {
+    console.error("Error sending password reset email:", err);
     res.status(500).send({ message: err.message });
   }
 };
@@ -168,7 +160,7 @@ exports.resetPassword = async (req, res) => {
     // Verify the token sent by the user
     const decodedToken = jwt.verify(
       req.params.token,
-      process.env.JWT_SECRET
+      secretKey
     );
 
     // If the token is invalid, return an error

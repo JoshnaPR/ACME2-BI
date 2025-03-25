@@ -123,7 +123,7 @@ exports.forgotPassword = async (req, res) => {
     // Brevo (Sendinblue) email setup
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail.to = [{ email: user.email, name: `${user.firstName} ${user.lastName}` }];
-    sendSmtpEmail.sender = { email: "joshna2507@gmail.com", name: "Christine Weaver" };
+    sendSmtpEmail.sender = { email: "christine@breastintentionsofwa.org", name: "Christine Weaver" };
     sendSmtpEmail.subject = "Reset Your Password";
     sendSmtpEmail.htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">

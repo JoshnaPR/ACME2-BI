@@ -8,7 +8,9 @@ const { authenticator } = require("otplib"); // For 2FA functionality
 const cookieParser = require('cookie-parser');
 
 // Load environment variables
-dotenv.config();
+// dotenv.config();
+require("dotenv").config();
+
 
 // Create an Express app
 const app = express();
@@ -183,4 +185,7 @@ mongoose
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
-  .catch((error) => console.log(error));
+  .catch((error) => {
+	console.log("MongoDB connection error:", error);
+	app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  });

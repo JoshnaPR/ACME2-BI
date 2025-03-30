@@ -199,8 +199,8 @@ const EventInventory = () => {
     logAction(localStorage.getItem("userId"), `Added an attendee to event: ${event.name} on ${formattedDate}`);
   };
 
-  const handleEditAttendee = (eventIndex, attendeeIndex, attendee) => {
-    setEditAttendeeId({ eventIndex, attendeeIndex });
+  const handleEditAttendee = (eventId, attendeeIndex, attendee) => {
+    setEditAttendeeId({ eventId, attendeeIndex });
     setAttendeeFormData({
       name: attendee?.name || "",
       sizeBefore: attendee?.sizeBefore || "",
@@ -214,7 +214,14 @@ const EventInventory = () => {
   };
 
   const handleUpdateAttendee = async () => {
-    const { eventIndex, attendeeIndex } = editAttendeeId;
+    const { eventId, attendeeIndex } = editAttendeeId;
+
+    const eventIndex = events.findIndex(event => event._id === eventId);
+    if (eventIndex === -1) {
+      console.error("Event not found for editing");
+      return;
+    }
+
     const currentAttendee = events[eventIndex].attendees[attendeeIndex];
 
     if (!currentAttendee) {
@@ -523,7 +530,7 @@ const EventInventory = () => {
                   {event.attendees && event.attendees.length > 0 ? (
                     event.attendees.map((attendee, attendeeIndex) => (
                       <li key={attendeeIndex} className="attendee-item">
-                        {editAttendeeId.eventIndex === eventIndex &&
+                        {editAttendeeId.eventId === event._id &&
                           editAttendeeId.attendeeIndex === attendeeIndex ? (
                           <>
                             <input
@@ -677,7 +684,7 @@ const EventInventory = () => {
                         )}
 
                         <div className="attendee-actions">
-                          {editAttendeeId.eventIndex === eventIndex &&
+                          {editAttendeeId.eventId === event._id &&
                             editAttendeeId.attendeeIndex === attendeeIndex ? (
                             <button onClick={handleUpdateAttendee}>
                               Update Attendee
@@ -687,7 +694,7 @@ const EventInventory = () => {
                               <button
                                 onClick={() =>
                                   handleEditAttendee(
-                                    eventIndex,
+                                    event._id,
                                     attendeeIndex,
                                     attendee
                                   )

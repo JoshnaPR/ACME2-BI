@@ -1,7 +1,6 @@
-// HomePage.js
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/HomePage.css"; // Custom styles for the homepage
+import "../styles/HomePage.css";
 import logo from "../assets/InnerVentory Button.png";
 import logo2 from "../assets/BreastIntentionsLogo.png";
 import { IoIosLogOut } from "react-icons/io";
@@ -9,6 +8,7 @@ import { fetchLogs } from "../services/logService";
 
 const HomePage = () => {
 
+  const role = localStorage.getItem("role");
   const [logs, setLogs] = useState([]);
   const [showLogsModal, setShowLogsModal] = useState(false);
 
@@ -27,7 +27,7 @@ const HomePage = () => {
       getLogs();
     }
   }, [showLogsModal]);
-
+  
   return (
     <div className="homepage-container">
       <header className="homepage-header">
@@ -79,9 +79,13 @@ const HomePage = () => {
           </Link>
         </div>
 
-        <button onClick={() => setShowLogsModal(true)} className="cta-button">
-          Show Logs
-        </button>
+        <div className="cta-buttons">
+        {role === "Admin" ? (
+          <button onClick={() => setShowLogsModal(true)} className="cta-button">
+            Show Logs
+          </button>
+          ) : null}
+       </div> 
 
         {showLogsModal && (
           <div className="modal-overlay" onClick={() => setShowLogsModal(false)}>

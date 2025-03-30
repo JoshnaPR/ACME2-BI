@@ -171,9 +171,6 @@ const BraInventory = () => {
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
           </Link>
-          <Link to="/two-fa" className="nav-link">
-            2 FA Authentication
-          </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />
           </Link>

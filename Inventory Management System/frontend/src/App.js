@@ -18,7 +18,6 @@ import "./styles/LandingPage.css";
 import "./styles/style.css";
 import "./styles/global.css"; // Import global styles
 import Logout from "./pages/Logout";
-import TwoFA from "./pages/TwoFA";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
@@ -49,11 +48,6 @@ function App() {
           <Route
             path="/event-inventory"
             element={isAuthenticated ? <EventInventory /> : <Navigate to="/" />}
-          />
-
-          <Route
-            path="/two-fa"
-            element={isAuthenticated ? <TwoFA /> : <Navigate to="/" />}
           />
 
           <Route path="/logout" element={<Logout />} />

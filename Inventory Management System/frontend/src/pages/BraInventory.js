@@ -131,24 +131,27 @@ const BraInventory = () => {
   });
 
   const getInventoryTotals = () => {
-    const totalBras = bras.reduce(
-      (sum, bra) => sum + parseInt(bra.quantity),
-      0
-    );
+    const normalizeType = (type) => type.toLowerCase().replace(/\s+/g, "");
+    const totalBras = bras.reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+
     const normalBras = bras
-      .filter((bra) => bra.type === "Normal")
+      .filter((bra) => normalizeType(bra.type) === "normal")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+
     const maternityBras = bras
-      .filter((bra) => bra.type === "Maternity")
+      .filter((bra) => normalizeType(bra.type) === "maternity")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+
     const disabilityBras = bras
-      .filter((bra) => bra.type === "Disability")
+      .filter((bra) => normalizeType(bra.type) === "disability")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+
     const flexfitBras = bras
-      .filter((bra) => bra.type === "Flex Fit")
+      .filter((bra) => normalizeType(bra.type) === "flexfit")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+
     const kidsBras = bras
-      .filter((bra) => bra.type === "Kids")
+      .filter((bra) => normalizeType(bra.type) === "kids")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
 
     return { totalBras, normalBras, maternityBras, disabilityBras, flexfitBras, kidsBras };

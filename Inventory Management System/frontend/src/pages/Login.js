@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from 'jwt-decode';
-import Cookies from "js-cookie"; // Import js-cookie for accessing cookies
 import "../styles/style.css"; // Ensure this matches the correct file path
 // Enable credentials with Axios globally
 axios.defaults.withCredentials = true;
@@ -10,28 +8,12 @@ axios.defaults.withCredentials = true;
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [show2FACodeInput, setShow2FACodeInput] = useState(false);
 
   const navigate = useNavigate(); // Use navigate for programmatic navigation
 
   useEffect(() => {
-    const token = Cookies.get("newToken"); // Access the token from cookies
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token); // Decode the token
-
-        // Check if the decoded token has a boolean flag for 2FA
-        if (decodedToken.twoFactorAuth) {
-          setShow2FACodeInput(true); // Show 2FA input if enabled
-        }
-      } catch (err) {
-        console.error("Failed to decode token:", err);
-      }
-    }
-
     if (successMessage) {
       navigate("/home"); // Redirect to Home Page after login success
     }
@@ -52,7 +34,6 @@ function Login() {
         {
           email,
           password,
-          code
         }
       );
       if (response.data) {
@@ -99,17 +80,6 @@ function Login() {
             <label>Password</label>
             <i className="bx bxs-lock-alt"></i>
           </div>
-
-          {show2FACodeInput ? <div className="input-box">
-            <input
-              type="number"
-              required
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-            <label>2FA Code</label>
-            <i className="bx bxs-user"></i>
-          </div> : ""}
 
           <button type="submit" className="btn" id="loginForm">
             {"Login"}

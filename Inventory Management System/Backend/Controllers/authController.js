@@ -1,6 +1,5 @@
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
-const { authenticator } = require('otplib');
 require("dotenv").config();
 const secretKey = process.env.JWT_SECRET;
 const SibApiV3Sdk = require("sib-api-v3-sdk");
@@ -47,7 +46,7 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password, code } = req.body;
+    const { email, password } = req.body;
 
     // Find the user by their email
     const user = await User.findOne({ email });
@@ -61,29 +60,12 @@ exports.loginUser = async (req, res) => {
       return res.status(400).send({ message: "Incorrect Password!" });
     }
 
-    // Handle 2FA verification
-    if (user.twoFactorAuth.enabled) {
-      if (!code) {
-        return res.status(400).send({
-          message: "2FA code required!",
-          codeRequested: true,
-        });
-      }
-
-      const verified = authenticator.check(code, user.twoFactorAuth.secret);
-
-      if (!verified) {
-        return res.status(400).send({ message: "Invalid 2FA code!" });
-      }
-    }
-
     // Generate JWT token including user role
     const token = jwt.sign(
       {
         userId: user._id,
         username: user.username,
         role: user.role,
-        twoFactorAuth: user.twoFactorAuth.enabled,
       },
       secretKey,
       { expiresIn: "9h" }
@@ -96,7 +78,6 @@ exports.loginUser = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
-      twoFactorAuth: user.twoFactorAuth.enabled,
       token,
     };
 
@@ -162,11 +143,6 @@ exports.resetPassword = async (req, res) => {
       req.params.token,
       secretKey
     );
-
-    // If the token is invalid, return an error
-    if (!decodedToken) {
-      return res.status(401).send({ message: "Invalid token" });
-    }
 
     // find the user with the id from the token
     const user = await User.findOne({ _id: decodedToken.userId });

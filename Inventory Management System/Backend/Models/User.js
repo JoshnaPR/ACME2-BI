@@ -17,11 +17,6 @@ const userSchema = new Schema({
     enum: ["Admin", "Volunteer"],
     default: "Volunteer",
   },
-  twoFactorAuth: {
-    enabled: { type: Boolean, default: false },
-    secret: { type: String, default: null },
-    tempSecret: { type: String, default: null },
-  },
 });
 
 // Hash password before saving
@@ -29,8 +24,7 @@ userSchema.pre("save", async function (next) {
   const user = this;
   if (!user.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(user.password, salt);
-  user.password = hash;
+  user.password = await bcrypt.hash(user.password,salt);
   next();
 });
 

@@ -145,7 +145,7 @@ const BraInventory = () => {
       .filter((bra) => bra.type === "Disability")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
     const flexfitBras = bras
-      .filter((bra) => bra.type === "FlexFit")
+      .filter((bra) => bra.type === "Flex Fit")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
     const kidsBras = bras
       .filter((bra) => bra.type === "Kids")
@@ -170,9 +170,6 @@ const BraInventory = () => {
           </Link>
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
-          </Link>
-          <Link to="/two-fa" className="nav-link">
-            2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />

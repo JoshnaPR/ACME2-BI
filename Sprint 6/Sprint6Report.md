@@ -1,7 +1,7 @@
-# Sprint 5 Report (3/18/2025 - 4/10/2025)
+# Sprint 6 Report (3/18/2025 - 4/10/2025)
 
 ## Sprint Video
-[Sprint 6 Demo Video]()
+[Sprint 6 Demo Video](https://youtu.be/W-Zt5aJlb9Q)
 
 ## What's New
 * We have finished our last functionalities and bugs and have fully deployed.
@@ -62,7 +62,6 @@ Here are the current code files for review:
     * [Signup.js](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/pages/Signup.js)
     * [LandPage.js](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/pages/LandingPage.js)
     *  [Logout.js](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/pages/Logout.js)
-    *  [TwoFA.s](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/pages/TwoFA.js)
   * Services:
     * [attendeeService.js](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/services/attendeeService.js)
     * [braService.js](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/services/braService.js)
@@ -74,7 +73,6 @@ Here are the current code files for review:
     * [HomePage.css](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/styles/HomePage.css)
     * [style.css](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/styles/style.css)
     * [LandPage.css](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/styles/LandingPage.css)
-    * [TwoFA.css](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/pages/TwoFA.css)
 * App
   * [App.js](https://github.com/JoshnaPR/ACME2-BI/blob/main/Inventory%20Management%20System/frontend/src/App.js)
   

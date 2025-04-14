@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getEvents, updateEvent, deleteEvent, createEvent } from "../services/eventService";
+import { getEvents, updateEvent, deleteEvent, createEvent} from "../services/eventService";
 import { Link } from "react-router-dom";
 import "../styles/EventInventory.css";
 import logo from "../assets/InnerVentory Button.png";
@@ -59,21 +59,21 @@ const EventInventory = () => {
 
   const [bras, setBras] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const eventData = await getEvents();
+      setEvents(eventData || []);
+
+      const brasData = await getBras();
+      setBras(brasData || []);
+
+      console.log("Fetched events and bras data successfully");
+    } catch (error) {
+      console.error("Error fetching events and bras data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const eventData = await getEvents();
-        setEvents(eventData || []);
-
-        const brasData = await getBras();
-        setBras(brasData || []);
-
-        console.log("Fetched events and bras data successfully");
-      } catch (error) {
-        console.error("Error fetching events and bras data:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -114,7 +114,7 @@ const EventInventory = () => {
 
   const handleUpdateEvent = async () => {
     const originalEvent = events.find((event) => event._id === editEventId);
-
+    
     if (!originalEvent) {
       console.error("Event not found for editing");
       return;
@@ -133,7 +133,7 @@ const EventInventory = () => {
 
       setEditEventId(null);
       setEventFormData({ name: "", date: "" });
-
+      
       const updatedEvents = await getEvents();
       setEvents(updatedEvents);
       setSuccessMessage("Event updated successfully");
@@ -159,7 +159,7 @@ const EventInventory = () => {
 
       const eventToDelete = events.find((event) => event._id === eventId);
 
-      if (eventToDelete) {
+      if(eventToDelete){
         await deleteEvent(eventId);
         const updatedEvents = await getEvents();
         setEvents(updatedEvents);
@@ -197,7 +197,7 @@ const EventInventory = () => {
     const formattedDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
 
     logAction(localStorage.getItem("userId"), `Added an attendee to event: ${event.name} on ${formattedDate}`);
-  };
+  };  
 
   const handleEditAttendee = (eventId, attendeeIndex, attendee) => {
     setEditAttendeeId({ eventId, attendeeIndex });
@@ -223,7 +223,7 @@ const EventInventory = () => {
     }
 
     const currentAttendee = events[eventIndex].attendees[attendeeIndex];
-
+    
     if (!currentAttendee) {
       console.error("Attendee not found for editing");
       return;
@@ -232,17 +232,17 @@ const EventInventory = () => {
     const normalize = (value) => (value ? value.toString().trim() : "");
 
     const checkChange =
-      normalize(currentAttendee.name) === normalize(attendeeFormData.name) &&
-      normalize(currentAttendee.sizeBefore) === normalize(attendeeFormData.sizeBefore) &&
-      normalize(currentAttendee.sizeAfter) === normalize(attendeeFormData.sizeAfter) &&
-      normalize(currentAttendee.braSize1) === normalize(attendeeFormData.braSize1) &&
-      normalize(currentAttendee.braSize2) === normalize(attendeeFormData.braSize2) &&
-      normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
-      normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
-      normalize(currentAttendee.email) === normalize(attendeeFormData.email);
+    normalize(currentAttendee.name) === normalize(attendeeFormData.name) &&
+    normalize(currentAttendee.sizeBefore) === normalize(attendeeFormData.sizeBefore) &&
+    normalize(currentAttendee.sizeAfter) === normalize(attendeeFormData.sizeAfter) &&
+    normalize(currentAttendee.braSize1) === normalize(attendeeFormData.braSize1) &&
+    normalize(currentAttendee.braSize2) === normalize(attendeeFormData.braSize2) &&
+    normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
+    normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
+    normalize(currentAttendee.email) === normalize(attendeeFormData.email);
 
     console.log("checkChange: ", checkChange);
-
+    
     if (checkChange) {
       console.log("No changes made to attendee");
       setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
@@ -269,19 +269,35 @@ const EventInventory = () => {
     const selectedBra1 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize1));
     const selectedBra2 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize2));
 
-    if (oldBra1) {
-      await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
+    const sameOldBra = oldBra1 && oldBra2 && oldBra1._id === oldBra2._id;
+    const sameNewBra = selectedBra1 && selectedBra2 && selectedBra1._id === selectedBra2._id;
+  
+    if (sameOldBra) {
+      await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 2 });
+    } else {
+      if (oldBra1) {
+        await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
+      }
+      if (oldBra2) {
+        await updateBra(oldBra2._id, { quantity: oldBra2.quantity + 1 });
+      }
     }
-    if (oldBra2) {
-      await updateBra(oldBra2._id, { quantity: oldBra2.quantity + 1 });
+  
+    if (sameNewBra) {
+      const newQty = Math.max(0, selectedBra1.quantity - 2);
+      await updateBra(selectedBra1._id, { quantity: newQty });
+    } else {
+      if (selectedBra1) {
+        const newQty1 = Math.max(0, selectedBra1.quantity - 1);
+        await updateBra(selectedBra1._id, { quantity: newQty1 });
+      }
+      if (selectedBra2) {
+        const newQty2 = Math.max(0, selectedBra2.quantity - 1);
+        await updateBra(selectedBra2._id, { quantity: newQty2 });
+      }
     }
-
-    if (selectedBra1) {
-      await updateBra(selectedBra1._id, { quantity: selectedBra1.quantity - 1 });
-    }
-    if (selectedBra2) {
-      await updateBra(selectedBra2._id, { quantity: selectedBra2.quantity - 1 });
-    }
+    
+    await fetchData();
 
     setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
     setAttendeeFormData({
@@ -302,8 +318,8 @@ const EventInventory = () => {
     const newAttendee = attendeeFormData;
 
     const eventDate = new Date(event.date).toLocaleDateString("en-US", { timeZone: "UTC" });
-
-    logAction(localStorage.getItem("userId"),
+    
+    logAction(localStorage.getItem("userId"), 
       `Updated attendee: ${oldAttendee.name || "Unnamed"} 
       (Size After: ${oldAttendee.sizeAfter || "N/A"})
       to New details - 
@@ -319,6 +335,53 @@ const EventInventory = () => {
     if (isConfirmed) {
       const updatedEvents = [...events];
       const deletedAttendee = updatedEvents[eventIndex].attendees[attendeeIndex];
+
+      const braSizes = [deletedAttendee.braSize1, deletedAttendee.braSize2];
+      const braCountMap = {};
+
+      for (const fullSize of braSizes) {
+        if (fullSize && fullSize.trim() !== "") {
+          const firstSpaceIndex = fullSize.indexOf(" ");
+          if (firstSpaceIndex === -1) continue;
+
+          const type = fullSize.substring(0, firstSpaceIndex).trim();
+          const size = fullSize.substring(firstSpaceIndex + 1).trim();
+          const key = `${type.toLowerCase()}|${size.toLowerCase()}`;
+
+          braCountMap[key] = (braCountMap[key] || 0) + 1;
+        }
+      }
+
+      for (const key in braCountMap) {
+        const [type, size] = key.split("|");
+        const count = braCountMap[key];
+
+        const matchingBra = bras.find(
+          (bra) =>
+            bra.type.toLowerCase() === type &&
+            bra.size.toLowerCase() === size
+        );
+
+        if (matchingBra) {
+          const updatedQty = matchingBra.quantity + count;
+
+          try {
+            await updateBra(matchingBra._id, { quantity: updatedQty });
+
+            setBras((prevBras) =>
+              prevBras.map((bra) =>
+                bra._id === matchingBra._id ? { ...bra, quantity: updatedQty } : bra
+              )
+            );
+          } catch (error) {
+            console.error("Failed to update bra quantity for:", key, error);
+          }
+        } else {
+          console.warn("Bra not found in inventory for:", key);
+        }
+      }
+      
+      await fetchData();
 
       updatedEvents[eventIndex].attendees.splice(attendeeIndex, 1);
       await updateEvent(
@@ -343,8 +406,8 @@ const EventInventory = () => {
 
       const filteredAttendees = searchByAttendee
         ? event.attendees.filter((attendee) =>
-          attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+            attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
         : event.attendees;
 
       const isVisible =
@@ -377,6 +440,9 @@ const EventInventory = () => {
           </Link>
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
+          </Link>
+          <Link to="/two-fa" className="nav-link">        
+            2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />
@@ -531,7 +597,7 @@ const EventInventory = () => {
                     event.attendees.map((attendee, attendeeIndex) => (
                       <li key={attendeeIndex} className="attendee-item">
                         {editAttendeeId.eventId === event._id &&
-                          editAttendeeId.attendeeIndex === attendeeIndex ? (
+                        editAttendeeId.attendeeIndex === attendeeIndex ? (
                           <>
                             <input
                               type="text"
@@ -549,78 +615,86 @@ const EventInventory = () => {
                               placeholder="Size Before"
                               className="form-input"
                             />
-                            <div className="input-container">
-                              <input
-                                type="text"
-                                name="braSize1"
-                                value={attendeeFormData.braSize1}
-                                onChange={handleAttendeeInputChange}
-                                placeholder="Select Bra Size 1"
-                                className="form-input"
-                                list="braSize1-list"
-                              />
-                              {attendeeFormData.braSize1 && (
-                                <button
-                                  type="button"
-                                  className="clear-btn"
-                                  onClick={() =>
-                                    handleAttendeeInputChange({ target: { name: "braSize1", value: "" } })
-                                  }
-                                >
-                                  ❌
-                                </button>
-                              )}
-                              <datalist id="braSize1-list" className="scrollable-datalist">
-                                {bras
-                                  .filter((bra) =>
-                                    `${bra.type} ${bra.size}`
-                                      .toLowerCase()
-                                      .includes(attendeeFormData.braSize1.toLowerCase())
-                                  )
-                                  .slice(0, 100)
-                                  .map((bra) => (
-                                    <option key={bra._id} value={`${bra.type} ${bra.size}`}>
-                                      {bra.type} {bra.size} (Qty: {bra.quantity})
-                                    </option>
-                                  ))}
-                              </datalist>
-                            </div>
-                            <div className="input-container">
-                              <input
-                                type="text"
-                                name="braSize2"
-                                value={attendeeFormData.braSize2}
-                                onChange={handleAttendeeInputChange}
-                                placeholder="Select Bra Size 2"
-                                className="form-input"
-                                list="braSize2-list"
-                              />
-                              {attendeeFormData.braSize2 && (
-                                <button
-                                  type="button"
-                                  className="clear-btn"
-                                  onClick={() =>
-                                    handleAttendeeInputChange({ target: { name: "braSize2", value: "" } })
-                                  }
-                                >
-                                  Clear
-                                </button>
-                              )}
-                              <datalist id="braSize2-list" className="scrollable-datalist">
-                                {bras
-                                  .filter((bra) =>
-                                    `${bra.type} ${bra.size}`
-                                      .toLowerCase()
-                                      .includes(attendeeFormData.braSize2.toLowerCase())
-                                  )
-                                  .slice(0, 100)
-                                  .map((bra) => (
-                                    <option key={bra._id} value={`${bra.type} ${bra.size}`}>
-                                      {bra.type} {bra.size} (Qty: {bra.quantity})
-                                    </option>
-                                  ))}
-                              </datalist>
-                            </div>
+                            <input
+                              type="text"
+                              name="sizeAfter"
+                              value={attendeeFormData.sizeAfter}
+                              onChange={handleAttendeeInputChange}
+                              placeholder="Size Before"
+                              className="form-input"
+                            />
+                           <div className="input-container">
+                            <input
+                              type="text"
+                              name="braSize1"
+                              value={attendeeFormData.braSize1}
+                              onChange={handleAttendeeInputChange}
+                              placeholder="Select Bra Size 1"
+                              className="form-input"
+                              list="braSize1-list"
+                            />
+                            {attendeeFormData.braSize1 && (
+                              <button
+                                type="button"
+                                className="clear-btn"
+                                onClick={() =>
+                                  handleAttendeeInputChange({ target: { name: "braSize1", value: "" } })
+                                }
+                              >
+                                ❌
+                              </button>
+                            )}
+                            <datalist id="braSize1-list" className="scrollable-datalist">
+                              {bras
+                                .filter((bra) =>
+                                  `${bra.type} ${bra.size}`
+                                    .toLowerCase()
+                                    .includes(attendeeFormData.braSize1.toLowerCase())
+                                )
+                                .slice(0, 100)
+                                .map((bra) => (
+                                  <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                    {bra.type} {bra.size} (Qty: {bra.quantity})
+                                  </option>
+                                ))}
+                            </datalist>
+                          </div>
+                          <div className="input-container">
+                            <input
+                              type="text"
+                              name="braSize2"
+                              value={attendeeFormData.braSize2}
+                              onChange={handleAttendeeInputChange}
+                              placeholder="Select Bra Size 2"
+                              className="form-input"
+                              list="braSize2-list"
+                            />
+                            {attendeeFormData.braSize2 && (
+                              <button
+                                type="button"
+                                className="clear-btn"
+                                onClick={() =>
+                                  handleAttendeeInputChange({ target: { name: "braSize2", value: "" } })
+                                }
+                              >
+                                ❌
+                              </button>
+                            )}
+                            <datalist id="braSize2-list" className="scrollable-datalist">
+                              {bras
+                                .filter((bra) =>
+                                  `${bra.type} ${bra.size}`
+                                    .toLowerCase()
+                                    .includes(attendeeFormData.braSize2.toLowerCase())
+                                )
+                                .slice(0, 100)
+                                .map((bra) => (
+                                  <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                    {bra.type} {bra.size} (Qty: {bra.quantity})
+                                  </option>
+                                ))}
+                            </datalist>
+                          </div>
                             <input
                               type="text"
                               name="fitterName"
@@ -685,7 +759,7 @@ const EventInventory = () => {
 
                         <div className="attendee-actions">
                           {editAttendeeId.eventId === event._id &&
-                            editAttendeeId.attendeeIndex === attendeeIndex ? (
+                          editAttendeeId.attendeeIndex === attendeeIndex ? (
                             <button onClick={handleUpdateAttendee}>
                               Update Attendee
                             </button>

@@ -131,27 +131,31 @@ const BraInventory = () => {
   });
 
   const getInventoryTotals = () => {
-    const totalBras = bras.reduce(
-      (sum, bra) => sum + parseInt(bra.quantity),
-      0
-    );
+    const normalizeType = (type) => type.toLowerCase().replace(/\s+/g, ""); // Convert to lowercase and remove spaces
+  
+    const totalBras = bras.reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
     const normalBras = bras
-      .filter((bra) => bra.type === "Normal")
+      .filter((bra) => normalizeType(bra.type) === "normal")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const maternityBras = bras
-      .filter((bra) => bra.type === "Maternity")
-      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const disabilityBras = bras
-      .filter((bra) => bra.type === "Disability")
-      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const flexfitBras = bras
-      .filter((bra) => bra.type === "FlexFit")
-      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const kidsBras = bras
-      .filter((bra) => bra.type === "Kids")
+  
+    const nursingBras = bras
+      .filter((bra) => normalizeType(bra.type) === "nursing")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
 
-    return { totalBras, normalBras, maternityBras, disabilityBras, flexfitBras, kidsBras };
+    const disabilityBras = bras
+      .filter((bra) => normalizeType(bra.type) === "disability")
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
+    const flexfitBras = bras
+      .filter((bra) => normalizeType(bra.type) === "flexfit") // Catches "Flex Fit" and "FlexFit"
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
+    const kidsBras = bras
+      .filter((bra) => normalizeType(bra.type) === "kids")
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
+    return { totalBras, normalBras, nursingBras, disabilityBras, flexfitBras, kidsBras };
   };
 
   return (
@@ -170,6 +174,9 @@ const BraInventory = () => {
           </Link>
           <Link to="/event-inventory" className="nav-link">
             Event Inventory
+          </Link>
+          <Link to="/two-fa" className="nav-link">
+            2 FA Authentication
           </Link>
           <Link to="/logout" title="Logout">
             <IoIosLogOut size={25} />
@@ -257,7 +264,7 @@ const BraInventory = () => {
               <h1>Inventory Levels</h1>
               <h2><strong>Total Bras: {getInventoryTotals().totalBras}</strong></h2>
               <p>Normal Bras: {getInventoryTotals().normalBras}</p>
-              <p>Maternity Bras: {getInventoryTotals().maternityBras}</p>
+              <p>Nursing Bras: {getInventoryTotals().nursingBras}</p>
               <p>Disability Bras: {getInventoryTotals().disabilityBras}</p>
               <p>FlexFit Bras: {getInventoryTotals().flexfitBras}</p>
               <p>Kids Bras: {getInventoryTotals().kidsBras}</p>
@@ -268,6 +275,59 @@ const BraInventory = () => {
 
         {successMessage && (
           <h2 style={{ textAlign: "center" }}>{successMessage}</h2>
+        )}
+
+        {editBra && (
+          <form
+            className="bra-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEdit(editBra._id);
+            }}
+          >
+            <h2>Edit Bra</h2>
+            <div className="form-row">
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Type"
+                  value={editBra.type}
+                  onChange={(e) =>
+                    setEditBra({ ...editBra, type: e.target.value })
+                  }
+                  required
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Size"
+                  value={editBra.size}
+                  onChange={(e) =>
+                    setEditBra({ ...editBra, size: e.target.value })
+                  }
+                  required
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="number"
+                  placeholder="Quantity"
+                  value={editBra.quantity}
+                  onChange={(e) =>
+                    setEditBra({ ...editBra, quantity: e.target.value })
+                  }
+                  required
+                  className="form-input"
+                />
+              </div>
+            </div>
+            <button type="submit" className="submit-button">
+              Update Bra
+            </button>
+          </form>
         )}
 
         <ul className="bra-list">
@@ -282,74 +342,18 @@ const BraInventory = () => {
                 <div className="bra-actions">
                   <button onClick={() => setEditBra(bra)}>Edit</button>
                   {role === "Admin" ? (
-                    <button onClick={() => handleDelete(bra._id)}>Delete</button>
+                    <button onClick={() => handleDelete(bra._id)}>
+                      Delete
+                    </button>
                   ) : null}
                 </div>
-
-                {editBra && editBra._id === bra._id && (
-                  <form
-                    className="bra-form edit-form"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleEdit(editBra._id);
-                    }}
-                  >
-                    <h2>Edit Bra</h2>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          placeholder="Type"
-                          value={editBra.type}
-                          onChange={(e) =>
-                            setEditBra({ ...editBra, type: e.target.value })
-                          }
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          placeholder="Size"
-                          value={editBra.size}
-                          onChange={(e) =>
-                            setEditBra({ ...editBra, size: e.target.value })
-                          }
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="number"
-                          placeholder="Quantity"
-                          value={editBra.quantity}
-                          onChange={(e) =>
-                            setEditBra({ ...editBra, quantity: e.target.value })
-                          }
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                    </div>
-                    <button type="submit" className="submit-button">
-                      Update Bra
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-button"
-                      onClick={() => setEditBra(null)}
-                    >
-                      Cancel
-                    </button>
-                  </form>
-                )}
               </li>
             ))
           ) : (
             <h2 style={{ textAlign: "center" }}>
-              {searchByType ? "No bras of this type found." : "No bras of this size found."}
+              {searchByType
+                ? "No bras of this type found."
+                : "No bras of this size found."}
             </h2>
           )}
         </ul>

@@ -131,26 +131,30 @@ const BraInventory = () => {
   });
 
   const getInventoryTotals = () => {
-    const totalBras = bras.reduce(
-      (sum, bra) => sum + parseInt(bra.quantity),
-      0
-    );
+    const normalizeType = (type) => type.toLowerCase().replace(/\s+/g, ""); // Convert to lowercase and remove spaces
+  
+    const totalBras = bras.reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
     const normalBras = bras
-      .filter((bra) => bra.type === "Normal")
+      .filter((bra) => normalizeType(bra.type) === "normal")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
     const nursingBras = bras
-      .filter((bra) => bra.type === "Nursing")
-      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const disabilityBras = bras
-      .filter((bra) => bra.type === "Disability")
-      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const flexfitBras = bras
-      .filter((bra) => bra.type === "FlexFit")
-      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
-    const kidsBras = bras
-      .filter((bra) => bra.type === "Kids")
+      .filter((bra) => normalizeType(bra.type) === "nursing")
       .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
 
+    const disabilityBras = bras
+      .filter((bra) => normalizeType(bra.type) === "disability")
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
+    const flexfitBras = bras
+      .filter((bra) => normalizeType(bra.type) === "flexfit") // Catches "Flex Fit" and "FlexFit"
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
+    const kidsBras = bras
+      .filter((bra) => normalizeType(bra.type) === "kids")
+      .reduce((sum, bra) => sum + parseInt(bra.quantity), 0);
+  
     return { totalBras, normalBras, nursingBras, disabilityBras, flexfitBras, kidsBras };
   };
 

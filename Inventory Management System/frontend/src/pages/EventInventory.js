@@ -59,21 +59,21 @@ const EventInventory = () => {
 
   const [bras, setBras] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const eventData = await getEvents();
+      setEvents(eventData || []);
+
+      const brasData = await getBras();
+      setBras(brasData || []);
+
+      console.log("Fetched events and bras data successfully");
+    } catch (error) {
+      console.error("Error fetching events and bras data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const eventData = await getEvents();
-        setEvents(eventData || []);
-
-        const brasData = await getBras();
-        setBras(brasData || []);
-
-        console.log("Fetched events and bras data successfully");
-      } catch (error) {
-        console.error("Error fetching events and bras data:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -269,20 +269,36 @@ const EventInventory = () => {
     const selectedBra1 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize1));
     const selectedBra2 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize2));
 
-    if (oldBra1) {
-      await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
+    const sameOldBra = oldBra1 && oldBra2 && oldBra1._id === oldBra2._id;
+    const sameNewBra = selectedBra1 && selectedBra2 && selectedBra1._id === selectedBra2._id;
+  
+    if (sameOldBra) {
+      await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 2 });
+    } else {
+      if (oldBra1) {
+        await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
+      }
+      if (oldBra2) {
+        await updateBra(oldBra2._id, { quantity: oldBra2.quantity + 1 });
+      }
     }
-    if (oldBra2) {
-      await updateBra(oldBra2._id, { quantity: oldBra2.quantity + 1 });
-    }
-
-    if (selectedBra1) {
-      await updateBra(selectedBra1._id, { quantity: selectedBra1.quantity - 1 });
-    }
-    if (selectedBra2) {
-      await updateBra(selectedBra2._id, { quantity: selectedBra2.quantity - 1 });
+  
+    if (sameNewBra) {
+      const newQty = Math.max(0, selectedBra1.quantity - 2);
+      await updateBra(selectedBra1._id, { quantity: newQty });
+    } else {
+      if (selectedBra1) {
+        const newQty1 = Math.max(0, selectedBra1.quantity - 1);
+        await updateBra(selectedBra1._id, { quantity: newQty1 });
+      }
+      if (selectedBra2) {
+        const newQty2 = Math.max(0, selectedBra2.quantity - 1);
+        await updateBra(selectedBra2._id, { quantity: newQty2 });
+      }
     }
     
+    await fetchData();
+
     setEditAttendeeId({ eventIndex: null, attendeeIndex: null });
     setAttendeeFormData({
       name: "",
@@ -319,6 +335,53 @@ const EventInventory = () => {
     if (isConfirmed) {
       const updatedEvents = [...events];
       const deletedAttendee = updatedEvents[eventIndex].attendees[attendeeIndex];
+
+      const braSizes = [deletedAttendee.braSize1, deletedAttendee.braSize2];
+      const braCountMap = {};
+
+      for (const fullSize of braSizes) {
+        if (fullSize && fullSize.trim() !== "") {
+          const firstSpaceIndex = fullSize.indexOf(" ");
+          if (firstSpaceIndex === -1) continue;
+
+          const type = fullSize.substring(0, firstSpaceIndex).trim();
+          const size = fullSize.substring(firstSpaceIndex + 1).trim();
+          const key = `${type.toLowerCase()}|${size.toLowerCase()}`;
+
+          braCountMap[key] = (braCountMap[key] || 0) + 1;
+        }
+      }
+
+      for (const key in braCountMap) {
+        const [type, size] = key.split("|");
+        const count = braCountMap[key];
+
+        const matchingBra = bras.find(
+          (bra) =>
+            bra.type.toLowerCase() === type &&
+            bra.size.toLowerCase() === size
+        );
+
+        if (matchingBra) {
+          const updatedQty = matchingBra.quantity + count;
+
+          try {
+            await updateBra(matchingBra._id, { quantity: updatedQty });
+
+            setBras((prevBras) =>
+              prevBras.map((bra) =>
+                bra._id === matchingBra._id ? { ...bra, quantity: updatedQty } : bra
+              )
+            );
+          } catch (error) {
+            console.error("Failed to update bra quantity for:", key, error);
+          }
+        } else {
+          console.warn("Bra not found in inventory for:", key);
+        }
+      }
+      
+      await fetchData();
 
       updatedEvents[eventIndex].attendees.splice(attendeeIndex, 1);
       await updateEvent(

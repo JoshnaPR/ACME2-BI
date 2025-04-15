@@ -8,6 +8,7 @@ const Logout = () => {
     // Clear all data from localStorage
     localStorage.removeItem("role");
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
 
     // Redirect to the login page
     navigate("/login");

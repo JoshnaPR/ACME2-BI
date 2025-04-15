@@ -240,8 +240,6 @@ const EventInventory = () => {
     normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
     normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
     normalize(currentAttendee.email) === normalize(attendeeFormData.email);
-
-    console.log("checkChange: ", checkChange);
     
     if (checkChange) {
       console.log("No changes made to attendee");
@@ -263,40 +261,43 @@ const EventInventory = () => {
     updatedEvents[eventIndex].attendees[attendeeIndex] = attendeeFormData;
     await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
 
-    const oldBra1 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(currentAttendee.braSize1));
-    const oldBra2 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(currentAttendee.braSize2));
-
-    const selectedBra1 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize1));
-    const selectedBra2 = bras.find((bra) => normalize(`${bra.type} ${bra.size}`) === normalize(attendeeFormData.braSize2));
-
-    const sameOldBra = oldBra1 && oldBra2 && oldBra1._id === oldBra2._id;
-    const sameNewBra = selectedBra1 && selectedBra2 && selectedBra1._id === selectedBra2._id;
-
-    if (sameOldBra) {
-      await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 2 });
-    } else {
-      if (oldBra1) {
-        await updateBra(oldBra1._id, { quantity: oldBra1.quantity + 1 });
-      }
-      if (oldBra2) {
-        await updateBra(oldBra2._id, { quantity: oldBra2.quantity + 1 });
-      }
-    }
-  
-    if (sameNewBra) {
-      const newQty = Math.max(0, selectedBra1.quantity - 2);
-      await updateBra(selectedBra1._id, { quantity: newQty });
-    } else {
-      if (selectedBra1) {
-        const newQty1 = Math.max(0, selectedBra1.quantity - 1);
-        await updateBra(selectedBra1._id, { quantity: newQty1 });
-      }
-      if (selectedBra2) {
-        const newQty2 = Math.max(0, selectedBra2.quantity - 1);
-        await updateBra(selectedBra2._id, { quantity: newQty2 });
-      }
-    }
+    const getBraBySize = (size) =>
+        bras.find(bra => normalize(`${bra.type} ${bra.size}`) === normalize(size));
     
+      const getBraCounts = (braSize1, braSize2) => {
+        const counts = {};
+        [braSize1, braSize2].forEach(size => {
+          if (!size) return;
+          const bra = getBraBySize(size);
+          if (bra) {
+            counts[bra._id] = (counts[bra._id] || { bra, count: 0 });
+            counts[bra._id].count += 1;
+          }
+        });
+        return counts;
+      };
+    
+      const oldBraCounts = getBraCounts(currentAttendee.braSize1, currentAttendee.braSize2);
+      const newBraCounts = getBraCounts(attendeeFormData.braSize1, attendeeFormData.braSize2);
+    
+      const allBraIds = new Set([
+        ...Object.keys(oldBraCounts),
+        ...Object.keys(newBraCounts),
+      ]);
+    
+      for (const braId of allBraIds) {
+        const oldCount = oldBraCounts[braId]?.count || 0;
+        const newCount = newBraCounts[braId]?.count || 0;
+        const bra = oldBraCounts[braId]?.bra || newBraCounts[braId]?.bra;
+    
+        const difference = newCount - oldCount;
+    
+        if (difference !== 0) {
+          const newQuantity = Math.max(0, bra.quantity - difference);
+          await updateBra(braId, { quantity: newQuantity });
+        }
+      }
+
     await fetchData();
     
     setEditAttendeeId({ eventIndex: null, attendeeIndex: null });

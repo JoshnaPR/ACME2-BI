@@ -78,6 +78,19 @@ const EventInventory = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    let timer;
+    
+    if (successMessage || errorMessage) {
+      timer = setTimeout(() => {
+        if (successMessage) setSuccessMessage('');
+        if (errorMessage) setErrorMessage('');
+      }, 5000);
+    }
+  
+    return () => clearTimeout(timer);
+  }, [successMessage, errorMessage]);
+
   const handleEventInputChange = (e) => {
     const { name, value } = e.target;
     setEventFormData({ ...eventFormData, [name]: value });
@@ -418,7 +431,6 @@ const EventInventory = () => {
     try {
       await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
       setEvents(updatedEvents);
-      setSuccessMessage("Attendee status updated successfully");
     } catch (error) {
       console.error("Error updating attendee status:", error);
       setErrorMessage("Failed to update attendee status");
@@ -553,9 +565,15 @@ const EventInventory = () => {
         </form>
 
         {successMessage && (
-          <h3 style={{ textAlign: "center" }}>{successMessage}</h3>
+          <div className="notification success">
+            {successMessage}
+          </div>
         )}
-        {errorMessage && <h3>{errorMessage}</h3>}
+        {errorMessage && (
+          <div className="notification error">
+            {errorMessage}
+          </div>
+        )}
 
         <ul className="event-list">
           {filteredEvents.length > 0 ? (

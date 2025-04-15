@@ -301,3 +301,48 @@
   max-height: 200px;
   overflow-y: auto;
 } 
+
+  @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+  @keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+  .notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  animation: fadeIn 0.5s ease, fadeOut 0.5s ease 4.5s;
+}
+
+  .notification.success {
+  background-color: #ffffff;
+  color: #ffc4f7;
+  border: 1px solid #ffc4f7;
+}
+
+  .notification.error {
+  background-color: #ffe0e0;
+  color: #802020;
+  border: 1px solid #802020;
+}

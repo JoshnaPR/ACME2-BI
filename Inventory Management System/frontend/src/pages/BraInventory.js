@@ -21,6 +21,15 @@ const BraInventory = () => {
     fetchBras();
   }, []);
 
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   const fetchBras = async () => {
     try {
       const brasData = await getBras();
@@ -270,7 +279,9 @@ const BraInventory = () => {
         )}
 
         {successMessage && (
-          <h2 style={{ textAlign: "center" }}>{successMessage}</h2>
+          <div className="notification success">
+            {successMessage}
+          </div>
         )}
 
         <ul className="bra-list">

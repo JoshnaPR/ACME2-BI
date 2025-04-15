@@ -12,6 +12,7 @@ const eventSchema = new mongoose.Schema({
         fitterName: String,
         phoneNumber: String,
         email: String,
+	done: { type: Boolean, default: false },
     }],
 });
 

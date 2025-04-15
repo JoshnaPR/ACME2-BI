@@ -200,8 +200,6 @@
     display: flex;
   }
 
-
-
   .attendee-block {
     background: #f0f0f0;
     padding: 10px;
@@ -244,11 +242,7 @@
   .attendee-item {
     margin-bottom: 8px;
   }
-  
-
-
-
-  
+    
   button {
     font-size: 0.8rem;
     padding: 8px 12px;

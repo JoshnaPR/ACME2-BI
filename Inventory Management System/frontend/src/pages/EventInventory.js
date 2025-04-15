@@ -672,6 +672,7 @@ const EventInventory = () => {
                                     name="name"
                                     value={attendeeFormData.name}
                                     onChange={handleAttendeeInputChange}
+                                    onClick={(e) => e.stopPropagation()}
                                     placeholder="Attendee Name"
                                     className="form-input"
                                   />
@@ -680,6 +681,7 @@ const EventInventory = () => {
                                     name="sizeBefore"
                                     value={attendeeFormData.sizeBefore}
                                     onChange={handleAttendeeInputChange}
+                                    onClick={(e) => e.stopPropagation()}
                                     placeholder="Size Before"
                                     className="form-input"
                                   />
@@ -688,10 +690,11 @@ const EventInventory = () => {
                                     name="sizeAfter"
                                     value={attendeeFormData.sizeAfter}
                                     onChange={handleAttendeeInputChange}
-                                    placeholder="Size Before"
+                                    onClick={(e) => e.stopPropagation()}
+                                    placeholder="Size After"
                                     className="form-input"
                                   />
-                                  <div className="input-container">
+                                  <div className="input-container" onClick={(e) => e.stopPropagation()}>
                                     <input
                                       type="text"
                                       name="braSize1"
@@ -729,7 +732,7 @@ const EventInventory = () => {
                                     </datalist>
                                   </div>
                                   
-                                  <div className="input-container">
+                                  <div className="input-container" onClick={(e => e.stopPropagation())}>
                                     <input
                                       type="text"
                                       name="braSize2"
@@ -771,6 +774,7 @@ const EventInventory = () => {
                                     name="fitterName"
                                     value={attendeeFormData.fitterName}
                                     onChange={handleAttendeeInputChange}
+                                    onClick={(e) => e.stopPropagation()}
                                     placeholder="Fitter Name"
                                     className="form-input"
                                   />
@@ -779,6 +783,7 @@ const EventInventory = () => {
                                     name="phoneNumber"
                                     value={attendeeFormData.phoneNumber}
                                     onChange={handleAttendeeInputChange}
+                                    onClick={(e) => e.stopPropagation()}
                                     placeholder="Phone Number"
                                     className="form-input"
                                   />
@@ -787,6 +792,7 @@ const EventInventory = () => {
                                     name="email"
                                     value={attendeeFormData.email}
                                     onChange={handleAttendeeInputChange}
+                                    onClick={(e) => e.stopPropagation()}
                                     placeholder="Email"
                                     className="form-input"
                                   />
@@ -867,10 +873,12 @@ const EventInventory = () => {
                                     <input 
                                     type="checkbox"
                                     checked={attendee.done}
-                                    onChange={(e) => { 
-                                      e.stopPropagation();
+                                    onClick={(e) =>
+                                      e.stopPropagation()
+                                    }
+                                    onChange={(e) =>
                                       handleCheckboxChange(attendee, eventIndex, attendeeIndex, e.target.checked)  
-                                    }}
+                                    }
                                   />
                                 </label>
                               Done

@@ -57,6 +57,10 @@ const EventInventory = () => {
   const [searchByAttendee, setSearchByAttendee] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [expandedAttendees, setExpandedAttendees] = useState({
+    eventId: null,
+    attendeeIndex: null,
+  });
 
   const [bras, setBras] = useState([]);
 
@@ -437,6 +441,14 @@ const EventInventory = () => {
     }
   };
 
+  const toggleAttendee = (eventId, attendeeIndex) => {
+    setExpandedAttendees((prev) =>
+      prev.eventId === eventId && prev.attendeeIndex === attendeeIndex
+        ? { eventId: null, attendeeIndex: null } // collapse
+        : { eventId, attendeeIndex } // expand
+    );
+  };
+
   // Search events and attendees
   const filteredEvents = events
     .map((event) => {
@@ -639,212 +651,232 @@ const EventInventory = () => {
                   {event.attendees && event.attendees.length > 0 ? (
                     event.attendees.map((attendee, attendeeIndex) => (
                       <li key={attendeeIndex} className="attendee-item">
-                        {editAttendeeId.eventId === event._id &&
-                        editAttendeeId.attendeeIndex === attendeeIndex ? (
-                          <>
-                            <input
-                              type="text"
-                              name="name"
-                              value={attendeeFormData.name}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Attendee Name"
-                              className="form-input"
-                            />
-                            <input
-                              type="text"
-                              name="sizeBefore"
-                              value={attendeeFormData.sizeBefore}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Size Before"
-                              className="form-input"
-                            />
-                            <input
-                              type="text"
-                              name="sizeAfter"
-                              value={attendeeFormData.sizeAfter}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Size Before"
-                              className="form-input"
-                            />
-                           <div className="input-container">
-                            <input
-                              type="text"
-                              name="braSize1"
-                              value={attendeeFormData.braSize1}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Select Bra Size 1"
-                              className="form-input"
-                              list="braSize1-list"
-                            />
-                            {attendeeFormData.braSize1 && (
-                              <button
-                                type="button"
-                                className="clear-btn"
-                                onClick={() =>
-                                  handleAttendeeInputChange({ target: { name: "braSize1", value: "" } })
-                                }
-                              >
-                                ❌
-                              </button>
-                            )}
-                            <datalist id="braSize1-list" className="scrollable-datalist">
-                              {bras
-                                .filter((bra) =>
-                                  `${bra.type} ${bra.size}`
-                                    .toLowerCase()
-                                    .includes(attendeeFormData.braSize1.toLowerCase())
-                                )
-                                .slice(0, 100)
-                                .map((bra) => (
-                                  <option key={bra._id} value={`${bra.type} ${bra.size}`}>
-                                    {bra.type} {bra.size} (Qty: {bra.quantity})
-                                  </option>
-                                ))}
-                            </datalist>
+                        <div
+                          className="attendee-block"
+                          onClick={(e) => {
+                            toggleAttendee(event._id, attendeeIndex);
+                            e.stopPropagation();
+                          }}
+                        >
+                          <div style={{ fontWeight: "bold"}}>
+                            {attendee?.name ?? `Attendee ${attendeeIndex + 1}`} ▾
                           </div>
-                          <div className="input-container">
-                            <input
-                              type="text"
-                              name="braSize2"
-                              value={attendeeFormData.braSize2}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Select Bra Size 2"
-                              className="form-input"
-                              list="braSize2-list"
-                            />
-                            {attendeeFormData.braSize2 && (
-                              <button
-                                type="button"
-                                className="clear-btn"
-                                onClick={() =>
-                                  handleAttendeeInputChange({ target: { name: "braSize2", value: "" } })
-                                }
-                              >
-                                ❌
-                              </button>
-                            )}
-                            <datalist id="braSize2-list" className="scrollable-datalist">
-                              {bras
-                                .filter((bra) =>
-                                  `${bra.type} ${bra.size}`
-                                    .toLowerCase()
-                                    .includes(attendeeFormData.braSize2.toLowerCase())
-                                )
-                                .slice(0, 100)
-                                .map((bra) => (
-                                  <option key={bra._id} value={`${bra.type} ${bra.size}`}>
-                                    {bra.type} {bra.size} (Qty: {bra.quantity})
-                                  </option>
-                                ))}
-                            </datalist>
-                          </div>
-                            <input
-                              type="text"
-                              name="fitterName"
-                              value={attendeeFormData.fitterName}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Fitter Name"
-                              className="form-input"
-                            />
-                            <input
-                              type="text"
-                              name="phoneNumber"
-                              value={attendeeFormData.phoneNumber}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Phone Number"
-                              className="form-input"
-                            />
-                            <input
-                              type="email"
-                              name="email"
-                              value={attendeeFormData.email}
-                              onChange={handleAttendeeInputChange}
-                              placeholder="Email"
-                              className="form-input"
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <p>
-                              <strong>Name:</strong>{" "}
-                              {attendee?.name ?? "No attendee name"}
-                            </p>
-                            <p>
-                              <strong>Size Before:</strong>{" "}
-                              {attendee?.sizeBefore ?? "No size before"}
-                            </p>
-                            <p>
-                              <strong>Size After:</strong>{" "}
-                              {attendee?.sizeAfter ?? "No size after"}
-                            </p>
-                            <p>
-                              <strong>Bra Size 1:</strong>{" "}
-                              {attendee?.braSize1 ?? "No bra size 1"}
-                            </p>
-                            <p>
-                              <strong>Bra Size 2:</strong>{" "}
-                              {attendee?.braSize2 ?? "No bra size 2"}
-                            </p>
-                            <p>
-                              <strong>Fitter:</strong>{" "}
-                              {attendee?.fitterName ?? "No fitter name"}
-                            </p>
-                            <p>
-                              <strong>Phone:</strong>{" "}
-                              {attendee?.phoneNumber ?? "No phone number"}
-                            </p>
-                            <p>
-                              <strong>Email:</strong>{" "}
-                              {attendee?.email ?? "No email"}
-                            </p>
-                          </>
-                        )}
+                          {expandedAttendees.eventId === event._id && 
+                          expandedAttendees.attendeeIndex === attendeeIndex && (
+                            <div className="attendee-details">
+                              {editAttendeeId.eventId === event._id &&
+                              editAttendeeId.attendeeIndex === attendeeIndex ? (
+                                <>
+                                  <input
+                                    type="text"
+                                    name="name"
+                                    value={attendeeFormData.name}
+                                    onChange={handleAttendeeInputChange}
+                                    placeholder="Attendee Name"
+                                    className="form-input"
+                                  />
+                                  <input
+                                    type="text"
+                                    name="sizeBefore"
+                                    value={attendeeFormData.sizeBefore}
+                                    onChange={handleAttendeeInputChange}
+                                    placeholder="Size Before"
+                                    className="form-input"
+                                  />
+                                  <input
+                                    type="text"
+                                    name="sizeAfter"
+                                    value={attendeeFormData.sizeAfter}
+                                    onChange={handleAttendeeInputChange}
+                                    placeholder="Size Before"
+                                    className="form-input"
+                                  />
+                                  <div className="input-container">
+                                    <input
+                                      type="text"
+                                      name="braSize1"
+                                      value={attendeeFormData.braSize1}
+                                      onChange={handleAttendeeInputChange}
+                                      placeholder="Select Bra Size 1"
+                                      className="form-input"
+                                      list="braSize1-list"
+                                    />
+                                    {attendeeFormData.braSize1 && (
+                                      <button
+                                        type="button"
+                                        className="clear-btn"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleAttendeeInputChange({ target: { name: "braSize1", value: "" } })
+                                        }}
+                                      >
+                                        ❌
+                                      </button>
+                                    )}
+                                    <datalist id="braSize1-list" className="scrollable-datalist">
+                                      {bras
+                                        .filter((bra) =>
+                                          `${bra.type} ${bra.size}`
+                                            .toLowerCase()
+                                            .includes(attendeeFormData.braSize1.toLowerCase())
+                                        )
+                                        .slice(0, 100)
+                                        .map((bra) => (
+                                          <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                            {bra.type} {bra.size} (Qty: {bra.quantity})
+                                          </option>
+                                        ))}
+                                    </datalist>
+                                  </div>
+                                  
+                                  <div className="input-container">
+                                    <input
+                                      type="text"
+                                      name="braSize2"
+                                      value={attendeeFormData.braSize2}
+                                      onChange={handleAttendeeInputChange}
+                                      placeholder="Select Bra Size 2"
+                                      className="form-input"
+                                      list="braSize2-list"
+                                    />
+                                    {attendeeFormData.braSize2 && (
+                                      <button
+                                        type="button"
+                                        className="clear-btn"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleAttendeeInputChange({ target: { name: "braSize2", value: "" } })
+                                        }}
+                                      >
+                                        ❌
+                                      </button>
+                                    )}
+                                    <datalist id="braSize2-list" className="scrollable-datalist">
+                                      {bras
+                                        .filter((bra) =>
+                                          `${bra.type} ${bra.size}`
+                                            .toLowerCase()
+                                            .includes(attendeeFormData.braSize2.toLowerCase())
+                                        )
+                                        .slice(0, 100)
+                                        .map((bra) => (
+                                          <option key={bra._id} value={`${bra.type} ${bra.size}`}>
+                                            {bra.type} {bra.size} (Qty: {bra.quantity})
+                                          </option>
+                                        ))}
+                                    </datalist>
+                                  </div>
+                                  <input
+                                    type="text"
+                                    name="fitterName"
+                                    value={attendeeFormData.fitterName}
+                                    onChange={handleAttendeeInputChange}
+                                    placeholder="Fitter Name"
+                                    className="form-input"
+                                  />
+                                  <input
+                                    type="text"
+                                    name="phoneNumber"
+                                    value={attendeeFormData.phoneNumber}
+                                    onChange={handleAttendeeInputChange}
+                                    placeholder="Phone Number"
+                                    className="form-input"
+                                  />
+                                  <input
+                                    type="email"
+                                    name="email"
+                                    value={attendeeFormData.email}
+                                    onChange={handleAttendeeInputChange}
+                                    placeholder="Email"
+                                    className="form-input"
+                                  />
+                                </>
+                              ) : (
+                                  <>
+                                    <p>
+                                      <strong>Name:</strong>{" "}
+                                      {attendee?.name ?? "No attendee name"}
+                                    </p>
+                                    <p>
+                                      <strong>Size Before:</strong>{" "}
+                                      {attendee?.sizeBefore ?? "No size before"}
+                                    </p>
+                                    <p>
+                                      <strong>Size After:</strong>{" "}
+                                      {attendee?.sizeAfter ?? "No size after"}
+                                    </p>
+                                    <p>
+                                      <strong>Bra Size 1:</strong>{" "}
+                                      {attendee?.braSize1 ?? "No bra size 1"}
+                                    </p>
+                                    <p>
+                                      <strong>Bra Size 2:</strong>{" "}
+                                      {attendee?.braSize2 ?? "No bra size 2"}
+                                    </p>
+                                    <p>
+                                      <strong>Fitter:</strong>{" "}
+                                      {attendee?.fitterName ?? "No fitter name"}
+                                    </p>
+                                    <p>
+                                      <strong>Phone:</strong>{" "}
+                                      {attendee?.phoneNumber ?? "No phone number"}
+                                    </p>
+                                    <p>
+                                      <strong>Email:</strong>{" "}
+                                      {attendee?.email ?? "No email"}
+                                    </p>
+                                  </>
+                                )}
 
-                        <div className="attendee-actions">
-                          {editAttendeeId.eventId === event._id &&
-                          editAttendeeId.attendeeIndex === attendeeIndex ? (
-                            <button onClick={handleUpdateAttendee}>
-                              Update Attendee
-                            </button>
-                          ) : (
-                            <>
-                              <button
-                                onClick={() =>
-                                  handleEditAttendee(
-                                    event._id,
-                                    attendeeIndex,
-                                    attendee
-                                  )
-                                }
-                              >
-                                Edit
-                              </button>
-                              {role === "Admin" ? (
-                                <button
-                                  onClick={() =>
-                                    handleDeleteAttendee(
-                                      eventIndex,
-                                      attendeeIndex
-                                    )
-                                  }
-                                >
-                                  Delete
-                                </button>
-                              ) : null}
-                            </>
+                                <div className="attendee-actions">
+                                  {editAttendeeId.eventId === event._id &&
+                                  editAttendeeId.attendeeIndex === attendeeIndex ? (
+                                    <button 
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpdateAttendee();
+                                      }}
+                                    >
+                                      Update Attendee
+                                    </button>
+                                  ) : (
+                                    <>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleEditAttendee(event._id, attendeeIndex, attendee);
+                                        }}
+                                      >
+                                        Edit
+                                      </button>
+                                      {role === "Admin" ? (
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteAttendee(eventIndex, attendeeIndex)
+                                          }}
+                                        >
+                                          Delete
+                                        </button>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </div>
+                                <div className="done-checkbox">
+                                  <label>
+                                    <input 
+                                    type="checkbox"
+                                    checked={attendee.done}
+                                    onChange={(e) => { 
+                                      e.stopPropagation();
+                                      handleCheckboxChange(attendee, eventIndex, attendeeIndex, e.target.checked)  
+                                    }}
+                                  />
+                                </label>
+                              Done
+                            </div>
+                          </div>
                           )}
-                        </div>
-                        <div className="done-checkbox">
-                          <label>
-                            <input 
-                            type="checkbox"
-                            checked={attendee.done}
-                            onChange={(e) =>
-                              handleCheckboxChange(attendee, eventIndex, attendeeIndex, e.target.checked)  
-                            }
-                            />
-                          </label>
-                          Done
                         </div>
                       </li>
                     ))

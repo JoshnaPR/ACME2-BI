@@ -41,23 +41,23 @@ function App() {
               <HomePage />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/bra-inventory"
-          element={
-            <ProtectedRoute>
-              <BraInventory />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/event-inventory"
-          element={
-            <ProtectedRoute>
-              <EventInventory />
-            </ProtectedRoute>
-          }
-        />
+          />
+          <Route
+            path="/bra-inventory"
+            element={
+              <ProtectedRoute>
+                <BraInventory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/event-inventory"
+            element={
+              <ProtectedRoute>
+                <EventInventory />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="/logout" element={<Logout />} />
 

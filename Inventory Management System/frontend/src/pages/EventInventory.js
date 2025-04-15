@@ -50,6 +50,7 @@ const EventInventory = () => {
     fitterName: "",
     phoneNumber: "",
     email: "",
+    done: false,
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [searchByEvent, setSearchByEvent] = useState(false);
@@ -189,6 +190,7 @@ const EventInventory = () => {
       fitterName: "",
       phoneNumber: "",
       email: "",
+      done: false,
     });
     setEvents(updatedEvents);
     setSuccessMessage("Attendee added successfully");
@@ -210,6 +212,7 @@ const EventInventory = () => {
       fitterName: attendee?.fitterName || "",
       phoneNumber: attendee?.phoneNumber || "",
       email: attendee?.email || "",
+      done: attendee?.done || false,
     });
   };
 
@@ -239,7 +242,8 @@ const EventInventory = () => {
     normalize(currentAttendee.braSize2) === normalize(attendeeFormData.braSize2) &&
     normalize(currentAttendee.fitterName) === normalize(attendeeFormData.fitterName) &&
     normalize(currentAttendee.phoneNumber) === normalize(attendeeFormData.phoneNumber) &&
-    normalize(currentAttendee.email) === normalize(attendeeFormData.email);
+    normalize(currentAttendee.email) === normalize(attendeeFormData.email) &&
+    normalize(currentAttendee.done) === normalize(attendeeFormData.done);
 
     console.log("checkChange: ", checkChange);
     
@@ -255,6 +259,7 @@ const EventInventory = () => {
         fitterName: "",
         phoneNumber: "",
         email: "",
+        done: false,
       });
       return;
     }
@@ -312,6 +317,7 @@ const EventInventory = () => {
       fitterName: "",
       phoneNumber: "",
       email: "",
+      done: false,
     });
     setEvents(updatedEvents);
     setSuccessMessage("Attendee updated successfully");
@@ -397,6 +403,25 @@ const EventInventory = () => {
       const formattedDate = new Date(updatedEvents[eventIndex].date).toLocaleDateString("en-US", { timeZone: "UTC" });
 
       logAction(localStorage.getItem("userId"), `Deleted Attendee: ${deletedAttendee.name || "Unnamed"} from event: ${updatedEvents[eventIndex].name} on ${formattedDate}`);
+    }
+  };
+
+  const handleCheckboxChange = async (attendee, eventIndex, attendeeIndex, isChecked) => {
+    const updatedAttendee = {
+      ...attendee,
+      done: isChecked,
+    };
+  
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex].attendees[attendeeIndex] = updatedAttendee;
+  
+    try {
+      await updateEvent(updatedEvents[eventIndex]._id, updatedEvents[eventIndex]);
+      setEvents(updatedEvents);
+      setSuccessMessage("Attendee status updated successfully");
+    } catch (error) {
+      console.error("Error updating attendee status:", error);
+      setErrorMessage("Failed to update attendee status");
     }
   };
 
@@ -793,9 +818,15 @@ const EventInventory = () => {
                         </div>
                         <div className="done-checkbox">
                           <label>
-                            <input type="checkbox" />
-                            Done
+                            <input 
+                            type="checkbox"
+                            checked={attendee.done}
+                            onChange={(e) =>
+                              handleCheckboxChange(attendee, eventIndex, attendeeIndex, e.target.checked)  
+                            }
+                            />
                           </label>
+                          Done
                         </div>
                       </li>
                     ))

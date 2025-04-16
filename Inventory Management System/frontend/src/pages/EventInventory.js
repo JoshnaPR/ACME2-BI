@@ -57,10 +57,7 @@ const EventInventory = () => {
   const [searchByAttendee, setSearchByAttendee] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [expandedAttendees, setExpandedAttendees] = useState({
-    eventId: null,
-    attendeeIndex: null,
-  });
+  const [expandedAttendees, setExpandedAttendees] = useState([]);
 
   const [bras, setBras] = useState([]);
 
@@ -442,13 +439,14 @@ const EventInventory = () => {
   };
 
   const toggleAttendee = (eventId, attendeeIndex) => {
-    setExpandedAttendees((prev) =>
-      prev.eventId === eventId && prev.attendeeIndex === attendeeIndex
-        ? { eventId: null, attendeeIndex: null } // collapse
-        : { eventId, attendeeIndex } // expand
-    );
+    const key = `${eventId}-${attendeeIndex}`;
+    if (expandedAttendees.includes(key)) {
+      setExpandedAttendees(expandedAttendees.filter((k) => k !== key));
+    } else {
+      setExpandedAttendees([...expandedAttendees, key]);
+    }
   };
-
+  
   // Search events and attendees
   const filteredEvents = events
     .map((event) => {
@@ -661,8 +659,7 @@ const EventInventory = () => {
                           <div style={{ fontWeight: "bold"}}>
                             {attendee?.name ?? `Attendee ${attendeeIndex + 1}`} ▾
                           </div>
-                          {expandedAttendees.eventId === event._id && 
-                          expandedAttendees.attendeeIndex === attendeeIndex && (
+                          {expandedAttendees.includes(`${event._id}-${attendeeIndex}`) && (
                             <div className="attendee-details">
                               {editAttendeeId.eventId === event._id &&
                               editAttendeeId.attendeeIndex === attendeeIndex ? (

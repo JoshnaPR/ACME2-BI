@@ -195,6 +195,43 @@
   .event-title-container button {
     margin-left: 8px;
   }
+
+  .event-actions {
+    display: flex;
+  }
+
+  .attendee-block {
+    background: #f0f0f0;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+  
+  .attendee-block:hover {
+    background-color: #e99cc9;
+    border-color: #d17bb7;
+  }
+  
+  .attendee-details {
+    margin-top: 8px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+  }
+  
+  .attendee-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .done-checkbox {
+    margin-top: 8px;
+  }
   
   .attendee-list {
     list-style: none;
@@ -204,31 +241,8 @@
   
   .attendee-item {
     margin-bottom: 8px;
-    padding: 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.9rem;
   }
-  
-  .attendee-item:hover {
-    background-color: #e99cc9;
-  }
-  
-  .attendee-item p {
-    margin: 4px 0;
-  }
-  
-  .event-actions {
-    display: flex;
-  }
-  
-  .attendee-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-  }
-  
+    
   button {
     font-size: 0.8rem;
     padding: 8px 12px;

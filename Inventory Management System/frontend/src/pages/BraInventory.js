@@ -271,7 +271,7 @@ const BraInventory = () => {
               <p>Normal Bras: {getInventoryTotals().normalBras}</p>
               <p>Maternity Bras: {getInventoryTotals().maternityBras}</p>
               <p>Disability Bras: {getInventoryTotals().disabilityBras}</p>
-              <p>FlexFit Bras: {getInventoryTotals().flexfitBras}</p>
+              <p>Flex Fit Bras: {getInventoryTotals().flexfitBras}</p>
               <p>Kids Bras: {getInventoryTotals().kidsBras}</p>
               <button onClick={() => setShowModal(false)}>Close</button>
             </div>
